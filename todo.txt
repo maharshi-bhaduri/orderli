@@ -46,3 +46,5 @@ Estimated Duration: 2 weeks
 3. Test and bug fixing: 3 days
 
 Please note that the timeline provided is an estimate and can vary depending on the complexity of the features, the proficiency of the developers, and any unforeseen challenges that may arise during development. It's important to regularly communicate with the developers, monitor progress, and adjust the timeline as needed to ensure realistic and achievable goals.
+
+some additional change 
