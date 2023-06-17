@@ -26,7 +26,7 @@ function App() {
         </p>
       </div>
       <h1 className="text-2xl font-bold underline">
-        tailwind says hello!
+        tailwind says hello! x2
       </h1>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
