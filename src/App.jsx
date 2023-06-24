@@ -1,7 +1,7 @@
 import React from "react";
-import Header from "./Header/Header";
-import SignUp from "./Pages/Signup/SignUp.jsx";
-import Home from "./Pages/Home/Home";
+import Header from "./Pages/Header";
+import SignUp from "./Pages/SignUp";
+import Home from "./Pages/Home";
 import { Routes, Route } from "react-router-dom";
 export default function App() {
   return (
