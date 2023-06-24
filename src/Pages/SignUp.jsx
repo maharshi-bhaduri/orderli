@@ -1,5 +1,5 @@
 import React from "react";
-import "./SignUp.css";
+
 export default function SignUp() {
   const [signUpFormData, setSignUpFormData] = React.useState({
     restName: "",
