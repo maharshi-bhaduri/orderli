@@ -1,5 +1,5 @@
 import React from "react";
-import "./Signup.css";
+import "./SignUp.css";
 export default function SignUp() {
   const [signUpFormData, setSignUpFormData] = React.useState({
     restName: "",
@@ -23,7 +23,7 @@ export default function SignUp() {
       </div>
       <form className="signup-form">
         <label>
-          Restaurant Name
+          What's your restaurant called?
           <input
             type="text"
             placeholder="Restaurant Name"
@@ -33,11 +33,11 @@ export default function SignUp() {
           />
         </label>
         <label>
-          IG Handle
+          How can we find your restaurant on instagram?
           <input
             type="text"
             name="restInstagramId"
-            placeholder="Instagram Id"
+            placeholder="IG Handle"
             value={signUpFormData.restInstagramId}
             onChange={handleChange}
           />
