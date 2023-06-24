@@ -5,6 +5,7 @@ export default function SignUp() {
     restName: "",
     restInstagramId: "",
     restBlurb: "",
+
     restMenu: {},
   });
   console.log(signUpFormData);
