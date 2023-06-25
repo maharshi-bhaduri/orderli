@@ -1,6 +1,6 @@
 import React from "react";
-import SignUp from "./pages1/SignUp";
-import Home from "./pages1/Home";
+import SignUp from "./pages/SignUp";
+import Home from "./pages/Home";
 import Header from "./components/Header";
 import { Routes, Route } from "react-router-dom";
 export default function App() {
