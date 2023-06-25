@@ -1,11 +1,14 @@
 /** @type {import('tailwindcss').Config} */
+const colors = require('tailwindcss/colors')
+
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     colors: {
+      ...colors,
       "orderlee-primary": {
-        100: "#f15800d5",
-        200: "#f15809d5",
+        100: "#f15800",
+        200: "#ff5e02db"
       },
     },
     extend: {},
