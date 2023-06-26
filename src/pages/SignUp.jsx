@@ -7,7 +7,7 @@ export default function SignUp() {
     providerName: "",
     providerHandle: "",
     providerType: "cafe",
-    about: ""
+    about: "",
   });
 
   const handleSubmit = (event) => {
@@ -15,14 +15,14 @@ export default function SignUp() {
     // Make the API request
     axios
       .post(
-        import.meta.env.MODE === "development" ?
-          "http://localhost:3000/api/create-provider" :
-          import.meta.env.VITE_APP_CREATE_PROVIDER,
+        //import.meta.env.MODE === "development" ?
+        //"http://localhost:3000/api/create-provider" :
+        import.meta.env.VITE_APP_CREATE_PROVIDER,
         JSON.stringify(signUpFormData),
         {
           headers: {
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         }
       )
       .then((response) => {
@@ -42,8 +42,8 @@ export default function SignUp() {
         [event.name]: event.value,
       };
     });
-    if (event.name == 'providerName') {
-      let handle = event.value.replace(/\s+/g, "").toLowerCase()
+    if (event.name == "providerName") {
+      let handle = event.value.replace(/\s+/g, "").toLowerCase();
       setSignUpFormData((prevFormData) => {
         return {
           ...prevFormData,
@@ -56,10 +56,7 @@ export default function SignUp() {
     <div>
       <div className="signup">
         <h1 className="signup-header">Register yourself</h1>
-        <form
-          onSubmit={handleSubmit}
-          className="signup-form"
-        >
+        <form onSubmit={handleSubmit} className="signup-form">
           <TextInput
             labelName="Let's start with a name."
             name="providerName"
@@ -85,7 +82,10 @@ export default function SignUp() {
             multiLine={true}
             onChange={handleChange}
           />
-          <button type="submit" className="bg-orderlee-primary-100 hover:bg-orderlee-primary-200 text-white font-bold py-2 px-4 rounded">
+          <button
+            type="submit"
+            className="bg-orderlee-primary-100 hover:bg-orderlee-primary-200 text-white font-bold py-2 px-4 rounded"
+          >
             Register
           </button>
         </form>
