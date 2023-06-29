@@ -5,18 +5,13 @@ import Signup from "./pages/SignUp";
 import { Routes, Route } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Dashboard from "./pages/Dashboard";
-import AddRestaurant from "./pages/AddRestaurant";
+import AddProvider from "./pages/AddProvider";
+import Provider from "./pages/Provider";
 
 
 export default function App() {
   const [user, setUser] = useState(null);
   const [providerData, setProviderData] = useState({})
-
-  // function addProvider(providerData) {
-  // setProviderData(providerData)
-  // }
-
-  console.log(providerData)
 
   useEffect(() => {
     const auth = getAuth();
@@ -36,9 +31,9 @@ export default function App() {
           path="/dashboard"
           element={<Dashboard isAuthed={!!user} />}
         ></Route>
-        <Route path="/addRestaurant" element={<AddRestaurant onAdd={setProviderData} />}></Route>
-        <Route path="/signup" element={<Signup />}></Route>
-        <Route path="/*" element={<Home />}></Route>
+        <Route path="/addRestaurant" element={<AddProvider onAdd={setProviderData} />}></Route>
+        <Route path="/signUp" element={<Signup />}></Route>
+        <Route path="/*" element={<Provider data={providerData} />}></Route>
       </Routes>
     </>
   );
