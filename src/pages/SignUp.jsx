@@ -1,5 +1,5 @@
 import React from "react";
-import { signInWithGoogle, signOutNow } from "../Firebase";
+import { signInWithGoogle, signOutNow } from "../utils/Firebase";
 export default function Signup() {
   return (
     <div className="signup">
