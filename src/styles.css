@@ -1,0 +1,86 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  font-family: "Poppins", sans-serif;
+}
+
+.header {
+  position: fixed;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  height: 80px;
+  width: 100%;
+  background-color: #f15800d5;
+}
+
+.header > h1 {
+  font-size: 40px;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  background: url("./images/food-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  box-shadow: inset 0 0 0 2000px rgba(255, 255, 255, 0.211);
+}
+
+.order-btn {
+  font-size: 15px;
+  border: none;
+}
+
+/*--------------Signup-----------------------------------*/
+.signup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/*-----------------Dashboard----------------*/
+.dashboard-header {
+  padding-top: 100px;
+  font-size: 25px;
+  padding-left: 25px;
+}
+
+/*---------------------Restaurant------------------------*/
+.restaurant {
+  padding-top: 80px;
+  margin-left: 40px;
+  background-color: white;
+  height: 100vh;
+}
+
+.restaurant-header {
+  font-size: 50px;
+  font-weight: lighter;
+  padding-bottom: 30px;
+}
+
+.restaurant-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+}
+
+.submit {
+  margin-top: 20px;
+  font-size: 16px;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 10px 30px;
+  background-color: #f15800d5;
+  color: white;
+}
+
+.handle-input {
+  display: inline;
+}
