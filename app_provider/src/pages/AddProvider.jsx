@@ -2,15 +2,18 @@ import React from "react";
 import axios from "axios";
 import TextInput from "../components/TextInput";
 import { useNavigate } from "react-router-dom";
+import Alert from "../components/Alert";
 
-export default function AddRestaurant(props) {
+export default function AddProvider(props) {
+
   let navigate = useNavigate();
-  const [restaurantFormData, setRestaurantFormData] = React.useState({
+  const [providerFormData, setProviderFormData] = React.useState({
     providerName: "",
     providerHandle: "",
     providerType: "cafe",
     about: "",
   });
+  const [alert, setAlert] = React.useState('NO ALERT');
 
   const handleSubmit = (event) => {
     event.preventDefault(); // Prevent form submission
@@ -18,7 +21,7 @@ export default function AddRestaurant(props) {
     axios
       .post(
         import.meta.env.VITE_APP_CREATE_PROVIDER,
-        JSON.stringify(restaurantFormData),
+        JSON.stringify(providerFormData),
         {
           headers: {
             "Content-Type": "application/json",
@@ -29,18 +32,26 @@ export default function AddRestaurant(props) {
       )
       .then((response) => {
         // Handle the API response
-        console.log(response.data);
-        props.onAdd(response.data)
-        navigate(`/${restaurantFormData.providerHandle}`);
+        console.log(parseInt(response.status / 100))
+        if (parseInt(response.status / 100) == 2) {
+
+          props.onAdd(response.operationStatus)
+          navigate(`/${providerFormData.providerHandle}`);
+        }
+        else {
+          console.log(response)
+          setAlert(response.data.operationStatus.message)
+        }
       })
       .catch((error) => {
         // Handle error
         console.error(error);
+        setAlert(error.response.data.operationStatus.message)
       });
   };
 
   function handleChange(event) {
-    setRestaurantFormData((prevFormData) => {
+    setProviderFormData((prevFormData) => {
       return {
         ...prevFormData,
         [event.name]: event.value,
@@ -48,7 +59,7 @@ export default function AddRestaurant(props) {
     });
     if (event.name == "providerName") {
       let handle = event.value.replace(/\s+/g, "").toLowerCase();
-      setRestaurantFormData((prevFormData) => {
+      setProviderFormData((prevFormData) => {
         return {
           ...prevFormData,
           providerHandle: handle,
@@ -60,12 +71,16 @@ export default function AddRestaurant(props) {
     <div>
       <div className="restaurant">
         <h1 className="restaurant-header">Register yourself</h1>
+        {alert}
+        {
+          alert && <Alert />
+        }
         <form onSubmit={handleSubmit} className="restaurant-form">
           <TextInput
             labelName="Let's start with a name."
             name="providerName"
             inputHint="Your awesome place"
-            value={restaurantFormData.providerName}
+            value={providerFormData.providerName}
             multiLine={false}
             onChange={handleChange}
           />
@@ -74,7 +89,7 @@ export default function AddRestaurant(props) {
             name="providerHandle"
             prependText="orderlee.in/"
             inputHint="yourawesomeplace"
-            value={restaurantFormData.providerHandle}
+            value={providerFormData.providerHandle}
             multiLine={false}
             onChange={handleChange}
           />
@@ -82,7 +97,7 @@ export default function AddRestaurant(props) {
             labelName="Describe your place."
             name="about"
             inputHint="It's the best place."
-            value={restaurantFormData.about}
+            value={providerFormData.about}
             multiLine={true}
             onChange={handleChange}
           />
