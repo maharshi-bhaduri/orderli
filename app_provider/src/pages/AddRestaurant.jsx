@@ -1,9 +1,11 @@
 import React from "react";
 import axios from "axios";
 import TextInput from "../components/TextInput";
+import { useNavigate } from "react-router-dom";
 
-export default function AddRestaurant() {
-  const [RestaurantFormData, setRestaurantFormData] = React.useState({
+export default function AddRestaurant(props) {
+  let navigate = useNavigate();
+  const [restaurantFormData, setRestaurantFormData] = React.useState({
     providerName: "",
     providerHandle: "",
     providerType: "cafe",
@@ -15,10 +17,8 @@ export default function AddRestaurant() {
     // Make the API request
     axios
       .post(
-        //import.meta.env.MODE === "development" ?
-        //"http://localhost:3000/api/create-provider" :
         import.meta.env.VITE_APP_CREATE_PROVIDER,
-        JSON.stringify(RestaurantFormData),
+        JSON.stringify(restaurantFormData),
         {
           headers: {
             "Content-Type": "application/json",
@@ -30,6 +30,8 @@ export default function AddRestaurant() {
       .then((response) => {
         // Handle the API response
         console.log(response.data);
+        props.onAdd(response.data)
+        navigate(`/${restaurantFormData.providerHandle}`);
       })
       .catch((error) => {
         // Handle error
@@ -63,7 +65,7 @@ export default function AddRestaurant() {
             labelName="Let's start with a name."
             name="providerName"
             inputHint="Your awesome place"
-            value={RestaurantFormData.providerName}
+            value={restaurantFormData.providerName}
             multiLine={false}
             onChange={handleChange}
           />
@@ -72,7 +74,7 @@ export default function AddRestaurant() {
             name="providerHandle"
             prependText="orderlee.in/"
             inputHint="yourawesomeplace"
-            value={RestaurantFormData.providerHandle}
+            value={restaurantFormData.providerHandle}
             multiLine={false}
             onChange={handleChange}
           />
@@ -80,7 +82,7 @@ export default function AddRestaurant() {
             labelName="Describe your place."
             name="about"
             inputHint="It's the best place."
-            value={RestaurantFormData.about}
+            value={restaurantFormData.about}
             multiLine={true}
             onChange={handleChange}
           />
