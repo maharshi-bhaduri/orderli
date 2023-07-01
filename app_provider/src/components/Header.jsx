@@ -18,7 +18,7 @@ export default function Header(props) {
         }}
         onClick={() => navigate("/login")}
       >
-        Sign Up
+        Sign In
       </button>
       {props.isAuth && (
         <button

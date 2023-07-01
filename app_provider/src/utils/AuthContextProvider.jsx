@@ -1,13 +1,15 @@
 import { createContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
-import { getAuth, getIdToken, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
+    const location = useLocation();
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
+    const allowedPaths = ['/'];
 
     useEffect(() => {
         const auth = getAuth();
@@ -15,6 +17,7 @@ const AuthProvider = ({ children }) => {
             if (user) {
                 localStorage.setItem('displayName', user.displayName);
                 setUser(user);
+                console.log(user);
                 user.getIdToken().then(
                     (token) => {
                         Cookies.set('token', token)
@@ -22,7 +25,9 @@ const AuthProvider = ({ children }) => {
                 )
             }
             else {
-                navigate('/login');
+                if (!allowedPaths.includes(location.pathname)) {
+                    navigate('/login');
+                }
             }
         });
         return () => unsubscribe(); // Unsubscribe from the auth state changes when component unmounts

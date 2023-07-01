@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-import { getAuthToken } from "../utils/Firebase";
 import TextInput from "../components/TextInput";
 import { useNavigate } from "react-router-dom";
 import Alert from "../components/Alert";
@@ -33,13 +32,11 @@ export default function AddProvider() {
       )
       .then((response) => {
         // Handle the API response
-        console.log(parseInt(response.status / 100))
         if (parseInt(response.status / 100) == 2) {
           navigate(`/provider/${providerFormData.providerHandle}`,
             { state: response.data.data });
         }
         else {
-          console.log(response)
           setAlert(response.data.operationStatus.message)
         }
       })
