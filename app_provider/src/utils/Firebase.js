@@ -1,11 +1,12 @@
 import { initializeApp } from "firebase/app";
-
 import {
   getAuth,
+  getIdToken,
   GoogleAuthProvider,
   signInWithPopup,
-  signOut,
+  signOut
 } from "firebase/auth";
+import Cookies from 'js-cookie';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_APP_APIKEY,
@@ -19,22 +20,24 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-
 const provider = new GoogleAuthProvider();
 
-export const signInWithGoogle = function () {
-  signInWithPopup(auth, provider)
+
+export function signInWithGoogle() {
+  return signInWithPopup(auth, provider)
     .then((res) => {
-      console.log(res);
-      localStorage.setItem("token", res._tokenResponse.idToken);
-      localStorage.setItem("uid", res.user.uid);
+      Cookies.set('token', res._tokenResponse.idToken);
+      Cookies.set('uid', res.user.uid);
+      localStorage.setItem('user', res.user)
+      return res.user
     })
     .catch((error) => {
       console.error(error);
     });
 };
 
-export const signOutNow = function () {
+
+export function signOutNow() {
   signOut(auth)
     .then(() => {
       localStorage.clear();
@@ -44,3 +47,22 @@ export const signOutNow = function () {
       console.error(err);
     });
 };
+
+
+export async function getAuthToken() {
+  const auth = getAuth();
+  console.log("from Firebase: current user: ", auth)
+  const user = auth.currentUser;
+
+  if (!user) {
+    return false;
+  }
+
+  try {
+    const idToken = await user.getIdToken();
+    return idToken;
+  } catch (error) {
+    console.error("Error getting ID token:", error);
+    return false;
+  }
+}

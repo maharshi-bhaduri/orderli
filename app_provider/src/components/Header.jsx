@@ -16,14 +16,14 @@ export default function Header(props) {
           boxShadow: "rgba(0, 0, 0, 0.02) 0 1px 3px 0",
           cursor: "pointer",
         }}
-        onClick={() => navigate("/signup")}
+        onClick={() => navigate("/login")}
       >
         Sign Up
       </button>
       {props.isAuth && (
         <button
           style={{ backgroundColor: "black", color: "white", padding: "10px" }}
-          // onClick={signOutNow}
+        // onClick={signOutNow}
         >
           signout
         </button>

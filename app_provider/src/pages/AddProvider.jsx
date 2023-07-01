@@ -1,11 +1,12 @@
 import React from "react";
 import axios from "axios";
+import { getAuthToken } from "../utils/Firebase";
 import TextInput from "../components/TextInput";
 import { useNavigate } from "react-router-dom";
 import Alert from "../components/Alert";
+import Cookies from "js-cookie";
 
-export default function AddProvider(props) {
-
+export default function AddProvider() {
   let navigate = useNavigate();
   const [providerFormData, setProviderFormData] = React.useState({
     providerName: "",
@@ -25,8 +26,8 @@ export default function AddProvider(props) {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: localStorage.getItem("token"),
-            uid: localStorage.getItem("uid"),
+            Authorization: Cookies.get('token'),
+            uid: Cookies.get('uid')
           },
         }
       )
@@ -34,9 +35,8 @@ export default function AddProvider(props) {
         // Handle the API response
         console.log(parseInt(response.status / 100))
         if (parseInt(response.status / 100) == 2) {
-
-          props.onAdd(response.operationStatus)
-          navigate(`/${providerFormData.providerHandle}`);
+          navigate(`/provider/${providerFormData.providerHandle}`,
+            { state: response.data.data });
         }
         else {
           console.log(response)
