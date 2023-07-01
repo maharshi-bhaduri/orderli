@@ -41,7 +41,6 @@ export function signOutNow() {
   signOut(auth)
     .then(() => {
       localStorage.clear();
-      console.log("signed out");
     })
     .catch((err) => {
       console.error(err);
@@ -51,7 +50,6 @@ export function signOutNow() {
 
 export async function getAuthToken() {
   const auth = getAuth();
-  console.log("from Firebase: current user: ", auth)
   const user = auth.currentUser;
 
   if (!user) {

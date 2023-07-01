@@ -6,22 +6,27 @@ import Dashboard from "./pages/Dashboard";
 import AddProvider from "./pages/AddProvider";
 import Provider from "./pages/Provider";
 import { AuthProvider } from "./utils/AuthContextProvider";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 
 export default function App() {
+  const queryClient = new QueryClient();
+
   return (
     <AuthProvider>
-      <>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />}></Route>
-          {/* <Route path="/signup" element={<SignUp />}></Route> */}
-          <Route path="/dashboard" element={<Dashboard />}></Route>
-          <Route path="/addRestaurant" element={<AddProvider />}></Route>
-          <Route path="/login" element={<LogIn />}></Route>
-          <Route path="/provider/:handle" element={<Provider data={providerData} />}></Route>
-        </Routes>
-      </>
+      <QueryClientProvider client={queryClient}>
+        <>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home />}></Route>
+            {/* <Route path="/signup" element={<SignUp />}></Route> */}
+            <Route path="/dashboard" element={<Dashboard />}></Route>
+            <Route path="/addRestaurant" element={<AddProvider />}></Route>
+            <Route path="/login" element={<LogIn />}></Route>
+            <Route path="/provider/:handle" element={<Provider />}></Route>
+          </Routes>
+        </>
+      </QueryClientProvider>
     </AuthProvider>
   );
 }
