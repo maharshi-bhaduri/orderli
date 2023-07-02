@@ -13,7 +13,7 @@ export default function AddProvider() {
     providerType: "cafe",
     about: "",
   });
-  const [alert, setAlert] = React.useState('NO ALERT');
+  const [alert, setAlert] = React.useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault(); // Prevent form submission
@@ -68,9 +68,8 @@ export default function AddProvider() {
     <div>
       <div className="restaurant">
         <h1 className="restaurant-header">Register yourself</h1>
-        {alert}
         {
-          alert && <Alert />
+          alert && <Alert heading='Oops' message={alert} />
         }
         <form onSubmit={handleSubmit} className="restaurant-form">
           <TextInput
