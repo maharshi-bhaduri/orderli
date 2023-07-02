@@ -2,7 +2,7 @@
 const colors = require('tailwindcss/colors')
 
 export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"
+  content: ["./app_provider/index.html", "./app_provider/src/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
     colors: {
@@ -12,7 +12,6 @@ export default {
         200: "#ff5e02db"
       },
     },
-    extend: {},
   },
   plugins: [],
 };

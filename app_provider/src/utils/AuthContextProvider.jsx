@@ -17,7 +17,6 @@ const AuthProvider = ({ children }) => {
             if (user) {
                 localStorage.setItem('displayName', user.displayName);
                 setUser(user);
-                console.log(user);
                 user.getIdToken().then(
                     (token) => {
                         Cookies.set('token', token)
