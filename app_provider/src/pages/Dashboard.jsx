@@ -1,56 +1,33 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
+import { useQuery } from 'react-query';
 import { AuthContext } from "../utils/AuthContextProvider";
-import axios from "axios";
-import Cookies from "js-cookie";
+import { getService } from "../utils/APIService";
 import Card from "../components/Card"
 
 
 export default function Dashboard() {
   const user = useContext(AuthContext);
-  const [providers, setProviders] = useState([])
-  const [isLoading, setIsLoading] = useState(true);
+
+  const { data: providers, isLoading, isError } = useQuery('providers',
+    () =>
+      getService(import.meta.env.VITE_APP_GET_PROVIDERS)
+        .then((response) => response.data),
+    {
+      staleTime: 1000 * 60 * 5,
+    }
+  )
 
   const message = user
     ? "Welcome to the dashboard, " + user.displayName
     : "Unathenticated";
 
-  useEffect(() => {
-    if (providers.length > 0) {
-      setIsLoading(false); // Set loading state to false
-      return; // Exit the useEffect early
-    }
-
-    axios.get(
-      import.meta.env.VITE_APP_GET_PROVIDERS,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: Cookies.get('token'),
-          uid: Cookies.get('uid')
-        },
-      }
-    )
-      .then((response) => {
-        // Handle the API response
-        if (parseInt(response.status / 100) == 2) {
-          setProviders(response.data);
-        }
-        else {
-          //filler
-        }
-      })
-      .catch((error) => {
-        // Handle error
-        console.error(error);
-      });
-  }, [])
-
-
   return (
     <div className="dashboard">
       <h1 className="dashboard-header">{message}</h1>
       <div className="flex flex-col items-center mt-4">
-        {
+        {isLoading ?
+          "DATA IS LOADING"
+          :
           providers.map((object, index) => (
             <Card
               key={index}
@@ -60,6 +37,13 @@ export default function Dashboard() {
               link={`/provider/${object.provider_handle}`}
             />
           ))}
+        <Card
+          key={0}
+          id={0}
+          heading="Add new provider"
+          subheading="coolNewPlace"
+          link={`/addRestaurant`}
+        />
       </div>
     </div>
   );

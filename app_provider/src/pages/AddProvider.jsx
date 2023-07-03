@@ -32,13 +32,8 @@ export default function AddProvider() {
       )
       .then((response) => {
         // Handle the API response
-        if (parseInt(response.status / 100) == 2) {
-          navigate(`/provider/${providerFormData.providerHandle}`,
-            { state: response.data.data });
-        }
-        else {
-          setAlert(response.data.operationStatus.message)
-        }
+        navigate(`/provider/${providerFormData.providerHandle}`,
+          { state: response.data.data });
       })
       .catch((error) => {
         // Handle error
