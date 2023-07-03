@@ -23,7 +23,7 @@ export default function LogIn() {
         size="lg"
         variant="outlined"
         color="blue-gray"
-        className="flex items-center gap-3"
+        className="flex items-center gap-3 p-4 rounded-full bg-gray-100 hover:bg-gray-200"
         onClick={handleSignIn}
       >
         <img src={googleLogo} alt="metamask" className="h-6 w-6" />
