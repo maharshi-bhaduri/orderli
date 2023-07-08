@@ -32,8 +32,7 @@ export default function AddProvider() {
       )
       .then((response) => {
         // Handle the API response
-        navigate(`/provider/${providerFormData.providerHandle}`,
-          { state: response.data.data });
+        navigate(`/provider/${providerFormData.providerHandle}`);
       })
       .catch((error) => {
         // Handle error
