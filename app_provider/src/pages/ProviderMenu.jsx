@@ -90,8 +90,7 @@ export default function ProviderMenu() {
   return (
     <div className="dashboard">
       <h1 className="dashboard-header">Welcome! Time to set the table!</h1>
-      <div>
-        <h2>Add New Menu Item</h2>
+      <div className="flex items-center justify-center my-4">
         <input
           type="text"
           placeholder="Item Name"
@@ -99,6 +98,7 @@ export default function ProviderMenu() {
           onChange={(e) =>
             setNewMenuItem({ ...newMenuItem, item_name: e.target.value })
           }
+          className="border border-gray-300 px-2 py-1 rounded mx-4"
         />
         <input
           type="text"
@@ -107,6 +107,7 @@ export default function ProviderMenu() {
           onChange={(e) =>
             setNewMenuItem({ ...newMenuItem, description: e.target.value })
           }
+          className="border border-gray-300 px-2 py-1 rounded mx-4"
         />
         <input
           type="number"
@@ -115,78 +116,114 @@ export default function ProviderMenu() {
           onChange={(e) =>
             setNewMenuItem({ ...newMenuItem, price: e.target.value })
           }
+          className="border border-gray-300 px-2 py-1 rounded mx-4"
         />
-        <button onClick={() => handleAddMenuItem()}>Add Item</button>
+        <button
+          onClick={() => handleAddMenuItem()}
+          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mx-2"
+        >Add Item</button>
       </div>
-      <div>
-        <h2>Menu Items</h2>
+      <div className="flex justify-center my-4">
         {isLoading ? (
           <p>Loading menu items...</p>
         ) : isError ? (
           <p>Error loading menu items.</p>
         ) : (
-          <div>
-            {menu.map((menuItem) => (
-              <div key={menuItem.menu_id}>
-                {console.log("Main main e ", editItemId)}
-                {console.log("Main main m", menuItem.menu_id)}
-                {editItemId === menuItem.menu_id && isEditing ? (
-                  <>
-                    <input
-                      type="text"
-                      placeholder="Item Name"
-                      value={editedMenuItem.item_name}
-                      onChange={(e) =>
-                        setEditedMenuItem({
-                          ...editedMenuItem,
-                          item_name: e.target.value,
-                        })
-                      }
-                    />
-                    <input
-                      type="text"
-                      placeholder="Description"
-                      value={editedMenuItem.description}
-                      onChange={(e) =>
-                        setEditedMenuItem({
-                          ...editedMenuItem,
-                          description: e.target.value,
-                        })
-                      }
-                    />
-                    <input
-                      type="number"
-                      placeholder="Price"
-                      value={editedMenuItem.price}
-                      onChange={(e) =>
-                        setEditedMenuItem({
-                          ...editedMenuItem,
-                          price: e.target.value,
-                        })
-                      }
-                    />
-                    <button onClick={() => handleUpdateMenuItem(editedMenuItem)}>
-                      Save
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <p>{menuItem.item_name}</p>
-                    <p>{menuItem.description}</p>
-                    <p>{menuItem.price}</p>
-                    <button onClick={() => handleEditMenuItem(menuItem)}>
-                      Edit
-                    </button>
-                    <button onClick={() => handleDeleteMenuItem(menuItem)}>
-                      Delete
-                    </button>
-                  </>
-                )}
-              </div>
-            ))}
-          </div>
+          <table className="w-3/4 mt-4">
+            <thead>
+              <tr>
+                <th className="py-2 px-4 bg-gray-100">Item Name</th>
+                <th className="py-2 px-4 bg-gray-100">Description</th>
+                <th className="py-2 px-4 bg-gray-100">Price</th>
+                <th className="py-2 px-4 bg-gray-100">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {menu.map((menuItem) => (
+                <tr key={menuItem.menu_id}>
+                  {editItemId === menuItem.menu_id && isEditing ? (
+                    <>
+                      {/* Edit mode input fields */}
+                      <td className="py-2 px-4">
+                        <input
+                          type="text"
+                          placeholder="Item Name"
+                          value={editedMenuItem.item_name}
+                          onChange={(e) =>
+                            setEditedMenuItem({
+                              ...editedMenuItem,
+                              item_name: e.target.value,
+                            })
+                          }
+                          className="border border-gray-300 px-2 py-1 rounded"
+                        />
+                      </td>
+                      <td className="py-2 px-4">
+                        <input
+                          type="text"
+                          placeholder="Description"
+                          value={editedMenuItem.description}
+                          onChange={(e) =>
+                            setEditedMenuItem({
+                              ...editedMenuItem,
+                              description: e.target.value,
+                            })
+                          }
+                          className="border border-gray-300 px-2 py-1 rounded"
+                        />
+                      </td>
+                      <td className="py-2 px-4">
+                        <input
+                          type="number"
+                          placeholder="Price"
+                          value={editedMenuItem.price}
+                          onChange={(e) =>
+                            setEditedMenuItem({
+                              ...editedMenuItem,
+                              price: e.target.value,
+                            })
+                          }
+                          className="border border-gray-300 px-2 py-1 rounded"
+                        />
+                      </td>
+                      <td className="py-2 px-4">
+                        <button
+                          onClick={() => handleUpdateMenuItem(editedMenuItem)}
+                        >
+                          Save
+                        </button>
+                        <button onClick={cancelEditMenuItem}>Cancel</button>
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      {/* Display mode table cells */}
+                      <td className="py-2 px-4">{menuItem.item_name}</td>
+                      <td className="py-2 px-4">{menuItem.description}</td>
+                      <td className="py-2 px-4">{menuItem.price}</td>
+                      <td className="py-2 px-4">
+                        <button
+                          onClick={() => handleEditMenuItem(menuItem)}
+                          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mx-2"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDeleteMenuItem(menuItem)}
+                          className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 mx-2"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
     </div>
   );
+
 }
