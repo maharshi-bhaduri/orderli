@@ -4,6 +4,7 @@ import LogIn from "./pages/LogIn";
 import { Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import AddProvider from "./pages/AddProvider";
+import ProviderMenu from "./pages/ProviderMenu";
 import Provider from "./pages/Provider";
 import { AuthProvider } from "./utils/AuthContextProvider";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -24,6 +25,7 @@ export default function App() {
             <Route path="/addRestaurant" element={<AddProvider />}></Route>
             <Route path="/login" element={<LogIn />}></Route>
             <Route path="/provider/:handle" element={<Provider />}></Route>
+            <Route path="/menu/:handle" element={<ProviderMenu />}></Route>
           </Routes>
         </>
       </QueryClientProvider>

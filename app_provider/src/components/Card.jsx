@@ -7,7 +7,10 @@ export default function Card(props) {
 
   function handleClick() {
     if (props?.link) {
-      navigate(props.link);
+      navigate(props.link,
+        {
+          state: props.stateData
+        });
     }
   }
   return (
