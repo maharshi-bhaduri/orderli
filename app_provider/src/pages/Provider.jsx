@@ -7,7 +7,8 @@ export default function Provider() {
   const location = useLocation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const providerHandle = location.state ? location.state : location.pathname.split('/').pop();
+  console.log(location.state)
+  const providerHandle = location.pathname.split('/').pop();
 
   const [isEditing, setIsEditing] = useState(false);
   const [updatedProviderDetails, setUpdatedProviderDetails] = useState({});
