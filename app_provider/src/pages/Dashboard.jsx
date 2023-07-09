@@ -31,11 +31,11 @@ export default function Dashboard() {
           providers.map((object, index) => (
             <Card
               key={index}
-              id={object.provider_id}
-              heading={object.provider_name}
-              subheading={object.provider_handle}
-              link={`/provider/${object.provider_handle}`}
-              stateData={object.provider_handle}
+              id={object.providerId}
+              heading={object.providerName}
+              subheading={object.providerHandle}
+              link={`/provider/${object.providerHandle}`}
+              stateData={object.providerHandle}
             />
           ))}
         <Card

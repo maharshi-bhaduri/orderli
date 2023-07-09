@@ -26,16 +26,16 @@ export default function Provider() {
     {
       onSuccess: () => {
         setUpdatedProviderDetails({
-          provider_id: providerDetails?.provider_id || null,
-          provider_name: providerDetails?.provider_name || "",
-          provider_type: providerDetails?.provider_type || "",
+          providerId: providerDetails?.providerId || null,
+          providerName: providerDetails?.providerName || "",
+          providerType: providerDetails?.providerType || "",
           address: providerDetails?.address || "",
           city: providerDetails?.city || "",
           state: providerDetails?.state || "",
           country: providerDetails?.country || "",
-          postal_code: providerDetails?.postal_code || "",
+          postalCode: providerDetails?.postalCode || "",
           about: providerDetails?.about || "",
-          contact_no: providerDetails?.contact_no || ""
+          contactNo: providerDetails?.contactNo || ""
         })
       }
     }
@@ -59,8 +59,27 @@ export default function Provider() {
     }
   );
 
+  const { mutate: deleteProvider } = useMutation(
+    (providerId) =>
+      postService(import.meta.env.VITE_APP_DELETE_PROVIDER, { providerId }),
+    {
+      onSuccess: () => {
+        navigate('/dashboard')
+        queryClient.invalidateQueries('providers');
+        console.log("Provider deleted successfully");
+      },
+      onError: (error) => {
+        console.error("Failed to update provider details:", error);
+      }
+    }
+  );
+
   const handleUpdateProviderDetails = () => {
     updateProviderDetails(updatedProviderDetails);
+  };
+
+  const handleDeleteProvider = () => {
+    deleteProvider(providerDetails.providerId);
   };
 
   const cancelProviderDetailsUpdate = () => {
@@ -71,14 +90,14 @@ export default function Provider() {
 
   return (
     <div className="flex flex-col items-center mt-4">
-      <h1 className="text-2xl font-bold text-blue-500">{providerDetails?.provider_name}</h1>
-      <img src={providerDetails?.qr_data} alt="QR Code" className="mt-4" />
+      <h1 className="text-2xl font-bold text-blue-500">{providerDetails?.providerName}</h1>
+      <img src={providerDetails?.qrData} alt="QR Code" className="mt-4" />
       <div className="mt-4 rounded">
         <table className="w-full mt-4 rounded">
           <tbody>
             <tr>
               <th className="py-2 px-4 bg-gray-100">Provider ID</th>
-              <td className="py-2 px-4">{providerDetails?.provider_id}</td>
+              <td className="py-2 px-4">{providerDetails?.providerId}</td>
             </tr>
             <tr>
               <th className="py-2 px-4 bg-gray-100">Provider Name</th>
@@ -86,14 +105,14 @@ export default function Provider() {
                 {isEditing ? (
                   <input
                     type="text"
-                    value={updatedProviderDetails.provider_name}
+                    value={updatedProviderDetails.providerName}
                     onChange={(e) =>
-                      setUpdatedProviderDetails({ ...updatedProviderDetails, provider_name: e.target.value })
+                      setUpdatedProviderDetails({ ...updatedProviderDetails, providerName: e.target.value })
                     }
                     className="border border-gray-300 px-2 py-1 rounded"
                   />
                 ) : (
-                  providerDetails?.provider_name
+                  providerDetails?.providerName
                 )}
               </td>
             </tr>
@@ -103,14 +122,14 @@ export default function Provider() {
                 {isEditing ? (
                   <input
                     type="text"
-                    value={updatedProviderDetails.provider_type}
+                    value={updatedProviderDetails.providerType}
                     onChange={(e) =>
-                      setUpdatedProviderDetails({ ...updatedProviderDetails, provider_type: e.target.value })
+                      setUpdatedProviderDetails({ ...updatedProviderDetails, providerType: e.target.value })
                     }
                     className="border border-gray-300 px-2 py-1 rounded"
                   />
                 ) : (
-                  providerDetails?.provider_type
+                  providerDetails?.providerType
                 )}
               </td>
             </tr>
@@ -188,14 +207,14 @@ export default function Provider() {
                 {isEditing ? (
                   <input
                     type="text"
-                    value={updatedProviderDetails.postal_code}
+                    value={updatedProviderDetails.postalCode}
                     onChange={(e) =>
-                      setUpdatedProviderDetails({ ...updatedProviderDetails, postal_code: e.target.value })
+                      setUpdatedProviderDetails({ ...updatedProviderDetails, postalCode: e.target.value })
                     }
                     className="border border-gray-300 px-2 py-1 rounded"
                   />
                 ) : (
-                  providerDetails?.postal_code
+                  providerDetails?.postalCode
                 )}
               </td>
             </tr>
@@ -223,14 +242,14 @@ export default function Provider() {
                 {isEditing ? (
                   <input
                     type="text"
-                    value={updatedProviderDetails.contact_no}
+                    value={updatedProviderDetails.contactNo}
                     onChange={(e) =>
-                      setUpdatedProviderDetails({ ...updatedProviderDetails, contact_no: e.target.value })
+                      setUpdatedProviderDetails({ ...updatedProviderDetails, contactNo: e.target.value })
                     }
                     className="border border-gray-300 px-2 py-1 rounded"
                   />
                 ) : (
-                  providerDetails?.contact_no
+                  providerDetails?.contactNo
                 )}
               </td>
             </tr>
@@ -267,6 +286,12 @@ export default function Provider() {
         className="bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400 mt-4"
       >
         Menu
+      </button>
+      <button
+        onClick={() => handleDeleteProvider()}
+        className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 mx-2"
+      >
+        Delete
       </button>
     </div>
   );

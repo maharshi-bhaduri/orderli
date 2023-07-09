@@ -19,7 +19,7 @@ export async function getService(api, params, headers) {
     )
         .then((response) => {
             // Handle the API response
-            return response;
+            return response;// adjust here once api is configured`  `
         })
         .catch((error) => {
             // Handle error
