@@ -60,8 +60,8 @@ export default function AddProvider() {
   }
   return (
     <div>
-      <div className="restaurant">
-        <h1 className="restaurant-header">Register yourself</h1>
+      <div className="restaurant mx-10 my-28">
+        <h1 className="text-4xl">Register yourself</h1>
         {
           alert && <Alert heading='Oops' message={alert} />
         }

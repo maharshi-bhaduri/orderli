@@ -7,7 +7,6 @@ export default function Provider() {
   const location = useLocation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  console.log(location.state)
   const providerHandle = location.pathname.split('/').pop();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -37,6 +36,9 @@ export default function Provider() {
           about: providerDetails?.about || "",
           contactNo: providerDetails?.contactNo || ""
         })
+      },
+      onError: (response) => {
+console.log(response)
       }
     }
   );

@@ -23,7 +23,7 @@ export async function getService(api, params, headers) {
         })
         .catch((error) => {
             // Handle error
-            throw new Error(error);
+            return error.response.status;
         });
 }
 
@@ -46,6 +46,7 @@ export async function postService(api, data, headers) {
         })
         .catch((error) => {
             // Handle error
-            throw new Error(error);
+            console.log(error.response.status)
+            return error;
         });
 }
