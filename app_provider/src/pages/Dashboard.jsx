@@ -27,16 +27,16 @@ export default function Dashboard() {
     <div className="mx-10 my-28">
       <h1 className="text-2xl">{message}</h1>
       <div className="w-full flex justify-center md:justify-start items-center my-6">
-        <div className="sm:w-full md:w-3/4 lg:w-2/5 flex flex-col items-center m-0 p-6 bg-gray-100 rounded-lg">
+        <div className="sm:w-full md:w-3/4 lg:w-2/5 flex flex-col items-center m-0 p-6 border border-gray-300 bg-gray-100 rounded-lg">
           <div className="w-full mb-4 flex justify-items-start items-center">
             <p className="text-xl font-semibold mx-2">
               Providers
             </p>
             <button
-            className="bg-blue-500 text-white py-2 px-4 rounded mx-2 hover:bg-blue-600"
-            onClick={()=>{navigate('/addRestaurant')}}
+              className="bg-blue-500 text-white py-2 px-4 rounded mx-2 hover:bg-blue-600"
+              onClick={() => { navigate('/addRestaurant') }}
             >
-            Add 
+              Add
             </button>
           </div>
           {isLoading ?
@@ -51,7 +51,7 @@ export default function Dashboard() {
                 link={`/provider/${object.providerHandle}`}
                 stateData={object.providerHandle}
               />
-            ))}        
+            ))}
         </div>
       </div>
     </div>

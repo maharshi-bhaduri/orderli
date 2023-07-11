@@ -9,7 +9,6 @@ const AuthProvider = ({ children }) => {
     const location = useLocation();
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
-    console.log(user)
     const allowedPaths = ['/'];
 
     useEffect(() => {

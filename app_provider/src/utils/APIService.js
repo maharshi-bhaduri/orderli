@@ -1,5 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { getAuth, onAuthStateChanged, getIdToken } from "firebase/auth";
 
 export async function getService(api, params, headers) {
     const mainHeaders = {
@@ -46,7 +47,9 @@ export async function postService(api, data, headers) {
         })
         .catch((error) => {
             // Handle error
-            console.log(error.response.status)
+            if(error.response.status == 401) {
+                getIdToken(true);
+            }
             return error;
         });
 }
