@@ -7,7 +7,6 @@ export default function Provider() {
   const location = useLocation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  console.log(location.state)
   const providerHandle = location.pathname.split('/').pop();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -37,6 +36,9 @@ export default function Provider() {
           about: providerDetails?.about || "",
           contactNo: providerDetails?.contactNo || ""
         })
+      },
+      onError: (response) => {
+        console.log(response)
       }
     }
   );
@@ -89,210 +91,183 @@ export default function Provider() {
 
 
   return (
-    <div className="flex flex-col items-center mt-4">
-      <h1 className="text-2xl font-bold text-blue-500">{providerDetails?.providerName}</h1>
-      <img src={providerDetails?.qrData} alt="QR Code" className="mt-4" />
-      <div className="mt-4 rounded">
-        <table className="w-full mt-4 rounded">
-          <tbody>
-            <tr>
-              <th className="py-2 px-4 bg-gray-100">Provider ID</th>
-              <td className="py-2 px-4">{providerDetails?.providerId}</td>
-            </tr>
-            <tr>
-              <th className="py-2 px-4 bg-gray-100">Provider Name</th>
-              <td className="py-2 px-4">
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={updatedProviderDetails.providerName}
-                    onChange={(e) =>
-                      setUpdatedProviderDetails({ ...updatedProviderDetails, providerName: e.target.value })
-                    }
-                    className="border border-gray-300 px-2 py-1 rounded"
-                  />
-                ) : (
-                  providerDetails?.providerName
-                )}
-              </td>
-            </tr>
-            <tr>
-              <th className="py-2 px-4 bg-gray-100">Provider Type</th>
-              <td className="py-2 px-4">
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={updatedProviderDetails.providerType}
-                    onChange={(e) =>
-                      setUpdatedProviderDetails({ ...updatedProviderDetails, providerType: e.target.value })
-                    }
-                    className="border border-gray-300 px-2 py-1 rounded"
-                  />
-                ) : (
-                  providerDetails?.providerType
-                )}
-              </td>
-            </tr>
-            <tr>
-              <th className="py-2 px-4 bg-gray-100">Address</th>
-              <td className="py-2 px-4">
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={updatedProviderDetails.address}
-                    onChange={(e) =>
-                      setUpdatedProviderDetails({ ...updatedProviderDetails, address: e.target.value })
-                    }
-                    className="border border-gray-300 px-2 py-1 rounded"
-                  />
-                ) : (
-                  providerDetails?.address
-                )}
-              </td>
-            </tr>
-            <tr>
-              <th className="py-2 px-4 bg-gray-100">City</th>
-              <td className="py-2 px-4">
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={updatedProviderDetails.city}
-                    onChange={(e) =>
-                      setUpdatedProviderDetails({ ...updatedProviderDetails, city: e.target.value })
-                    }
-                    className="border border-gray-300 px-2 py-1 rounded"
-                  />
-                ) : (
-                  providerDetails?.city
-                )}
-              </td>
-            </tr>
-            <tr>
-              <th className="py-2 px-4 bg-gray-100">State</th>
-              <td className="py-2 px-4">
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={updatedProviderDetails.state}
-                    onChange={(e) =>
-                      setUpdatedProviderDetails({ ...updatedProviderDetails, state: e.target.value })
-                    }
-                    className="border border-gray-300 px-2 py-1 rounded"
-                  />
-                ) : (
-                  providerDetails?.state
-                )}
-              </td>
-            </tr>
-            <tr>
-              <th className="py-2 px-4 bg-gray-100">Country</th>
-              <td className="py-2 px-4">
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={updatedProviderDetails.country}
-                    onChange={(e) =>
-                      setUpdatedProviderDetails({ ...updatedProviderDetails, country: e.target.value })
-                    }
-                    className="border border-gray-300 px-2 py-1 rounded"
-                  />
-                ) : (
-                  providerDetails?.country
-                )}
-              </td>
-            </tr>
-            <tr>
-              <th className="py-2 px-4 bg-gray-100">Postal Code</th>
-              <td className="py-2 px-4">
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={updatedProviderDetails.postalCode}
-                    onChange={(e) =>
-                      setUpdatedProviderDetails({ ...updatedProviderDetails, postalCode: e.target.value })
-                    }
-                    className="border border-gray-300 px-2 py-1 rounded"
-                  />
-                ) : (
-                  providerDetails?.postalCode
-                )}
-              </td>
-            </tr>
-            <tr>
-              <th className="py-2 px-4 bg-gray-100">About</th>
-              <td className="py-2 px-4">
-                {
-                  isEditing ? (
+    <div className="mx-10 my-28">
+      <div className="flex flex-col items-center mt-4">
+        <div
+          className={"border rounded-lg border-gray-300 bg-gray-100 " +
+            "p-5 w-3/4 transition ease-in-out flex justify-around items-center"}
+        >
+          <div className="flex flex-col justify-start h-full">
+            <h1 className="text-2xl font-bold my-4">{providerDetails?.providerName}</h1>
+            <h2 className="text-lg font-normal">/{providerDetails.providerHandle}</h2>
+          </div>
+          <img src={providerDetails?.qrData} alt="QR Code" />
+        </div>
+        <div className={"border rounded-lg border-gray-300 bg-gray-100 " +
+          "p-5 w-3/4 transition ease-in-out flex justify-around items-center"}>
+          <table className="w-full mt-4">
+            <tbody>
+              <tr className="bg-gray-100">
+                <th className="py-2 px-4 text-left">Address</th>
+                <td className="py-2 px-4 text-left">
+                  {isEditing ? (
                     <input
                       type="text"
-                      value={updatedProviderDetails.about}
+                      value={updatedProviderDetails.address}
                       onChange={(e) =>
-                        setUpdatedProviderDetails({ ...updatedProviderDetails, about: e.target.value })
+                        setUpdatedProviderDetails({ ...updatedProviderDetails, address: e.target.value })
                       }
                       className="border border-gray-300 px-2 py-1 rounded"
                     />
                   ) : (
-                    providerDetails?.about
+                    providerDetails?.address
                   )}
-              </td>
-            </tr>
-            <tr>
-              <th className="py-2 px-4 bg-gray-100">Contact No</th>
-              <td className="py-2 px-4">
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={updatedProviderDetails.contactNo}
-                    onChange={(e) =>
-                      setUpdatedProviderDetails({ ...updatedProviderDetails, contactNo: e.target.value })
-                    }
-                    className="border border-gray-300 px-2 py-1 rounded"
-                  />
-                ) : (
-                  providerDetails?.contactNo
-                )}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      {isEditing ? (
-        <div className="mt-4">
-          <button
-            onClick={handleUpdateProviderDetails}
-            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mr-2"
-          >
-            Save
-          </button>
-          <button
-            onClick={cancelProviderDetailsUpdate}
-            className="bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400"
-          >
-            Cancel
-          </button>
+                </td>
+              </tr>
+              <tr className="bg-gray-50">
+                <th className="py-2 px-4 text-left">City</th>
+                <td className="py-2 px-4 text-left">
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={updatedProviderDetails.city}
+                      onChange={(e) =>
+                        setUpdatedProviderDetails({ ...updatedProviderDetails, city: e.target.value })
+                      }
+                      className="border border-gray-300 px-2 py-1 rounded"
+                    />
+                  ) : (
+                    providerDetails?.city
+                  )}
+                </td>
+              </tr>
+              <tr className="bg-gray-100">
+                <th className="py-2 px-4 text-left">State</th>
+                <td className="py-2 px-4 text-left">
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={updatedProviderDetails.state}
+                      onChange={(e) =>
+                        setUpdatedProviderDetails({ ...updatedProviderDetails, state: e.target.value })
+                      }
+                      className="border border-gray-300 px-2 py-1 rounded"
+                    />
+                  ) : (
+                    providerDetails?.state
+                  )}
+                </td>
+              </tr>
+              <tr className="bg-gray-50">
+                <th className="py-2 px-4 text-left">Country</th>
+                <td className="py-2 px-4 text-left">
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={updatedProviderDetails.country}
+                      onChange={(e) =>
+                        setUpdatedProviderDetails({ ...updatedProviderDetails, country: e.target.value })
+                      }
+                      className="border border-gray-300 px-2 py-1 rounded"
+                    />
+                  ) : (
+                    providerDetails?.country
+                  )}
+                </td>
+              </tr>
+              <tr className="bg-gray-100">
+                <th className="py-2 px-4 text-left">Postal Code</th>
+                <td className="py-2 px-4 text-left">
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={updatedProviderDetails.postalCode}
+                      onChange={(e) =>
+                        setUpdatedProviderDetails({ ...updatedProviderDetails, postalCode: e.target.value })
+                      }
+                      className="border border-gray-300 px-2 py-1 rounded"
+                    />
+                  ) : (
+                    providerDetails?.postalCode
+                  )}
+                </td>
+              </tr>
+              <tr className="bg-gray-50">
+                <th className="py-2 px-4 text-left">About</th>
+                <td className="py-2 px-4 text-left">
+                  {
+                    isEditing ? (
+                      <input
+                        type="text"
+                        value={updatedProviderDetails.about}
+                        onChange={(e) =>
+                          setUpdatedProviderDetails({ ...updatedProviderDetails, about: e.target.value })
+                        }
+                        className="border border-gray-300 px-2 py-1 rounded"
+                      />
+                    ) : (
+                      providerDetails?.about
+                    )}
+                </td>
+              </tr>
+              <tr className="bg-gray-100">
+                <th className="py-2 px-4 text-left">Contact No</th>
+                <td className="py-2 px-4 text-left">
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={updatedProviderDetails.contactNo}
+                      onChange={(e) =>
+                        setUpdatedProviderDetails({ ...updatedProviderDetails, contactNo: e.target.value })
+                      }
+                      className="border border-gray-300 px-2 py-1 rounded"
+                    />
+                  ) : (
+                    providerDetails?.contactNo
+                  )}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      ) : (
-        <button
-          onClick={handleEditClick}
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mt-4"
-        >
-          Edit
-        </button>
-      )}
 
-      <button
-        onClick={() => navigate(`/menu/${providerHandle}`)}
-        className="bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400 mt-4"
-      >
-        Menu
-      </button>
-      <button
-        onClick={() => handleDeleteProvider()}
-        className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 mx-2"
-      >
-        Delete
-      </button>
-    </div>
+        {isEditing ? (
+          <div className="mt-4">
+            <button
+              onClick={handleUpdateProviderDetails}
+              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mr-2"
+            >
+              Save
+            </button>
+            <button
+              onClick={cancelProviderDetailsUpdate}
+              className="bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400"
+            >
+              Cancel
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={handleEditClick}
+            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mt-4"
+          >
+            Edit
+          </button>
+        )}
+
+        <button
+          onClick={() => navigate(`/menu/${providerHandle}`)}
+          className="bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400 mt-4"
+        >
+          Menu
+        </button>
+        <button
+          onClick={() => handleDeleteProvider()}
+          className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 mx-2"
+        >
+          Delete
+        </button>
+      </div>
+    </div >
   );
 }
