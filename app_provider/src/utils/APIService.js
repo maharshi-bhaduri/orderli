@@ -24,6 +24,10 @@ export async function getService(api, params, headers) {
         })
         .catch((error) => {
             // Handle error
+            console.log("token expired: ", error.response.status)
+            if (error.response.status == 401) {
+                getIdToken(true);
+            }
             return error.response.status;
         });
 }
@@ -47,7 +51,7 @@ export async function postService(api, data, headers) {
         })
         .catch((error) => {
             // Handle error
-            if(error.response.status == 401) {
+            if (error.response.status == 401) {
                 getIdToken(true);
             }
             return error;
