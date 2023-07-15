@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { getService, postService } from "../utils/APIService";
+import { getMenu } from "../utils/queryService";
 
 export default function ProviderMenu() {
   const location = useLocation();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [newAdditionDisabled, setNewAdditionDisabled] = useState(false)
   const [updateEnabled, setUpdateEnabled] = useState(-1)
-  const providerHandle = location.state ? location.state : location.pathname.split('/').pop();
-  const { data: menu, isLoading, isError } = useQuery(['menu', providerHandle], () =>
-    getService(import.meta.env.VITE_APP_GET_PROVIDER_MENU, { providerHandle })
-      .then((response) => response.data)
-  );
+  const { providerHandle } = useParams();
+  const { data: menu, isLoading, isError } = getMenu(providerHandle);
+
 
   const [newMenuItem, setNewMenuItem] = useState({
     itemName: "",
@@ -25,9 +25,6 @@ export default function ProviderMenu() {
   const [isEditing, setIsEditing] = useState(false);
   const [deleteRow, setDeleteRow] = useState(-1);
   const [editedMenuItem, setEditedMenuItem] = useState(null);
-
-
-  const queryClient = useQueryClient();
 
   const { mutate: addMenuItem } = useMutation(
     (menuItem) =>
@@ -100,14 +97,9 @@ export default function ProviderMenu() {
     setIsEditing(false);
   };
 
-  const handleSaveMenuItem = (menuItem) => {
-    handleUpdateMenuItem(menuItem);
-  };
-
   return (
-    <div className="dashboard">
-      <h1 className="dashboard-header">Welcome! Time to set the table!</h1>
-      <div className="flex items-center justify-center my-4">
+    <div className="">
+      <div className="flex items-center justify-center my-8">
         <input
           type="text"
           placeholder="Item Name"
@@ -149,7 +141,7 @@ export default function ProviderMenu() {
           <p>Loading menu items...</p>
         ) : isError ? (
           <p>Error loading menu items.</p>
-        ) : menu.length == 0 ? <div className="flex w-3/4 justify-center rounded-lg border border-gray-300 bg-gray-100 p-5">
+        ) : menu?.length == 0 ? <div className="flex w-3/4 justify-center rounded-lg border border-gray-300 bg-gray-100 p-5">
           <h1>Ready to Set the Table? Add an Item!</h1>
         </div>
           :
@@ -223,7 +215,7 @@ export default function ProviderMenu() {
                           >
                             Save
                           </button>
-                          <button onClick={cancelEditMenuItem}
+                          <button onClick={() => { setIsEditing(false) }}
                             disabled={updateEnabled === menuItem.menuId}
                             className={`bg-gray-300 text-gray-700 py-2 px-4 rounded mx-2
                           ${updateEnabled === menuItem.menuId ? "bg-gray-300 text-white" : "hover:bg-gray-400"}`}
