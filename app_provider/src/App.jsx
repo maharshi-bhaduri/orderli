@@ -7,9 +7,11 @@ import AddProvider from "./pages/AddProvider";
 import Provider from "./pages/Provider";
 import { AuthProvider } from "./utils/AuthContextProvider";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { initializeLocalForage } from "./utils/localforageUtils";
 
 
 export default function App() {
+  initializeLocalForage()
   const queryClient = new QueryClient();
 
   return (

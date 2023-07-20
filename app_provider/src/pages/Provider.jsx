@@ -11,7 +11,7 @@ import { useParams } from "react-router-dom";
 export default function Provider() {
   const location = useLocation();
   const { providerHandle } = useParams();
-  getProfile(providerHandle)
+  getProfile(providerHandle);
   getMenu(providerHandle);
 
   return (

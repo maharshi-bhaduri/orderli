@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { getService, postService } from "../utils/APIService";
+import { useMutation, useQueryClient } from 'react-query';
+import { postService } from "../utils/APIService";
 import { getMenu } from "../utils/queryService";
+import localforage from "localforage";
 
 export default function ProviderMenu() {
   const location = useLocation();
@@ -12,6 +13,7 @@ export default function ProviderMenu() {
   const [updateEnabled, setUpdateEnabled] = useState(-1)
   const { providerHandle } = useParams();
   const { data: menu, isLoading, isError } = getMenu(providerHandle);
+  const [updatedMenu, setUpdatedMenu] = useState([]);
 
 
   const [newMenuItem, setNewMenuItem] = useState({
@@ -25,6 +27,58 @@ export default function ProviderMenu() {
   const [isEditing, setIsEditing] = useState(false);
   const [deleteRow, setDeleteRow] = useState(-1);
   const [editedMenuItem, setEditedMenuItem] = useState(null);
+
+  const checkAndUpdateMenuItem = async (menuItem) => {
+    const updateOperations = await localforage.getItem('update') || [];
+
+    const updatedItem = updateOperations.find(
+      (operation) => operation.menuId === menuItem.menuId
+    );
+
+    return updatedItem || menuItem;
+  };
+
+  const updateMenuItemsWithOperation = async (menuItems) => {
+    const addOperations = await localforage.getItem('add') || [];
+    const updateOperations = await localforage.getItem('update') || [];
+    const deleteOperations = await localforage.getItem('delete') || [];
+
+    const updatedMenuItems = menuItems.map((menuItem) => {
+      const addOperation = addOperations.find(
+        (operation) => operation.menuId === menuItem.menuId
+      );
+      const updateOperation = updateOperations.find(
+        (operation) => operation.menuId === menuItem.menuId
+      );
+      const deleteOperation = deleteOperations.find(
+        (operation) => operation.menuId === menuItem.menuId
+      );
+
+      if (addOperation) {
+        return { ...menuItem, operation: 'add' };
+      }
+      if (updateOperation) {
+        return { ...menuItem, operation: 'update' };
+      }
+      if (deleteOperation) {
+        return { ...menuItem, operation: 'delete' };
+      }
+
+      return { ...menuItem, operation: null };
+    });
+
+    return updatedMenuItems;
+  };
+
+
+  useEffect(() => {
+    const fetchUpdatedMenu = async () => {
+      const updatedMenuItems = await updateMenuItemsWithOperation(menu);
+      setUpdatedMenu(updatedMenuItems);
+    };
+
+    fetchUpdatedMenu();
+  }, [menu, updatedMenu]);
 
   const { mutate: addMenuItem } = useMutation(
     (menuItem) =>
@@ -66,9 +120,12 @@ export default function ProviderMenu() {
     }
   );
 
-  const handleAddMenuItem = () => {
-    setNewAdditionDisabled(true)
-    addMenuItem(newMenuItem);
+  const handleAddMenuItem = async () => {
+    const addOperations = await localforage.getItem('add') || [];
+    setNewAdditionDisabled(true);
+    addOperations.push(newMenuItem);
+    // addMenuItem(newMenuItem);
+    await localforage.setItem('add', addOperations);
     setNewMenuItem({
       itemName: "",
       description: "",
@@ -77,14 +134,39 @@ export default function ProviderMenu() {
     });
   };
 
-  const handleUpdateMenuItem = (menuItem) => {
-    setUpdateEnabled(menuItem.menuId)
-    updateMenuItem(menuItem);
+  const handleUpdateMenuItem = async (menuItem) => {
+
+    const updateOperations = await localforage.getItem('update') || [];
+
+    console.log("menuItem ", menuItem)
+    console.log("updateOperations ", updateOperations)
+    const updatedOperations = updateOperations.map(operation => {
+      if (operation.menuId === menuItem.menuId) {
+        return menuItem;
+      }
+      return operation;
+    });
+    const isMenuItemUpdated = updateOperations.some(
+      (operation) => operation.menuId === menuItem.menuId
+    );
+    if (!isMenuItemUpdated) {
+      updatedOperations.push(menuItem);
+    }
+    console.log("updatedOperations ", updatedOperations)
+    await localforage.setItem('update', updatedOperations);
+    // updateMenuItem(menuItem);
+    // setUpdateEnabled(menuItem.menuId)
+
+    setIsEditing(false);
+    setUpdateEnabled(-1)
   };
 
-  const handleDeleteMenuItem = (menuItem) => {
+  const handleDeleteMenuItem = async (menuItem) => {
+    const deleteOperations = await localforage.getItem('delete') || [];
+    deleteOperations.push(menuItem);
+    await localforage.setItem('delete', deleteOperations);
     setDeleteRow(menuItem.menuId);
-    deleteMenuItem(menuItem);
+    // deleteMenuItem(menuItem);
   };
 
   const handleEditMenuItem = (menuItem) => {
@@ -93,9 +175,17 @@ export default function ProviderMenu() {
     setEditedMenuItem(menuItem)
   };
 
-  const cancelEditMenuItem = () => {
+  const cancelEditMenuItem = async (editedMenuItem) => {
+    const updateOperations = await localforage.getItem('update') || [];
+
+    const updatedOperations = updateOperations.filter(
+      (operation) => operation.menuId !== editedMenuItem.menuId
+    );
+
+    await localforage.setItem('update', updatedOperations);
     setIsEditing(false);
   };
+
 
   return (
     <div className="">
@@ -135,6 +225,7 @@ export default function ProviderMenu() {
           disabled={newAdditionDisabled}
           className={`bg-blue-500 text-white py-2 px-4 rounded ${newAdditionDisabled ? "bg-gray-300" : "hover:bg-blue-600 mx-2"}`}
         >Add Item</button>
+        {/* addition trigger */}
       </div>
       <div className="flex justify-center my-4">
         {isLoading ? (
@@ -156,7 +247,8 @@ export default function ProviderMenu() {
                 </tr>
               </thead>
               <tbody>
-                {menu.map((menuItem) => (
+                {!isLoading && menu.map((menuItem) => (
+
                   <tr key={menuItem.menuId}
                     className={deleteRow === menuItem.menuId ? "opacity-0 transition-opacity duration-500" : ""}>
                     {editItemId === menuItem.menuId && isEditing ? (
@@ -215,7 +307,7 @@ export default function ProviderMenu() {
                           >
                             Save
                           </button>
-                          <button onClick={() => { setIsEditing(false) }}
+                          <button onClick={() => { cancelEditMenuItem(editedMenuItem) }}
                             disabled={updateEnabled === menuItem.menuId}
                             className={`bg-gray-300 text-gray-700 py-2 px-4 rounded mx-2
                           ${updateEnabled === menuItem.menuId ? "bg-gray-300 text-white" : "hover:bg-gray-400"}`}
