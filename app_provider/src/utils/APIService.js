@@ -9,7 +9,7 @@ export async function getService(api, params, headers) {
         uid: Cookies.get('uid')
     }
     return axios.get(
-        api,// import.meta.env.VITE_APP_GET_PROVIDERS,
+        api,
         {
             headers: {
                 ...mainHeaders,

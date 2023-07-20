@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, onIdTokenChanged } from "firebase/auth";
 
 const AuthContext = createContext();
 
@@ -29,6 +29,7 @@ const AuthProvider = ({ children }) => {
                 }
             }
         });
+
         return () => unsubscribe(); // Unsubscribe from the auth state changes when component unmounts
     }, []);
 
