@@ -42,10 +42,6 @@ export default function ProviderProfile() {
     }
   );
 
-  const handleDeleteProvider = () => {
-    deleteProvider(providerDetails.providerId);
-  };
-
   const cancelProviderDetailsUpdate = () => {
     setUpdatedProviderDetails(providerDetails);
     setIsEditing(false);

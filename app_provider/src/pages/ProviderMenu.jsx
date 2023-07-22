@@ -15,8 +15,8 @@ export default function ProviderMenu() {
   const { data: menu, isLoading, isError } = getMenu(providerHandle);
   const [updatedMenu, setUpdatedMenu] = useState([]);
 
-
   const [newMenuItem, setNewMenuItem] = useState({
+    menuId: Date.now(),
     itemName: "",
     description: "",
     providerHandle: providerHandle,
@@ -70,15 +70,40 @@ export default function ProviderMenu() {
     return updatedMenuItems;
   };
 
+  const updateMenuItemsWithCachedOperations = async () => {
+    const addOperations = await localforage.getItem('add') || [];
+    const updateOperations = await localforage.getItem('update') || [];
+    const deleteOperations = await localforage.getItem('delete') || [];
+
+    const updatedMenuItems = menu.map((menuItem) => {
+      const updateOperation = updateOperations.find(
+        (operation) => operation.menuId === menuItem.menuId
+      );
+      const deleteOperation = deleteOperations.find(
+        (operation) => operation.menuId === menuItem.menuId
+      );
+      if (updateOperation) {
+        return { ...menuItem, operation: 'update' };
+      }
+      else if (deleteOperation) {
+        return { ...menuItem, operation: 'delete' };
+      }
+      return { ...menuItem, operation: null };
+    });
+
+    const updatedMenuWithAdditions = [...menu,
+    ...addOperations.map(
+      (menuItem) => ({ ...menuItem, operation: 'add' })
+    )
+    ];
+    setUpdatedMenu(updatedMenuWithAdditions);
+  };
 
   useEffect(() => {
-    const fetchUpdatedMenu = async () => {
-      const updatedMenuItems = await updateMenuItemsWithOperation(menu);
-      setUpdatedMenu(updatedMenuItems);
-    };
-
-    fetchUpdatedMenu();
-  }, [menu, updatedMenu]);
+    if (menu) {
+      updateMenuItemsWithCachedOperations();
+    }
+  }, [menu]);
 
   const { mutate: addMenuItem } = useMutation(
     (menuItem) =>
@@ -120,13 +145,27 @@ export default function ProviderMenu() {
     }
   );
 
+  const { mutate: updateMenu } = useMutation(
+    (menuItem) =>
+      postService(import.meta.env.VITE_APP_UPDATE_MENU, menuItem),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['menu', providerHandle]);
+      }
+    }
+  );
+
   const handleAddMenuItem = async () => {
     const addOperations = await localforage.getItem('add') || [];
-    setNewAdditionDisabled(true);
-    addOperations.push(newMenuItem);
+    // setNewAdditionDisabled(true);
+    const newItemOper = { ...newMenuItem, operation: "add" }
+    addOperations.push(newItemOper);
     // addMenuItem(newMenuItem);
+    setUpdatedMenu((prevUpdatedMenu) => [...prevUpdatedMenu, newItemOper])
     await localforage.setItem('add', addOperations);
+
     setNewMenuItem({
+      menuId: Date.now(),
       itemName: "",
       description: "",
       providerHandle: providerHandle,
@@ -135,38 +174,55 @@ export default function ProviderMenu() {
   };
 
   const handleUpdateMenuItem = async (menuItem) => {
-
-    const updateOperations = await localforage.getItem('update') || [];
-
-    console.log("menuItem ", menuItem)
-    console.log("updateOperations ", updateOperations)
-    const updatedOperations = updateOperations.map(operation => {
-      if (operation.menuId === menuItem.menuId) {
-        return menuItem;
-      }
-      return operation;
-    });
-    const isMenuItemUpdated = updateOperations.some(
-      (operation) => operation.menuId === menuItem.menuId
-    );
-    if (!isMenuItemUpdated) {
-      updatedOperations.push(menuItem);
+    if (menuItem.operation === 'add') {
+      const addOperations = await localforage.getItem('add');
+      const updatedAddCache = addOperations.map((cachedItem) =>
+        cachedItem.menuId === menuItem.menuId ? menuItem : cachedItem
+      );
+      await localforage.setItem('add', updatedAddCache);
     }
-    console.log("updatedOperations ", updatedOperations)
-    await localforage.setItem('update', updatedOperations);
+    else if (menuItem.operation === null) {
+      const updateOperations = await localforage.getItem('update') || [];
+      const updatedOperations = updateOperations.map(operation => {
+        if (operation.menuId === menuItem.menuId) {
+          return menuItem;
+        }
+        return operation;
+      });
+      const isMenuItemUpdated = updateOperations.some(
+        (operation) => operation.menuId === menuItem.menuId
+      );
+      if (!isMenuItemUpdated) {
+        updatedOperations.push(menuItem);
+      }
+      await localforage.setItem('update', updatedOperations);
+    }
+    updateMenuItemsWithCachedOperations();
     // updateMenuItem(menuItem);
     // setUpdateEnabled(menuItem.menuId)
-
     setIsEditing(false);
     setUpdateEnabled(-1)
   };
 
   const handleDeleteMenuItem = async (menuItem) => {
-    const deleteOperations = await localforage.getItem('delete') || [];
-    deleteOperations.push(menuItem);
-    await localforage.setItem('delete', deleteOperations);
-    setDeleteRow(menuItem.menuId);
-    // deleteMenuItem(menuItem);
+    if (menuItem.operation === 'add') {
+      const addOperations = await localforage.getItem('add');
+      const indexToRemove = addOperations.findIndex((item) => item.menuId === menuItem.menuId);
+      // If the menu item is found, remove it from the array
+      if (indexToRemove !== -1) {
+        addOperations.splice(indexToRemove, 1);
+        // Save the updated addOperations array back to localforage
+        await localforage.setItem('add', addOperations);
+      }
+    }
+    else if (menuItem.operation === null) {
+      const deleteOperations = await localforage.getItem('delete') || [];
+      deleteOperations.push(menuItem);
+      await localforage.setItem('delete', deleteOperations);
+      setDeleteRow(menuItem.menuId);
+      // deleteMenuItem(menuItem);
+    }
+    updateMenuItemsWithCachedOperations();
   };
 
   const handleEditMenuItem = (menuItem) => {
@@ -232,7 +288,7 @@ export default function ProviderMenu() {
           <p>Loading menu items...</p>
         ) : isError ? (
           <p>Error loading menu items.</p>
-        ) : menu?.length == 0 ? <div className="flex w-3/4 justify-center rounded-lg border border-gray-300 bg-gray-100 p-5">
+        ) : updatedMenu?.length == 0 ? <div className="flex w-3/4 justify-center rounded-lg border border-gray-300 bg-gray-100 p-5">
           <h1>Ready to Set the Table? Add an Item!</h1>
         </div>
           :
@@ -247,7 +303,7 @@ export default function ProviderMenu() {
                 </tr>
               </thead>
               <tbody>
-                {!isLoading && menu.map((menuItem) => (
+                {!isLoading && updatedMenu.map((menuItem) => (
 
                   <tr key={menuItem.menuId}
                     className={deleteRow === menuItem.menuId ? "opacity-0 transition-opacity duration-500" : ""}>
@@ -305,7 +361,7 @@ export default function ProviderMenu() {
                             className={`bg-blue-500 text-white py-2 px-4 rounded mx-2 
                           ${updateEnabled === menuItem.menuId ? "bg-gray-300" : "hover:bg-blue-600"}`}
                           >
-                            Save
+                            Done
                           </button>
                           <button onClick={() => { cancelEditMenuItem(editedMenuItem) }}
                             disabled={updateEnabled === menuItem.menuId}
@@ -343,6 +399,13 @@ export default function ProviderMenu() {
           )
         }
       </div>
+      <button
+        // onClick={ }
+        // disabled={updateEnabled === menuItem.menuId} //no menu item here
+        className={`bg-blue-500 text-white py-2 px-4 rounded mx-2 hover:bg-blue-600"}`}
+      >
+        Save
+      </button>
     </div>
   );
 
