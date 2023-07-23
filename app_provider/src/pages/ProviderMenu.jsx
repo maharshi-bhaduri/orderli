@@ -83,15 +83,15 @@ export default function ProviderMenu() {
         (operation) => operation.menuId === menuItem.menuId
       );
       if (updateOperation) {
-        return { ...menuItem, operation: 'update' };
+        return { ...updateOperation, operation: 'update' };
       }
-      else if (deleteOperation) {
-        return { ...menuItem, operation: 'delete' };
+      if (deleteOperation) {
+        return { ...deleteOperation, operation: 'delete' };
       }
       return { ...menuItem, operation: null };
     });
 
-    const updatedMenuWithAdditions = [...menu,
+    const updatedMenuWithAdditions = [...updatedMenuItems,
     ...addOperations.map(
       (menuItem) => ({ ...menuItem, operation: 'add' })
     )
@@ -158,10 +158,10 @@ export default function ProviderMenu() {
   const handleAddMenuItem = async () => {
     const addOperations = await localforage.getItem('add') || [];
     // setNewAdditionDisabled(true);
-    const newItemOper = { ...newMenuItem, operation: "add" }
-    addOperations.push(newItemOper);
+    // const newItemOper = { ...newMenuItem, operation: "add" }
+    addOperations.push(newMenuItem);
     // addMenuItem(newMenuItem);
-    setUpdatedMenu((prevUpdatedMenu) => [...prevUpdatedMenu, newItemOper])
+    setUpdatedMenu((prevUpdatedMenu) => [...prevUpdatedMenu, { ...newMenuItem, operation: "add" }])
     await localforage.setItem('add', addOperations);
 
     setNewMenuItem({
@@ -174,6 +174,7 @@ export default function ProviderMenu() {
   };
 
   const handleUpdateMenuItem = async (menuItem) => {
+    console.log(menuItem)
     if (menuItem.operation === 'add') {
       const addOperations = await localforage.getItem('add');
       const updatedAddCache = addOperations.map((cachedItem) =>
@@ -181,7 +182,8 @@ export default function ProviderMenu() {
       );
       await localforage.setItem('add', updatedAddCache);
     }
-    else if (menuItem.operation === null) {
+    else if (!menuItem.operation || menuItem.operation === "update") {
+      console.log("hehe")
       const updateOperations = await localforage.getItem('update') || [];
       const updatedOperations = updateOperations.map(operation => {
         if (operation.menuId === menuItem.menuId) {
@@ -189,9 +191,11 @@ export default function ProviderMenu() {
         }
         return operation;
       });
+      console.log("updatedOperations ", updatedOperations)
       const isMenuItemUpdated = updateOperations.some(
         (operation) => operation.menuId === menuItem.menuId
       );
+
       if (!isMenuItemUpdated) {
         updatedOperations.push(menuItem);
       }
