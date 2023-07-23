@@ -1,23 +1,24 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-
 export default function Card(props) {
   const navigate = useNavigate();
 
-  function handleClick() {
-    if (props?.link) {
-      navigate(props.link);
-    }
+  function logfunction() {
+    console.log("clicked on div");
   }
+
   return (
-    <div
-      className="m-4 border rounded-lg border-gray-300 bg-gray-100 hover:bg-gray-200
-    hover:cursor-pointer drop-shadow-md border-slate-100 p-5 w-4/5 md:w-1/2"
-      onClick={handleClick}
-    >
-      <h1 className="text-2xl font-medium">{props.heading}</h1>
-      <h2 className="italic">/{props.subheading}</h2>
+    <div className="max-w-lg mx-auto px-4" onClick={logfunction}>
+      <div className="bg-white rounded-lg shadow-md">
+        <div className="p-4 mb-4 flex justify-between items-center">
+          <div>
+            <h3 className="text-lg font-semibold mb-2">{props.itemName}</h3>
+            <p className="text-gray-800 mb-2">{props.description}</p>
+          </div>
+          <p className="text-gray-800 font-semibold">Rs. {props.price}</p>
+        </div>
+      </div>
     </div>
   );
 }

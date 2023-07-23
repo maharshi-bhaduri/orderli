@@ -3,16 +3,17 @@ import Sidebar from "../components/Sidebar";
 import ProviderProfile from "./ProviderProfile";
 import ProviderDefault from "./ProviderDefault";
 import { optionMap } from "../utils/optionMap";
-import { getMenu, getProfile } from "../utils/queryService";
+import { getMenu, getProfile, getFeedback } from "../utils/queryService";
 import { Routes, Route } from "react-router-dom";
 import ProviderMenu from "./ProviderMenu";
 import { useParams } from "react-router-dom";
-
+import ProviderFeedback from "./ProviderFeedback";
 export default function Provider() {
   const location = useLocation();
   const { providerHandle } = useParams();
   getProfile(providerHandle);
   getMenu(providerHandle);
+  getFeedback(providerHandle);
 
   return (
     <div className="flex mt-20 h-[calc(100vh-80px)] overflow-hidden">
@@ -22,6 +23,7 @@ export default function Provider() {
           <Route path={`/profile`} element={<ProviderProfile />} />
           <Route path={`/menu`} element={<ProviderMenu />} />
           <Route path={`/`} element={<ProviderDefault />} />
+          <Route path={`/feedback`} element={<ProviderFeedback />} />
         </Routes>
       </div>
     </div>
