@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { postService } from "../utils/APIService";
 import { getMenu } from "../utils/queryService";
 import localforage from "localforage";
+import MenuEditRow from "../components/MenuEditRow";
 
 export default function ProviderMenu() {
   const location = useLocation();
@@ -14,61 +15,19 @@ export default function ProviderMenu() {
   const { providerHandle } = useParams();
   const { data: menu, isLoading, isError } = getMenu(providerHandle);
   const [updatedMenu, setUpdatedMenu] = useState([]);
-
-  const [newMenuItem, setNewMenuItem] = useState({
+  const defaultNewMenuItem = {
     menuId: Date.now(),
     itemName: "",
     description: "",
-    providerHandle: providerHandle,
     price: 0
-  });
+  }
+
+  const [newMenuItem, setNewMenuItem] = useState(defaultNewMenuItem);
 
   const [editItemId, setEditItemId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [deleteRow, setDeleteRow] = useState(-1);
-  const [editedMenuItem, setEditedMenuItem] = useState(null);
-
-  const checkAndUpdateMenuItem = async (menuItem) => {
-    const updateOperations = await localforage.getItem('update') || [];
-
-    const updatedItem = updateOperations.find(
-      (operation) => operation.menuId === menuItem.menuId
-    );
-
-    return updatedItem || menuItem;
-  };
-
-  const updateMenuItemsWithOperation = async (menuItems) => {
-    const addOperations = await localforage.getItem('add') || [];
-    const updateOperations = await localforage.getItem('update') || [];
-    const deleteOperations = await localforage.getItem('delete') || [];
-
-    const updatedMenuItems = menuItems.map((menuItem) => {
-      const addOperation = addOperations.find(
-        (operation) => operation.menuId === menuItem.menuId
-      );
-      const updateOperation = updateOperations.find(
-        (operation) => operation.menuId === menuItem.menuId
-      );
-      const deleteOperation = deleteOperations.find(
-        (operation) => operation.menuId === menuItem.menuId
-      );
-
-      if (addOperation) {
-        return { ...menuItem, operation: 'add' };
-      }
-      if (updateOperation) {
-        return { ...menuItem, operation: 'update' };
-      }
-      if (deleteOperation) {
-        return { ...menuItem, operation: 'delete' };
-      }
-
-      return { ...menuItem, operation: null };
-    });
-
-    return updatedMenuItems;
-  };
+  const [editedMenuItem, setEditedMenuItem] = useState({});
 
   const updateMenuItemsWithCachedOperations = async () => {
     const addOperations = await localforage.getItem('add') || [];
@@ -90,8 +49,8 @@ export default function ProviderMenu() {
       }
       return { ...menuItem, operation: null };
     });
-
-    const updatedMenuWithAdditions = [...updatedMenuItems,
+    const removedDeletes = updatedMenuItems.filter((item) => item.operation !== 'delete');
+    const updatedMenuWithAdditions = [...removedDeletes,
     ...addOperations.map(
       (menuItem) => ({ ...menuItem, operation: 'add' })
     )
@@ -105,55 +64,47 @@ export default function ProviderMenu() {
     }
   }, [menu]);
 
-  const { mutate: addMenuItem } = useMutation(
-    (menuItem) =>
-      postService(import.meta.env.VITE_APP_ADD_MENU_ITEM, menuItem),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['menu', providerHandle]);
-        setNewAdditionDisabled(false)
-      }
-    },
-    {
-      onError: () => {
-        setNewAdditionDisabled(false)
-        //handle errors here
-      }
-    }
-  );
-
-  const { mutate: updateMenuItem } = useMutation(
-    (menuItem) =>
-      postService(import.meta.env.VITE_APP_UPDATE_MENU_ITEM, menuItem),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['menu', providerHandle]);
-        setEditItemId(null);
-        setIsEditing(false);
-        setUpdateEnabled(-1)
-      }
-    }
-  );
-
-  const { mutate: deleteMenuItem } = useMutation(
-    (menuItem) =>
-      postService(import.meta.env.VITE_APP_DELETE_MENU_ITEM, menuItem),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['menu', providerHandle]);
-      }
-    }
-  );
-
   const { mutate: updateMenu } = useMutation(
-    (menuItem) =>
-      postService(import.meta.env.VITE_APP_UPDATE_MENU, menuItem),
+    (cachedChanges) =>
+      postService(import.meta.env.VITE_APP_UPDATE_MENU, cachedChanges),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['menu', providerHandle]);
       }
     }
   );
+
+  const handleSaveMenu = async () => {
+    const addOperations = await localforage.getItem('add') || [];
+    const updateOperations = await localforage.getItem('update') || [];
+    const deleteOperations = await localforage.getItem('delete') || [];
+
+    const removeOperationKey = (obj) => {
+      const { operation, ...updatedData } = obj;
+      return updatedData;
+    };
+    const addListWithoutOperation = addOperations.map(removeOperationKey).map(
+      (obj) => {
+        const { menuId, ...updatedData } = obj;
+        return updatedData;
+      }
+    );
+    const updateListWithoutOperation = updateOperations.map(removeOperationKey);
+    const deleteListWithoutOperation = deleteOperations.map(removeOperationKey);
+
+    const cachedChanges = {
+      providerHandle: providerHandle,
+      addMenuItems: addListWithoutOperation,
+      updateMenuItems: updateListWithoutOperation,
+      deleteMenuItems: deleteListWithoutOperation
+    }
+
+    await localforage.setItem('update', []);
+    await localforage.setItem('add', []);
+    await localforage.setItem('delete', []);
+
+    updateMenu(cachedChanges)
+  }
 
   const handleAddMenuItem = async () => {
     const addOperations = await localforage.getItem('add') || [];
@@ -164,17 +115,11 @@ export default function ProviderMenu() {
     setUpdatedMenu((prevUpdatedMenu) => [...prevUpdatedMenu, { ...newMenuItem, operation: "add" }])
     await localforage.setItem('add', addOperations);
 
-    setNewMenuItem({
-      menuId: Date.now(),
-      itemName: "",
-      description: "",
-      providerHandle: providerHandle,
-      price: 0
-    });
+    setNewMenuItem(defaultNewMenuItem);
   };
 
   const handleUpdateMenuItem = async (menuItem) => {
-    console.log(menuItem)
+    console.log("menuItem ", menuItem)
     if (menuItem.operation === 'add') {
       const addOperations = await localforage.getItem('add');
       const updatedAddCache = addOperations.map((cachedItem) =>
@@ -183,7 +128,6 @@ export default function ProviderMenu() {
       await localforage.setItem('add', updatedAddCache);
     }
     else if (!menuItem.operation || menuItem.operation === "update") {
-      console.log("hehe")
       const updateOperations = await localforage.getItem('update') || [];
       const updatedOperations = updateOperations.map(operation => {
         if (operation.menuId === menuItem.menuId) {
@@ -191,7 +135,6 @@ export default function ProviderMenu() {
         }
         return operation;
       });
-      console.log("updatedOperations ", updatedOperations)
       const isMenuItemUpdated = updateOperations.some(
         (operation) => operation.menuId === menuItem.menuId
       );
@@ -219,7 +162,7 @@ export default function ProviderMenu() {
         await localforage.setItem('add', addOperations);
       }
     }
-    else if (menuItem.operation === null) {
+    else if (menuItem.operation === null || menuItem.operation === "update") {
       const deleteOperations = await localforage.getItem('delete') || [];
       deleteOperations.push(menuItem);
       await localforage.setItem('delete', deleteOperations);
@@ -245,7 +188,6 @@ export default function ProviderMenu() {
     await localforage.setItem('update', updatedOperations);
     setIsEditing(false);
   };
-
 
   return (
     <div className="">
@@ -310,70 +252,16 @@ export default function ProviderMenu() {
                 {!isLoading && updatedMenu.map((menuItem) => (
 
                   <tr key={menuItem.menuId}
-                    className={deleteRow === menuItem.menuId ? "opacity-0 transition-opacity duration-500" : ""}>
+                  >
                     {editItemId === menuItem.menuId && isEditing ? (
-                      <>
-                        <td className="py-2 px-4 w-1/4">
-                          <input
-                            type="text"
-                            placeholder="Item Name"
-                            value={editedMenuItem.itemName}
-                            disabled={updateEnabled === menuItem.menuId}
-                            onChange={(e) =>
-                              setEditedMenuItem({
-                                ...editedMenuItem,
-                                itemName: e.target.value,
-                              })
-                            }
-                            className="w-50 border border-gray-300 px-2 py-1 rounded"
-                          />
-                        </td>
-                        <td className="py-2 px-4 w-1/4">
-                          <input
-                            type="text"
-                            placeholder="Description"
-                            value={editedMenuItem.description}
-                            disabled={updateEnabled === menuItem.menuId}
-                            onChange={(e) =>
-                              setEditedMenuItem({
-                                ...editedMenuItem,
-                                description: e.target.value,
-                              })
-                            }
-                            className="w-50 border border-gray-300 px-2 py-1 rounded"
-                          />
-                        </td>
-                        <td className="py-2 px-4 w-1/4">
-                          <input
-                            type="number"
-                            placeholder="Price"
-                            value={editedMenuItem.price}
-                            disabled={updateEnabled === menuItem.menuId}
-                            onChange={(e) =>
-                              setEditedMenuItem({
-                                ...editedMenuItem,
-                                price: e.target.value,
-                              })
-                            }
-                            className="w-50 border border-gray-300 px-2 py-1 rounded"
-                          />
-                        </td>
-                        <td className="py-2 px-4 w-1/4">
-                          <button
-                            onClick={() => handleUpdateMenuItem(editedMenuItem)}
-                            disabled={updateEnabled === menuItem.menuId}
-                            className={`bg-blue-500 text-white py-2 px-4 rounded mx-2 
-                          ${updateEnabled === menuItem.menuId ? "bg-gray-300" : "hover:bg-blue-600"}`}
-                          >
-                            Done
-                          </button>
-                          <button onClick={() => { cancelEditMenuItem(editedMenuItem) }}
-                            disabled={updateEnabled === menuItem.menuId}
-                            className={`bg-gray-300 text-gray-700 py-2 px-4 rounded mx-2
-                          ${updateEnabled === menuItem.menuId ? "bg-gray-300 text-white" : "hover:bg-gray-400"}`}
-                          >Cancel</button>
-                        </td>
-                      </>
+                      <MenuEditRow
+                        editedMenuItem={editedMenuItem}
+                        cancelEditMenuItem={() => cancelEditMenuItem(editedMenuItem)}
+                        handleUpdateMenuItem={() => handleUpdateMenuItem(editedMenuItem)}
+                        onChange={(e) => {
+                          setEditedMenuItem(e)
+                        }}
+                      />
                     ) : (
                       <>
                         {/* Display mode table cells */}
@@ -404,7 +292,7 @@ export default function ProviderMenu() {
         }
       </div>
       <button
-        // onClick={ }
+        onClick={() => handleSaveMenu()}
         // disabled={updateEnabled === menuItem.menuId} //no menu item here
         className={`bg-blue-500 text-white py-2 px-4 rounded mx-2 hover:bg-blue-600"}`}
       >
