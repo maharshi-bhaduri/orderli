@@ -25,3 +25,21 @@ export const optionMap = [
         icon: "reviews"
     }
 ]
+
+export const menuRowOptions = [
+    {
+        name: "Item Name",
+        type: "text",
+        key: "itemName"
+    },
+    {
+        name: "Description",
+        type: "text",
+        key: "description"
+    },
+    {
+        name: "Price",
+        type: "number",
+        key: "price"
+    },
+]
