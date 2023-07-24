@@ -11,7 +11,6 @@ export default function ProviderMenu() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [newAdditionDisabled, setNewAdditionDisabled] = useState(false)
-  const [updateEnabled, setUpdateEnabled] = useState(-1)
   const { providerHandle } = useParams();
   const { data: menu, isLoading, isError } = getMenu(providerHandle);
   const [updatedMenu, setUpdatedMenu] = useState([]);
@@ -145,10 +144,7 @@ export default function ProviderMenu() {
       await localforage.setItem('update', updatedOperations);
     }
     updateMenuItemsWithCachedOperations();
-    // updateMenuItem(menuItem);
-    // setUpdateEnabled(menuItem.menuId)
     setIsEditing(false);
-    setUpdateEnabled(-1)
   };
 
   const handleDeleteMenuItem = async (menuItem) => {
@@ -192,42 +188,18 @@ export default function ProviderMenu() {
   return (
     <div className="">
       <div className="flex items-center justify-center my-8">
-        <input
-          type="text"
-          placeholder="Item Name"
-          value={newMenuItem.itemName}
-          disabled={newAdditionDisabled}
-          onChange={(e) =>
-            setNewMenuItem({ ...newMenuItem, itemName: e.target.value })
-          }
-          className="border border-gray-300 px-2 py-1 rounded mx-4"
-        />
-        <input
-          type="text"
-          placeholder="Description"
-          value={newMenuItem.description}
-          disabled={newAdditionDisabled}
-          onChange={(e) =>
-            setNewMenuItem({ ...newMenuItem, description: e.target.value })
-          }
-          className="border border-gray-300 px-2 py-1 rounded mx-4"
-        />
-        <input
-          type="number"
-          placeholder="Price"
-          value={newMenuItem.price}
-          disabled={newAdditionDisabled}
-          onChange={(e) =>
-            setNewMenuItem({ ...newMenuItem, price: e.target.value })
-          }
-          className="border border-gray-300 px-2 py-1 rounded mx-4"
-        />
-        <button
-          onClick={() => handleAddMenuItem()}
-          disabled={newAdditionDisabled}
-          className={`bg-blue-500 text-white py-2 px-4 rounded ${newAdditionDisabled ? "bg-gray-300" : "hover:bg-blue-600 mx-2"}`}
-        >Add Item</button>
-        {/* addition trigger */}
+        <table>
+          <tbody>
+            <MenuEditRow
+              editedMenuItem={newMenuItem}
+              type="add"
+              handleAddMenuItem={() => handleAddMenuItem()}
+              onChange={(e) => {
+                setNewMenuItem(e)
+              }}
+            />
+          </tbody>
+        </table>
       </div>
       <div className="flex justify-center my-4">
         {isLoading ? (
@@ -242,29 +214,28 @@ export default function ProviderMenu() {
             <table className="w-3/4 mt-4">
               <thead>
                 <tr>
-                  <th className="py-2 px-4 bg-gray-100">Item Name</th>
-                  <th className="py-2 px-4 bg-gray-100">Description</th>
-                  <th className="py-2 px-4 bg-gray-100">Price</th>
-                  <th className="py-2 px-4 bg-gray-100">Actions</th>
+                  <th className="py-2 px-4 bg-gray-100 text-left">Item Name</th>
+                  <th className="py-2 px-4 bg-gray-100 text-left">Description</th>
+                  <th className="py-2 px-4 bg-gray-100 text-left">Price</th>
+                  <th className="py-2 px-4 bg-gray-100 text-left">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {!isLoading && updatedMenu.map((menuItem) => (
-
-                  <tr key={menuItem.menuId}
-                  >
-                    {editItemId === menuItem.menuId && isEditing ? (
+                {!isLoading &&
+                  updatedMenu.map((menuItem) => (
+                    editItemId === menuItem.menuId && isEditing ? (
                       <MenuEditRow
+                        key={menuItem.menuId}
                         editedMenuItem={editedMenuItem}
                         cancelEditMenuItem={() => cancelEditMenuItem(editedMenuItem)}
                         handleUpdateMenuItem={() => handleUpdateMenuItem(editedMenuItem)}
+                        type="update"
                         onChange={(e) => {
-                          setEditedMenuItem(e)
+                          setEditedMenuItem(e);
                         }}
                       />
                     ) : (
-                      <>
-                        {/* Display mode table cells */}
+                      <tr key={menuItem.menuId}>
                         <td className="py-2 px-4 w-1/4">{menuItem.itemName}</td>
                         <td className="py-2 px-4 w-1/4">{menuItem.description}</td>
                         <td className="py-2 px-4 w-1/4">{menuItem.price}</td>
@@ -282,10 +253,9 @@ export default function ProviderMenu() {
                             Delete
                           </button>
                         </td>
-                      </>
-                    )}
-                  </tr>
-                ))}
+                      </tr>
+                    )
+                  ))}
               </tbody>
             </table>
           )

@@ -2,7 +2,7 @@ import React from "react";
 import { menuRowOptions } from "../utils/optionMap";
 
 export default function MenuEditRow(props) {
-  const { editedMenuItem, onChange } = props;
+  const { editedMenuItem, onChange, type } = props;
 
   const handleInputChange = (key, value) =>
     onChange({
@@ -11,11 +11,11 @@ export default function MenuEditRow(props) {
     });
 
   return (
-    <>
+    <tr>
       {menuRowOptions.map((item, index) => {
         return <td
           key={index}
-          className="py-2 px-4 w-1/4">{/* this is rendered as undefined. why? */}
+          className="py-2 px-4 w-1/4">
           <input
             type={item.type}
             placeholder={item.name}
@@ -25,19 +25,29 @@ export default function MenuEditRow(props) {
           />
         </td>
       })}
-      <td className="py-2 px-4 w-1/4">
-        <button
-          onClick={() => props.handleUpdateMenuItem(editedMenuItem)}
-          className={"bg-blue-500 text-white py-2 px-4 rounded mx-2 "
-            + "hover:bg-blue-600"}
-        >
-          Done
-        </button>
-        <button onClick={() => { props.cancelEditMenuItem(editedMenuItem) }}
-          className={"bg-gray-300 text-gray-700 py-2 px-4 rounded mx-2"
-            + "hover:bg-gray-400"}
-        >Cancel</button>
-      </td>
-    </>
+      {type === "update" ?
+        (
+          <td className="py-2 px-4 w-1/4">
+            <button
+              onClick={() => props.handleUpdateMenuItem(editedMenuItem)}
+              className={"bg-blue-500 text-white py-2 px-4 rounded mx-2 "
+                + "hover:bg-blue-600"}
+            >
+              Done
+            </button>
+            <button onClick={() => { props.cancelEditMenuItem(editedMenuItem) }}
+              className={"bg-gray-300 text-gray-700 py-2 px-4 rounded mx-2"
+                + "hover:bg-gray-400"}
+            >Cancel</button>
+
+          </td>
+        ) :
+        <td className="py-2 px-4 w-1/4">
+          <button
+            onClick={() => props.handleAddMenuItem()}
+            className={"bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mx-2"}
+          >Add Item</button>
+        </td>}
+    </tr>
   );
 }
