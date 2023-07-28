@@ -7,17 +7,20 @@ export default function ProviderFeedback() {
   const { data: feedback, isLoading, isError } = getFeedback(providerHandle);
 
   return (
-    <div className="max-w-5xl mx-auto mt-8">
-      {!isLoading &&
-        feedback.map((feedbackitem, index) => (
-          <div key={index}>
-            <FeedbackCard
-              rating={feedbackitem.rating}
-              desc={feedbackitem.feedbackComments}
-              createdAt={feedbackitem.createdAt.substring(0, 10)}
-            />
-          </div>
-        ))}
-    </div>
+    <>
+      <div className="max-w-5xl mx-auto mt-12">
+        <header className="text-4xl">Customer Feedback</header>
+        {!isLoading &&
+          feedback.map((feedbackitem, index) => (
+            <div key={index}>
+              <FeedbackCard
+                rating={parseInt(Math.round(feedbackitem.rating))}
+                desc={feedbackitem.feedbackComments}
+                createdAt={feedbackitem.createdAt.substring(0, 10)}
+              />
+            </div>
+          ))}
+      </div>
+    </>
   );
 }
