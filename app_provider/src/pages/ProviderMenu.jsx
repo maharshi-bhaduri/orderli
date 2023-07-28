@@ -188,92 +188,101 @@ export default function ProviderMenu() {
   };
 
   return (
-    <div className="">
-      <div className="flex items-center justify-center my-8">
-        <table>
-          <tbody>
-            <MenuEditRow
-              editedMenuItem={newMenuItem}
-              type="add"
-              handleAddMenuItem={() => handleAddMenuItem()}
-              onChange={(e) => {
-                setNewMenuItem(e);
-              }}
-            />
-          </tbody>
-        </table>
+    <div className="w-full px-8 flex flex-col items-center">
+      <div className="w-full my-6">
+        <header className="text-4xl font-medium">Menu</header>
       </div>
-      <div className="flex justify-center my-4">
-        {isLoading ? (
-          <p>Loading menu items...</p>
-        ) : isError ? (
-          <p>Error loading menu items.</p>
-        ) : updatedMenu?.length == 0 ? (
-          <div className="flex w-3/4 justify-center rounded-lg border border-gray-300 bg-gray-100 p-5">
-            <h1>Ready to Set the Table? Add an Item!</h1>
-          </div>
-        ) : (
-          <table className="w-3/4 mt-4">
-            <thead>
-              <tr>
-                <th className="py-2 px-4 bg-gray-100 text-left">Item Name</th>
-                <th className="py-2 px-4 bg-gray-100 text-left">Description</th>
-                <th className="py-2 px-4 bg-gray-100 text-left">Price</th>
-                <th className="py-2 px-4 bg-gray-100 text-left">Actions</th>
-              </tr>
-            </thead>
+      <div
+        className={"rounded-lg bg-white " +
+          "w-full p-5 transition ease-in-out flex flex-col justify-around items-center"}
+      >
+        <div className="">
+          <table>
             <tbody>
-              {!isLoading &&
-                updatedMenu.map((menuItem) =>
-                  editItemId === menuItem.menuId && isEditing ? (
-                    <MenuEditRow
-                      key={menuItem.menuId}
-                      editedMenuItem={editedMenuItem}
-                      cancelEditMenuItem={() =>
-                        cancelEditMenuItem(editedMenuItem)
-                      }
-                      handleUpdateMenuItem={() =>
-                        handleUpdateMenuItem(editedMenuItem)
-                      }
-                      type="update"
-                      onChange={(e) => {
-                        setEditedMenuItem(e);
-                      }}
-                    />
-                  ) : (
-                    <tr key={menuItem.menuId}>
-                      <td className="py-2 px-4 w-1/4">{menuItem.itemName}</td>
-                      <td className="py-2 px-4 w-1/4">
-                        {menuItem.description}
-                      </td>
-                      <td className="py-2 px-4 w-1/4">{menuItem.price}</td>
-                      <td className="py-2 px-4 w-1/4">
-                        <button
-                          onClick={() => handleEditMenuItem(menuItem)}
-                          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mx-2"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDeleteMenuItem(menuItem)}
-                          className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 mx-2"
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  )
-                )}
+              <MenuEditRow
+                editedMenuItem={newMenuItem}
+                type="add"
+                handleAddMenuItem={() => handleAddMenuItem()}
+                onChange={(e) => {
+                  setNewMenuItem(e);
+                }}
+              />
             </tbody>
           </table>
-        )}
+        </div>
+        <div className="flex justify-center my-4">
+          {isLoading ? (
+            <p>Loading menu items...</p>
+          ) : isError ? (
+            <p>Error loading menu items.</p>
+          ) : updatedMenu?.length == 0 ? (
+            <div className="flex w-3/4 justify-center rounded-lg border border-gray-300 bg-gray-100 p-5">
+              <h1>Ready to Set the Table? Add an Item!</h1>
+            </div>
+          ) : (
+            <table className="w-3/4 mt-4">
+              <thead>
+                <tr>
+                  <th className="py-2 px-4 bg-gray-100 text-left">Item Name</th>
+                  <th className="py-2 px-4 bg-gray-100 text-left">Description</th>
+                  <th className="py-2 px-4 bg-gray-100 text-left">Price</th>
+                  <th className="py-2 px-4 bg-gray-100 text-left">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {!isLoading &&
+                  updatedMenu.map((menuItem) =>
+                    editItemId === menuItem.menuId && isEditing ? (
+                      <MenuEditRow
+                        key={menuItem.menuId}
+                        editedMenuItem={editedMenuItem}
+                        cancelEditMenuItem={() =>
+                          cancelEditMenuItem(editedMenuItem)
+                        }
+                        handleUpdateMenuItem={() =>
+                          handleUpdateMenuItem(editedMenuItem)
+                        }
+                        type="update"
+                        onChange={(e) => {
+                          setEditedMenuItem(e);
+                        }}
+                      />
+                    ) : (
+                      <tr key={menuItem.menuId}>
+                        <td className="py-2 px-4 w-1/4">{menuItem.itemName}</td>
+                        <td className="py-2 px-4 w-1/4">
+                          {menuItem.description}
+                        </td>
+                        <td className="py-2 px-4 w-1/4">{menuItem.price}</td>
+                        <td className="py-2 px-4 w-1/4">
+                          <button
+                            onClick={() => handleEditMenuItem(menuItem)}
+                            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mx-2"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDeleteMenuItem(menuItem)}
+                            className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 mx-2"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    )
+                  )}
+              </tbody>
+            </table>
+          )}
+        </div>
+        <button
+          onClick={() => handleSaveMenu()}
+          className={`bg-blue-500 text-white py-2 px-4 rounded mx-2 hover:bg-blue-600"}`}
+        >
+          Save
+        </button>
       </div>
-      <button
-        onClick={() => handleSaveMenu()}
-        className={`bg-blue-500 text-white py-2 px-4 rounded mx-2 hover:bg-blue-600"}`}
-      >
-        Save
-      </button>
     </div>
+
   );
 }

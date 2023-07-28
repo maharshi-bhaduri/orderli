@@ -55,14 +55,16 @@ export default function ProviderProfile() {
       </div>
       <div
         className={"rounded-lg bg-white " +
-          "w-full p-5 transition ease-in-out flex justify-around items-center"}
+          "w-full p-5 transition ease-in-out flex flex-col justify-around items-center"}
       >
-        <div className="flex flex-col justify-center h-full">
-          <h1 className="text-4xl font-bold my-4">{providerDetails?.providerName}</h1>
-          <h2 className="text-lg font-normal">/{providerDetails?.providerHandle}</h2>
+        <div
+          className="flex">
+          <div className="flex flex-col justify-center h-full">
+            <h1 className="text-4xl font-bold my-4">{providerDetails?.providerName}</h1>
+            <h2 className="text-lg font-normal">/{providerDetails?.providerHandle}</h2>
+          </div>
+          <img src={providerDetails?.qrData} alt="QR Code" />
         </div>
-        <img src={providerDetails?.qrData} alt="QR Code" />
-
 
         <table className="w-full mt-4">
           <tbody>
