@@ -10,7 +10,6 @@ export default function ProviderMenu() {
   const location = useLocation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [newAdditionDisabled, setNewAdditionDisabled] = useState(false)
   const { providerHandle } = useParams();
   const { data: menu, isLoading, isError } = getMenu(providerHandle);
   const [updatedMenu, setUpdatedMenu] = useState([]);
@@ -97,23 +96,17 @@ export default function ProviderMenu() {
       updateMenuItems: updateListWithoutOperation,
       deleteMenuItems: deleteListWithoutOperation
     }
-
     await localforage.setItem('update', []);
     await localforage.setItem('add', []);
     await localforage.setItem('delete', []);
-
     updateMenu(cachedChanges)
   }
 
   const handleAddMenuItem = async () => {
     const addOperations = await localforage.getItem('add') || [];
-    // setNewAdditionDisabled(true);
-    // const newItemOper = { ...newMenuItem, operation: "add" }
     addOperations.push(newMenuItem);
-    // addMenuItem(newMenuItem);
     setUpdatedMenu((prevUpdatedMenu) => [...prevUpdatedMenu, { ...newMenuItem, operation: "add" }])
     await localforage.setItem('add', addOperations);
-
     setNewMenuItem(defaultNewMenuItem);
   };
 
@@ -151,10 +144,8 @@ export default function ProviderMenu() {
     if (menuItem.operation === 'add') {
       const addOperations = await localforage.getItem('add');
       const indexToRemove = addOperations.findIndex((item) => item.menuId === menuItem.menuId);
-      // If the menu item is found, remove it from the array
       if (indexToRemove !== -1) {
         addOperations.splice(indexToRemove, 1);
-        // Save the updated addOperations array back to localforage
         await localforage.setItem('add', addOperations);
       }
     }
@@ -163,7 +154,6 @@ export default function ProviderMenu() {
       deleteOperations.push(menuItem);
       await localforage.setItem('delete', deleteOperations);
       setDeleteRow(menuItem.menuId);
-      // deleteMenuItem(menuItem);
     }
     updateMenuItemsWithCachedOperations();
   };
@@ -263,7 +253,6 @@ export default function ProviderMenu() {
       </div>
       <button
         onClick={() => handleSaveMenu()}
-        // disabled={updateEnabled === menuItem.menuId} //no menu item here
         className={`bg-blue-500 text-white py-2 px-4 rounded mx-2 hover:bg-blue-600"}`}
       >
         Save
