@@ -2,7 +2,7 @@ import Home from "./pages/Home";
 import Header from "./components/Header";
 import LogIn from "./pages/LogIn";
 import { Routes, Route } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
+import AccountHome from "./pages/AccountHome";
 import AddProvider from "./pages/AddProvider";
 import Provider from "./pages/Provider";
 import { AuthProvider } from "./utils/AuthContextProvider";
@@ -22,7 +22,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />}></Route>
             {/* <Route path="/signup" element={<SignUp />}></Route> */}
-            <Route path="/dashboard" element={<Dashboard />}></Route>
+            <Route path="/account" element={<AccountHome />}></Route>
             <Route path="/addRestaurant" element={<AddProvider />}></Route>
             <Route path="/login" element={<LogIn />}></Route>
             <Route path="/provider/:providerHandle/*" element={<Provider />}></Route>
