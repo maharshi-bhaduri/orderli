@@ -7,9 +7,15 @@ export default function ProviderFeedback() {
   const { data: feedback, isLoading, isError } = getFeedback(providerHandle);
 
   return (
-    <>
-      <div className="max-w-5xl mx-auto mt-12">
-        <header className="text-4xl">Customer Feedback</header>
+    <div className="w-full px-8 flex flex-col items-center">
+      <div className="w-full my-6">
+        <header className="text-4xl font-medium">Customer Feedback</header>
+      </div>
+      <div
+        className={"rounded-lg bg-white " +
+          "w-full p-5 transition ease-in-out flex flex-col justify-around items-center"}
+      >
+        {/* </div><div className="max-w-5xl mx-auto mt-12"> */}
         {!isLoading &&
           feedback.map((feedbackitem, index) => (
             <div key={index}>
@@ -21,6 +27,6 @@ export default function ProviderFeedback() {
             </div>
           ))}
       </div>
-    </>
+    </div>
   );
 }
