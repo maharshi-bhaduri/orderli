@@ -6,7 +6,7 @@ export default function Header(props) {
   const navigate = useNavigate();
   return (
     <header className="fixed flex justify-between align-center items-center h-20 w-full py-2 px-5 top-0">
-      <div className="rounded-full bg-orange-400 p-4 select-none cursor-pointer">
+      <div className="rounded-full p-4 select-none cursor-pointer">
         <h1 className="text-2xl">orderlee.in</h1>
       </div>
       <div className="rounded-full bg-orange-400 p-2">

@@ -10,7 +10,7 @@ export default function LogIn() {
     try {
       signInWithGoogle().then(
         (user) => {
-          navigate('/dashboard')
+          navigate('/account')
         })
     } catch (error) {
       console.log("Error signing in with Google:", error);
