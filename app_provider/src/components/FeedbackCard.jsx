@@ -7,7 +7,12 @@ export default function FeedbackCard({ rating, desc, createdAt }) {
     setExpanded(!expanded);
   };
   return (
-    <div className="max-w-full mx-auto mt-8 bg-white rounded-lg shadow-md p-4 flex flex-row items-center space-x-4">
+    <div
+      className={`max-w-full mx-auto mt-8 bg-white rounded-lg shadow-md p-4 flex flex-row items-center space-x-4 cursor-pointer ${
+        expanded ? "h-auto" : "h-24 overflow-hidden"
+      }`}
+      onClick={toggleExpansion}
+    >
       {/* Rating */}
       <div className="flex-shrink-0  p-2  bg-blue-500">
         <span className="text-lg font-semibold text-white">{rating}</span>
