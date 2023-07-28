@@ -16,7 +16,7 @@ export default function Provider() {
   getFeedback(providerHandle);
 
   return (
-    <div className="flex mt-20 h-[calc(100vh-80px)] overflow-hidden">
+    <div className="flex mt-16 h-[calc(100vh-80px)] overflow-hidden">
       <Sidebar optionMap={optionMap} />
       <div className="rounded-tl-lg flex flex-grow flex-wrap w-full
       md:w-3/4 h-[calc(100vh-80px)] overflow-y-auto bg-gray-100">

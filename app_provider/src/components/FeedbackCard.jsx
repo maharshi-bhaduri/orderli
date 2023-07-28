@@ -12,9 +12,8 @@ export default function FeedbackCard({ rating, desc, createdAt }) {
 
   return (
     <div
-      className={`max-w-full mx-auto mt-8 bg-white rounded-lg p-4 flex flex-row items-center space-x-4 cursor-pointer ${
-        expanded ? "h-auto" : "h-24 overflow-hidden"
-      }`}
+      className={`w-full mx-auto mt-8 bg-white rounded-lg p-4 flex flex-row items-center space-x-4 
+      cursor-pointer ${expanded ? "h-auto" : "h-24 overflow-hidden"}`}
       onClick={toggleExpansion}
     >
       {/* Rating */}

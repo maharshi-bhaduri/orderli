@@ -49,21 +49,23 @@ export default function ProviderProfile() {
 
 
   return (
-    <div className="mx-4 mt-4 w-full flex flex-col justify-center items-center">
-      <div
-        className={" border rounded-lg border-gray-300 bg-gray-100 " +
-          "w-full md:w-3/4 p-5 transition ease-in-out flex justify-around items-center"}
-      >
-        <div className="flex flex-col justify-center h-full">
-          <h1 className="text-4xl font-bold my-4">{providerDetails?.providerName}</h1>
-          <h2 className="text-lg font-normal">/{providerDetails?.providerHandle}</h2>
-
-
-        </div>
-        <img src={providerDetails?.qrData} alt="QR Code" />
+    <div className="w-full px-8 flex flex-col items-center">
+      <div className="w-full my-6">
+        <header className="text-4xl font-medium">Profile</header>
       </div>
-      <div className={"my-4 border rounded-lg border-gray-300 bg-gray-100 " +
-        "p-5 w-full md:w-3/4 transition ease-in-out flex justify-around items-center"}>
+      <div
+        className={"rounded-lg bg-white " +
+          "w-full p-5 transition ease-in-out flex flex-col justify-around items-center"}
+      >
+        <div
+          className="flex">
+          <div className="flex flex-col justify-center h-full">
+            <h1 className="text-4xl font-bold my-4">{providerDetails?.providerName}</h1>
+            <h2 className="text-lg font-normal">/{providerDetails?.providerHandle}</h2>
+          </div>
+          <img src={providerDetails?.qrData} alt="QR Code" />
+        </div>
+
         <table className="w-full mt-4">
           <tbody>
             <tr className="bg-gray-100">
