@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Card from "../components/Card"
 
 
-export default function Dashboard() {
+export default function AccountHome() {
   const navigate = useNavigate();
   const user = useContext(AuthContext);
 
@@ -20,13 +20,13 @@ export default function Dashboard() {
   )
 
   const message = user
-    ? "Welcome, " + user.displayName + "!"
-    : "Unathenticated";
+    ? "Welcome " + user.displayName + "!"
+    : "";
 
   return (
     <div className="mx-10 my-28">
-      <h1 className="text-2xl">{message}</h1>
-      <div className="w-full flex justify-center md:justify-start items-center my-6">
+      <div className="w-full flex flex-col justify-center md:justify-start items-center my-6">
+        <h1 className="text-2xl my-6">{message}</h1>
         <div className="sm:w-full md:w-3/4 lg:w-2/5 flex flex-col items-center m-0 p-6 border border-gray-300 bg-gray-100 rounded-lg">
           <div className="w-full mb-4 flex justify-items-start items-center">
             <p className="text-xl font-semibold mx-2">

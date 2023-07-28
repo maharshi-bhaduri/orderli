@@ -117,7 +117,6 @@ export default function ProviderMenu() {
       { ...newMenuItem, operation: "add" },
     ]);
     await localforage.setItem("add", addOperations);
-
     setNewMenuItem(defaultNewMenuItem);
   };
 
@@ -167,7 +166,6 @@ export default function ProviderMenu() {
       deleteOperations.push(menuItem);
       await localforage.setItem("delete", deleteOperations);
       setDeleteRow(menuItem.menuId);
-      // deleteMenuItem(menuItem);
     }
     updateMenuItemsWithCachedOperations();
   };
@@ -272,7 +270,6 @@ export default function ProviderMenu() {
       </div>
       <button
         onClick={() => handleSaveMenu()}
-        // disabled={updateEnabled === menuItem.menuId} //no menu item here
         className={`bg-blue-500 text-white py-2 px-4 rounded mx-2 hover:bg-blue-600"}`}
       >
         Save
