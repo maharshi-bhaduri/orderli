@@ -40,17 +40,18 @@ export default function ProviderMenu() {
       const deleteOperation = deleteOperations.find(
         (operation) => operation.menuId === menuItem.menuId
       );
-      if (updateOperation) {
-        return { ...updateOperation, operation: "update" };
-      }
       if (deleteOperation) {
         return { ...deleteOperation, operation: "delete" };
+      }
+      if (updateOperation) {
+        return { ...updateOperation, operation: "update" };
       }
       return { ...menuItem, operation: null };
     });
     const removedDeletes = updatedMenuItems.filter(
       (item) => item.operation !== "delete"
     );
+
     const updatedMenuWithAdditions = [
       ...removedDeletes,
       ...addOperations.map((menuItem) => ({ ...menuItem, operation: "add" })),
