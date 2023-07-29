@@ -7,27 +7,14 @@ export default function ProviderFeedback() {
   const { providerHandle } = useParams();
   const { data: feedback, isLoading, isError } = getFeedback(providerHandle);
   const options = [
-    { value: "ratingDescending", label: "High to low rating" },
-    { value: "ratingAscending", label: "Low to high rating" },
-    { value: "dateDescending", label: "high to low date" },
-    { value: "dateAscending", label: "low to high date" },
+    { value: "ratingDescending", label: "Rating: Descending" },
+    { value: "ratingAscending", label: "Rating: Ascending" },
+    { value: "dateDescending", label: "Date: Descending" },
+    { value: "dateAscending", label: "Date: Ascending" },
   ];
   const [selectedOption, setSelectedOption] = useState(options[0].value);
   const handleSelectChange = function (event) {
     setSelectedOption(event.target.value);
-    console.log(selectedOption);
-    feedback.sort((feedback1, feedback2) => {
-      switch (selectedOption) {
-        case "ratingDescending":
-          return feedback2.rating - feedback1.rating;
-        case "ratingAscending":
-          return feedback1.rating - feedback2.rating;
-        case "dateDescending":
-          return feedback1.createdAt - feedback2.createdAt;
-        case "dateAscending":
-          return feedback1.createdAt - feedback2.createdAt;
-      }
-    });
   };
 
   return (
@@ -61,7 +48,18 @@ export default function ProviderFeedback() {
         </div>
         <div className="max-w-5xl mx-auto mt-8">
           {!isLoading &&
-            feedback.map((feedbackitem, index) => (
+            feedback.sort((feedback1, feedback2) => {
+              switch (selectedOption) {
+                case "ratingDescending":
+                  return feedback2.rating - feedback1.rating;
+                case "ratingAscending":
+                  return feedback1.rating - feedback2.rating;
+                case "dateDescending":
+                  return new Date(feedback2.createdAt) - new Date(feedback1.createdAt);
+                case "dateAscending":
+                  return new Date(feedback1.createdAt) - new Date(feedback2.createdAt);
+              }
+            }).map((feedbackitem, index) => (
               <div key={index}>
                 <FeedbackCard
                   rating={parseInt(Math.round(feedbackitem.rating))}
