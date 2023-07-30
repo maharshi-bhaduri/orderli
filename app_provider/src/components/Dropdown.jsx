@@ -1,33 +1,4 @@
-// import React from "react";
-
-// export default function Dropdown(props) {
-//   return (
-//     <div>
-//       <label htmlFor="dropdown">Sort by: </label>
-//       <select
-//         id="dropdown"
-//         value={props.selectedOption}
-//         onChange={props.handleSelectChange}
-//         className="w-50 appearance-none bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white "
-//       >
-//         {props.options.map((option) => {
-//           return (
-//             <option
-//               key={option.value}
-//               value={option.value}
-//               className="text-gray-800"
-//             >
-//               {option.value}
-//             </option>
-//           );
-//         })}
-//       </select>
-//     </div>
-//   );
-// }
-
 import React, { useState } from "react";
-import { AiFillCaretDown } from "react-icons/ai";
 import expandMore from "../assets/expandmore.svg";
 import expandLess from "../assets/expandless.svg";
 export default function Dropdown(props) {
@@ -39,7 +10,8 @@ export default function Dropdown(props) {
       <div
         id="dropdown"
         className="w-full  bg-white border border-gray-300 text-gray-700 px-4 py-2  rounded-lg cursor-pointer"
-        onClick={() => setShowOptions(!showOptions)}
+        onClick={() => setShowOptions(!showOptions)
+        }
       >
         {props.selectedOption}
 
@@ -59,11 +31,10 @@ export default function Dropdown(props) {
                 props.handleSelectChange(option.value);
                 setShowOptions(false);
               }}
-              className={`px-4 py-2 cursor-pointer ${
-                option.value === props.selectedOption
-                  ? "bg-orange-300 m-2 text-white rounded "
-                  : "hover:bg-orange-100 rounded m-2"
-              }`}
+              className={`px-4 py-2 cursor-pointer ${option.value === props.selectedOption
+                ? "bg-orange-300 m-2 text-white rounded "
+                : "hover:bg-orange-100 rounded m-2"
+                }`}
             >
               {option.value}
             </div>
