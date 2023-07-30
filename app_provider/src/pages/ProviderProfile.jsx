@@ -6,7 +6,6 @@ import { getProfile } from "../utils/queryService";
 import { useNavigate } from "react-router-dom";
 import BorderedPallete from "../components/BorderedPallete";
 import InfoGrid from "../components/InfoGrid";
-import Dropdown from "../components/Dropdown";
 
 export default function ProviderProfile() {
   const { providerHandle } = useParams();

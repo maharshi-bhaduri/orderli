@@ -8,6 +8,7 @@ import { Routes, Route } from "react-router-dom";
 import ProviderMenu from "./ProviderMenu";
 import { useParams } from "react-router-dom";
 import ProviderFeedback from "./ProviderFeedback";
+import ProviderSettings from "./ProviderSettings";
 export default function Provider() {
   const location = useLocation();
   const { providerHandle } = useParams();
@@ -21,10 +22,11 @@ export default function Provider() {
       <div className="rounded-tl-lg flex flex-grow flex-wrap w-full
       md:w-3/4 h-[calc(100vh-80px)] overflow-y-auto bg-gray-100">
         <Routes>
+          <Route path={`/`} element={<ProviderDefault />} />
           <Route path={`/profile`} element={<ProviderProfile />} />
           <Route path={`/menu`} element={<ProviderMenu />} />
-          <Route path={`/`} element={<ProviderDefault />} />
           <Route path={`/feedback`} element={<ProviderFeedback />} />
+          <Route path={`/settings`} element={<ProviderSettings />} />
         </Routes>
       </div>
     </div>
