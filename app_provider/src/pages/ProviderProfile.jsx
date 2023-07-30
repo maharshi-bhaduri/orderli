@@ -4,6 +4,9 @@ import { useParams } from "react-router-dom";
 import { postService } from "../utils/APIService";
 import { getProfile } from "../utils/queryService";
 import { useNavigate } from "react-router-dom";
+import BorderedPallete from "../components/BorderedPallete";
+import InfoGrid from "../components/InfoGrid";
+import Dropdown from "../components/Dropdown";
 
 export default function ProviderProfile() {
   const { providerHandle } = useParams();
@@ -11,6 +14,71 @@ export default function ProviderProfile() {
   const [isEditing, setIsEditing] = useState(false);
   const [updatedProviderDetails, setUpdatedProviderDetails] = useState({});
   const navigate = useNavigate();
+
+  const businessInfolist = [
+    {
+      key: "Name",
+      value: providerDetails?.providerName
+    },
+    {
+      key: "Handle",
+      value: providerDetails?.providerHandle
+    },
+    {
+      key: "Type",
+      value: providerDetails?.providerType
+    },
+    {
+      key: "About",
+      value: providerDetails?.about
+    },
+    {
+      key: "Website",
+      value: providerDetails?.website
+    },
+    {
+      key: "Contact",
+      value: providerDetails?.contactNo
+    },
+  ]
+
+  const locationInfolist = [
+    {
+      key: "Address",
+      value: providerDetails?.address
+    },
+    {
+      key: "State",
+      value: providerDetails?.state
+    },
+    {
+      key: "City",
+      value: providerDetails?.city
+    },
+    {
+      key: "Zip Code",
+      value: providerDetails?.postalCode
+    },
+    {
+      key: "Country",
+      value: providerDetails?.country
+    },
+  ]
+
+  const socialInfolist = [
+    {
+      key: "Social Account 1",
+      value: providerDetails?.social1
+    },
+    {
+      key: "Social Account 2",
+      value: providerDetails?.social2
+    },
+    {
+      key: "Social Account 3",
+      value: providerDetails?.social3
+    },
+  ]
 
   const { mutate: updateProviderDetails } = useMutation(
     (updatedProviderDetails) =>
@@ -51,21 +119,42 @@ export default function ProviderProfile() {
   return (
     <div className="w-full px-8 flex flex-col items-center">
       <div className="w-full my-6">
-        <header className="text-4xl font-medium">Profile</header>
+        <header className="text-2xl font-medium">Profile</header>
       </div>
       <div
         className={"rounded-lg bg-white " +
           "w-full p-5 transition ease-in-out flex flex-col justify-around items-center"}
       >
-        <div
-          className="flex">
-          <div className="flex flex-col justify-center h-full">
-            <h1 className="text-4xl font-bold my-4">{providerDetails?.providerName}</h1>
-            <h2 className="text-lg font-normal">/{providerDetails?.providerHandle}</h2>
+        <BorderedPallete>
+          <div className="flex flex-col items-center">
+            <img src={providerDetails?.qrData}
+              alt="QR Code"
+              className="transition-transform hover:scale-110 cursor-pointer"
+            />
           </div>
-          <img src={providerDetails?.qrData} alt="QR Code" />
-        </div>
+          <div className="m-4 border h-3/4">
+          </div>
+          <InfoGrid
+            cols={2}
+            title='Business Details'
+            infoList={businessInfolist}
+          />
+        </BorderedPallete>
 
+        <BorderedPallete>
+          <InfoGrid
+            cols={2}
+            title='Location Details'
+            infoList={locationInfolist}
+          />
+        </BorderedPallete>
+        <BorderedPallete>
+          <InfoGrid
+            cols={2}
+            title='Social Media'
+            infoList={socialInfolist}
+          />
+        </BorderedPallete>
         <table className="w-full mt-4">
           <tbody>
             <tr className="bg-gray-100">

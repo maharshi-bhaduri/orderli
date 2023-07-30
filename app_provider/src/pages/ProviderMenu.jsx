@@ -202,7 +202,7 @@ export default function ProviderMenu() {
   return (
     <div className="w-full px-8 flex flex-col items-center">
       <div className="w-full my-6">
-        <header className="text-4xl font-medium">Menu</header>
+        <header className="text-2xl font-medium">Menu</header>
       </div>
       <div
         className={"rounded-lg bg-white " +

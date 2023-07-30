@@ -24,7 +24,7 @@ export default function ProviderFeedback() {
   return (
     <div className="w-full px-8 flex flex-col items-center">
       <div className="w-full my-6">
-        <header className="text-4xl font-medium">Customer Feedback</header>
+        <header className="text-2xl font-medium">Customer Feedback</header>
       </div>
       <div
         className={
