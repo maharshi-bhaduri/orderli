@@ -39,7 +39,10 @@ export default function ProviderFeedback() {
             <option value="">Select an option</option>
             {options.map((option) => {
               return (
-                <option key={option.value} value={option.value}>
+                <option
+                  key={option.value}
+                  value={option.value}
+                  className="">
                   {option.label}
                 </option>
               );

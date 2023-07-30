@@ -5,12 +5,12 @@ import { postService } from "../utils/APIService";
 import { getMenu } from "../utils/queryService";
 import localforage from "localforage";
 import MenuEditRow from "../components/MenuEditRow";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function ProviderMenu() {
   const location = useLocation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [newAdditionDisabled, setNewAdditionDisabled] = useState(false);
   const { providerHandle } = useParams();
   const { data: menu, isLoading, isError } = getMenu(providerHandle);
   const [updatedMenu, setUpdatedMenu] = useState([]);
@@ -22,11 +22,23 @@ export default function ProviderMenu() {
   };
 
   const [newMenuItem, setNewMenuItem] = useState(defaultNewMenuItem);
-
   const [editItemId, setEditItemId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [deleteRow, setDeleteRow] = useState(-1);
   const [editedMenuItem, setEditedMenuItem] = useState({});
+  const variants = {
+    enter: {
+      x: "-100%", // Slide in from the left
+      opacity: 0,
+    },
+    visible: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: {
+      x: "100%", // Slide out to the right
+      opacity: 0,
+    },
+  };
 
   const updateMenuItemsWithCachedOperations = async () => {
     const addOperations = (await localforage.getItem("add")) || [];
@@ -166,7 +178,6 @@ export default function ProviderMenu() {
       const deleteOperations = (await localforage.getItem("delete")) || [];
       deleteOperations.push(menuItem);
       await localforage.setItem("delete", deleteOperations);
-      setDeleteRow(menuItem.menuId);
     }
     updateMenuItemsWithCachedOperations();
   };
@@ -231,47 +242,55 @@ export default function ProviderMenu() {
                 </tr>
               </thead>
               <tbody>
-                {!isLoading &&
-                  updatedMenu.map((menuItem) =>
-                    editItemId === menuItem.menuId && isEditing ? (
-                      <MenuEditRow
-                        key={menuItem.menuId}
-                        editedMenuItem={editedMenuItem}
-                        cancelEditMenuItem={() =>
-                          cancelEditMenuItem(editedMenuItem)
-                        }
-                        handleUpdateMenuItem={() =>
-                          handleUpdateMenuItem(editedMenuItem)
-                        }
-                        type="update"
-                        onChange={(e) => {
-                          setEditedMenuItem(e);
-                        }}
-                      />
-                    ) : (
-                      <tr key={menuItem.menuId}>
-                        <td className="py-2 px-4 w-1/4">{menuItem.itemName}</td>
-                        <td className="py-2 px-4 w-1/4">
-                          {menuItem.description}
-                        </td>
-                        <td className="py-2 px-4 w-1/4">{menuItem.price}</td>
-                        <td className="py-2 px-4 w-1/4">
-                          <button
-                            onClick={() => handleEditMenuItem(menuItem)}
-                            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mx-2"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => handleDeleteMenuItem(menuItem)}
-                            className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 mx-2"
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
+                <AnimatePresence>
+                  {!isLoading &&
+                    updatedMenu.map((menuItem) =>
+                      editItemId === menuItem.menuId && isEditing ? (
+                        <MenuEditRow
+                          key={menuItem.menuId}
+                          editedMenuItem={editedMenuItem}
+                          cancelEditMenuItem={() =>
+                            cancelEditMenuItem(editedMenuItem)
+                          }
+                          handleUpdateMenuItem={() =>
+                            handleUpdateMenuItem(editedMenuItem)
+                          }
+                          type="update"
+                          onChange={(e) => {
+                            setEditedMenuItem(e);
+                          }}
+                        />
+                      ) : (
+                        <motion.tr key={menuItem.menuId}
+                          initial="enter"
+                          animate="visible"
+                          exit="exit"
+                          variants={variants}
+                          transition={{ duration: 0.3 }}>
+                          <td className="py-2 px-4 w-1/4">{menuItem.itemName}</td>
+                          <td className="py-2 px-4 w-1/4">
+                            {menuItem.description}
+                          </td>
+                          <td className="py-2 px-4 w-1/4">{menuItem.price}</td>
+                          <td className="py-2 px-4 w-1/4">
+                            <button
+                              onClick={() => handleEditMenuItem(menuItem)}
+                              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mx-2"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => handleDeleteMenuItem(menuItem)}
+                              className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 mx-2"
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </motion.tr>
+                      )
                     )
-                  )}
+                  }
+                </AnimatePresence>
               </tbody>
             </table>
           )}
