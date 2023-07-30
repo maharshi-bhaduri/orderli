@@ -27,7 +27,7 @@ export default function ProviderMenu() {
   const [editedMenuItem, setEditedMenuItem] = useState({});
   const variants = {
     enter: {
-      x: "-100%", // Slide in from the left
+      x: -50, // Slide in from the left
       opacity: 0,
     },
     visible: {
@@ -35,7 +35,7 @@ export default function ProviderMenu() {
       opacity: 1,
     },
     exit: {
-      x: "100%", // Slide out to the right
+      x: 50, // Slide out to the right
       opacity: 0,
     },
   };
@@ -242,7 +242,7 @@ export default function ProviderMenu() {
                 </tr>
               </thead>
               <tbody>
-                <AnimatePresence>
+                <AnimatePresence initial={false}>
                   {!isLoading &&
                     updatedMenu.map((menuItem) =>
                       editItemId === menuItem.menuId && isEditing ? (
