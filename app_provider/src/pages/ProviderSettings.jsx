@@ -45,7 +45,11 @@ export default function ProviderSettings() {
             text="Delete"
             buttonStyle="red"
             onClick={() => { deleteProvider(providerDetails.providerId) }}
-          />
+          >
+            <span className="material-symbols-outlined">
+              delete
+            </span>
+          </GraphicButton>
         </div>
       </div>
     </div>
