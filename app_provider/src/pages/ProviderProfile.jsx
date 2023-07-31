@@ -15,10 +15,43 @@ export default function ProviderProfile() {
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
   const [providerDetailsReplica, setProviderDetailsReplica] = useState(null)
+  const [profileUpdated, setProfileUpdated] = useState(false);
 
   useEffect(() => {
     setProviderDetailsReplica(providerDetails);
   }, [providerDetails])
+
+  useEffect(() => {
+    if (providerDetails && providerDetailsReplica) {
+      setProfileUpdated(providerDetails !== providerDetailsReplica);
+    }
+  }, [providerDetails, providerDetailsReplica])
+
+  // const deepEqual = (object1, object2) => {
+  //   const keys1 = Object.keys(object1);
+  //   const keys2 = Object.keys(object2);
+
+  //   if (keys1.length !== keys2.length) {
+  //     console.log("1")
+  //     return false;
+  //   }
+
+  //   for (const key of keys1) {
+  //     const val1 = object1[key];
+  //     const val2 = object2[key];
+  //     const areObjects =
+  //       typeof val1 === "object" && typeof val2 === "object";
+
+  //     if (
+  //       (areObjects && !deepEqual(val1, val2)) ||
+  //       (!areObjects && val1 !== val2)
+  //     ) {
+  //       return false;
+  //     }
+  //   }
+
+  //   return true;
+  // };
 
   let businessInfolist = [
     {
@@ -121,13 +154,24 @@ export default function ProviderProfile() {
         <header className="text-2xl font-medium">Profile</header>
         {
           editable ?
-            <GraphicButton
-              text="Save"
-              onClick={() => {
-                setEditable(false);
-                updateProviderDetails(providerDetailsReplica)
-              }}
-            /> :
+            (
+              <>
+                <GraphicButton
+                  text="Save"
+                  onClick={() => {
+                    setEditable(false);
+                    updateProviderDetails(providerDetailsReplica);
+                  }}
+                />
+                <GraphicButton
+                  text="Cancel"
+                  onClick={() => {
+                    setProviderDetailsReplica(providerDetails)
+                    setEditable(false);
+                  }}
+                />
+              </>
+            ) :
             <GraphicButton
               text="Unlock"
               onClick={() => setEditable(true)}
@@ -168,6 +212,9 @@ export default function ProviderProfile() {
             title='Location Details'
             infoList={locationInfolist}
             editable={editable}
+            onChange={(e) => {
+              setProviderDetailsReplica({ ...providerDetailsReplica, ...e });
+            }}
           />
         </BorderedPallete>
         <BorderedPallete>
@@ -176,6 +223,9 @@ export default function ProviderProfile() {
             title='Social Media'
             infoList={socialInfolist}
             editable={editable}
+            onChange={(e) => {
+              setProviderDetailsReplica({ ...providerDetailsReplica, ...e });
+            }}
           />
         </BorderedPallete>
       </div>
