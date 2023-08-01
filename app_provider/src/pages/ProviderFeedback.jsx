@@ -3,15 +3,13 @@ import React, { useEffect, useState } from "react";
 import { getFeedback } from "../utils/queryService";
 import FeedbackCard from "../components/FeedbackCard";
 import Dropdown from "../components/Dropdown";
+import { motion } from "framer-motion";
 
 export default function ProviderFeedback() {
   const { providerHandle } = useParams();
   const { data: feedback, isLoading, isError } = getFeedback(providerHandle);
   const options = [
-    {
-      value: "ratingDescending",
-      label: "Rating: Descending",
-    },
+    { value: "ratingDescending", label: "Rating: Descending" },
     { value: "ratingAscending", label: "Rating: Ascending" },
     { value: "dateDescending", label: "Date: Descending" },
     { value: "dateAscending", label: "Date: Ascending" },
@@ -38,7 +36,7 @@ export default function ProviderFeedback() {
           options={options}
         />
         <div className="max-w-5xl mx-auto mt-8">
-          {!isLoading &&
+          {!isLoading && feedback &&
             feedback
               .sort((feedback1, feedback2) => {
                 switch (selectedOption) {
@@ -59,13 +57,17 @@ export default function ProviderFeedback() {
                 }
               })
               .map((feedbackitem, index) => (
-                <div key={index}>
+                <motion.div
+                  key={feedbackitem.feedbackId}
+                  layout
+                  layoutId={index}
+                >
                   <FeedbackCard
                     rating={parseInt(Math.round(feedbackitem.rating))}
                     desc={feedbackitem.feedbackComments}
                     createdAt={feedbackitem.createdAt.substring(0, 10)}
                   />
-                </div>
+                </motion.div>
               ))}
         </div>
       </div>

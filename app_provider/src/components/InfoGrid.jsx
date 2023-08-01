@@ -27,7 +27,7 @@ export default function InfoGrid(props) {
                             <GraphicButton text='Done' buttonStyle='blue' onClick={() => setEditing(false)}>
                             </GraphicButton> :
                             <GraphicButton onClick={() => setEditing(true)}>
-                                <span className="material-symbols-outlined">
+                                <span className="material-symbols-outlined text-lg">
                                     edit
                                 </span>
                             </GraphicButton>
