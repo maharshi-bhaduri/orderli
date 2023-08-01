@@ -147,7 +147,6 @@ export default function ProviderProfile() {
     }
   );
 
-
   return (
     <div className="w-full px-8 mb-10 flex flex-col items-center">
       <div className="w-full my-6 flex justify-between">
