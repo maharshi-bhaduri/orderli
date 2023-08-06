@@ -6,21 +6,6 @@ export default function Home() {
   const navigate = useNavigate();
   let { providerHandle } = useParams();
 
-  /*
-  React.useEffect(() => {
-    axios
-      .get(import.meta.env.VITE_APP_GET_MENU, {
-        params: { providerHandle: providerHandle },
-      })
-      .then((response) => {
-        Cookies.set("menu", JSON.stringify(response.data));
-        console.log(JSON.parse(Cookies.get("menu")));
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
-*/
   const data = getMenu(providerHandle);
   console.log(data);
   function goToMenu() {
@@ -29,7 +14,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <div className="consumer-container">
+      <div className="flex h-screen justify-center items-center bg-cover bg-center bg-multiply bg-opacity-10">
         <button
           onClick={goToMenu}
           className="order-btn bg-orderlee-primary-100 hover:bg-orange-500  text-white font-bold py-5 px-10 rounded-full"
