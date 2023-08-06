@@ -9,6 +9,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import TabGroup from "../components/TabGroup";
 import { tabMap } from "../utils/optionMap";
 import BorderedPallete from "../components/BorderedPallete";
+import GraphicButton from "../components/GraphicButton";
 
 export default function ProviderMenu() {
   const location = useLocation();
@@ -18,7 +19,8 @@ export default function ProviderMenu() {
   const { data: menu, isLoading, isError } = getMenu(providerHandle);
   const [updatedMenu, setUpdatedMenu] = useState([]);
   const [category, setCategory] = useState("");
-  const noCatText = "Please select a category to view the items inside."
+  const [addingNewItem, setAddingNewItem] = useState(false)
+  const noCatText = "Please select a category to see items contained."
   const defaultNewMenuItem = {
     menuId: Date.now(), //temporary
     itemName: "",
@@ -211,28 +213,28 @@ export default function ProviderMenu() {
 
   return (
     <div className="w-full flex flex-col items-center">
-      <div
-        className={"rounded-lg bg-white " +
-          "w-full transition ease-in-out flex flex-col justify-around items-center"}
-      >
-        <div className="flex flex w-full items-center sticky top-0">
-          <div className="flex-grow mr-4">
-            <BorderedPallete title="Categories">
-              <TabGroup
-                tabMap={tabMap}
-                onSelect={handleCategorySelect}
-              />
-            </BorderedPallete>
-          </div>
-          <div className="flex-grow">
-            <BorderedPallete title="Actions">
-              <TabGroup
-                tabMap={tabMap}
-                onSelect={handleCategorySelect}
-              />
-            </BorderedPallete>
-          </div>
+      <div className="flex m-2 w-full items-center ">
+        <div className="h-full flex-grow rounded-lg p-2 bg-white items-center justify-center">
+          <TabGroup
+            tabMap={tabMap}
+            onSelect={handleCategorySelect}
+            newTab="+ Category"
+          />
         </div>
+        <div className="h-full flex-grow justify-evenly flex rounded-lg ml-4 p-2 bg-white">
+          <button
+            onClick={() => handleSaveMenu()}
+            className={`bg-blue-500 text-white m-2 px-4 py-2 rounded-lg hover:bg-blue-600"}`}
+          >
+            Save
+          </button>
+          <GraphicButton text={"Add Item"} onClick={() => setAddingNewItem(!addingNewItem)} />
+        </div>
+      </div>
+      <div
+        className="rounded-lg my-2 bg-white px-4 pb-4 h-[calc(100vh-121px)] overflow-y-auto
+          w-full flex flex-col items-center text-sm"
+      >
         {!category ?
           <BorderedPallete type="notify">
             <div className="w-full flex items-center justify-center ">
@@ -241,21 +243,24 @@ export default function ProviderMenu() {
           </BorderedPallete>
           :
           <BorderedPallete title="Menu">
-            <div className="flex flex-col">
-              <BorderedPallete type="notify">
-                <table>
-                  <tbody>
-                    <MenuEditRow
-                      editedMenuItem={newMenuItem}
-                      type="add"
-                      handleAddMenuItem={() => handleAddMenuItem()}
-                      onChange={(e) => {
-                        setNewMenuItem(e);
-                      }}
-                    />
-                  </tbody>
-                </table>
-              </BorderedPallete>
+            <div className="flex flex-col w-full">
+              {
+                addingNewItem &&
+                <BorderedPallete type="notify">
+                  <table>
+                    <tbody>
+                      <MenuEditRow
+                        editedMenuItem={newMenuItem}
+                        type="add"
+                        handleAddMenuItem={() => handleAddMenuItem()}
+                        onChange={(e) => {
+                          setNewMenuItem(e);
+                        }}
+                      />
+                    </tbody>
+                  </table>
+                </BorderedPallete>
+              }
               <div className="flex justify-center my-4">
                 {isLoading ? (
                   <p>Loading menu items...</p>
@@ -306,7 +311,7 @@ export default function ProviderMenu() {
                                   {menuItem.description}
                                 </td>
                                 <td className="py-2 px-4 w-1/4">{menuItem.price}</td>
-                                <td className="py-2 px-4 w-1/4">
+                                <td className="py-2 px-4 w-1/4 flex">
                                   <button
                                     onClick={() => handleEditMenuItem(menuItem)}
                                     className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mx-2"
@@ -332,14 +337,7 @@ export default function ProviderMenu() {
             </div>
           </BorderedPallete>
         }
-        <button
-          onClick={() => handleSaveMenu()}
-          className={`bg-blue-500 text-white py-2 px-4 rounded mx-2 hover:bg-blue-600"}`}
-        >
-          Save
-        </button>
       </div>
     </div>
-
   );
 }
