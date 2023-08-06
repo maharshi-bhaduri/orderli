@@ -16,7 +16,7 @@ export default function InfoGrid(props) {
 
     return (
         <div className="flex flex-col justify-center h-full flex-grow" >
-            <div className="flex h-10 justify-between text-sm font-bold text-gray-600">
+            <div className="flex justify-between text-sm font-bold text-gray-600">
                 <div>
                     {props.title}
                 </div>

@@ -6,6 +6,9 @@ import { getMenu } from "../utils/queryService";
 import localforage from "localforage";
 import MenuEditRow from "../components/MenuEditRow";
 import { AnimatePresence, motion } from "framer-motion";
+import TabGroup from "../components/TabGroup";
+import { tabMap } from "../utils/optionMap";
+import BorderedPallete from "../components/BorderedPallete";
 
 export default function ProviderMenu() {
   const location = useLocation();
@@ -14,6 +17,8 @@ export default function ProviderMenu() {
   const { providerHandle } = useParams();
   const { data: menu, isLoading, isError } = getMenu(providerHandle);
   const [updatedMenu, setUpdatedMenu] = useState([]);
+  const [category, setCategory] = useState("");
+  const noCatText = "Please select a category to view the items inside."
   const defaultNewMenuItem = {
     menuId: Date.now(), //temporary
     itemName: "",
@@ -199,102 +204,134 @@ export default function ProviderMenu() {
     setIsEditing(false);
   };
 
+  const handleCategorySelect = async (categoryName) => {
+    setCategory(categoryName);
+  };
+  console.log(category)
+
   return (
-    <div className="w-full px-8 flex flex-col items-center">
-      <div className="w-full my-6">
-        <header className="text-2xl font-medium">Menu</header>
-      </div>
+    <div className="w-full flex flex-col items-center">
       <div
         className={"rounded-lg bg-white " +
-          "w-full p-5 transition ease-in-out flex flex-col justify-around items-center"}
+          "w-full transition ease-in-out flex flex-col justify-around items-center"}
       >
-        <div className="">
-          <table>
-            <tbody>
-              <MenuEditRow
-                editedMenuItem={newMenuItem}
-                type="add"
-                handleAddMenuItem={() => handleAddMenuItem()}
-                onChange={(e) => {
-                  setNewMenuItem(e);
-                }}
+        <div className="flex flex w-full items-center sticky top-0">
+          <div className="flex-grow mr-4">
+            <BorderedPallete title="Categories">
+              <TabGroup
+                tabMap={tabMap}
+                onSelect={handleCategorySelect}
               />
-            </tbody>
-          </table>
+            </BorderedPallete>
+          </div>
+          <div className="flex-grow">
+            <BorderedPallete title="Actions">
+              <TabGroup
+                tabMap={tabMap}
+                onSelect={handleCategorySelect}
+              />
+            </BorderedPallete>
+          </div>
         </div>
-        <div className="flex justify-center my-4">
-          {isLoading ? (
-            <p>Loading menu items...</p>
-          ) : isError ? (
-            <p>Error loading menu items.</p>
-          ) : updatedMenu?.length == 0 ? (
-            <div className="flex w-3/4 justify-center rounded-lg border border-gray-300 bg-gray-100 p-5">
-              <h1>Ready to Set the Table? Add an Item!</h1>
+        {!category ?
+          <BorderedPallete type="notify">
+            <div className="w-full flex items-center justify-center ">
+              {noCatText}
             </div>
-          ) : (
-            <table className="w-3/4 mt-4">
-              <thead>
-                <tr>
-                  <th className="py-2 px-4 bg-gray-100 text-left">Item Name</th>
-                  <th className="py-2 px-4 bg-gray-100 text-left">Description</th>
-                  <th className="py-2 px-4 bg-gray-100 text-left">Price</th>
-                  <th className="py-2 px-4 bg-gray-100 text-left">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <AnimatePresence initial={false}>
-                  {!isLoading &&
-                    updatedMenu.map((menuItem) =>
-                      editItemId === menuItem.menuId && isEditing ? (
-                        <MenuEditRow
-                          key={menuItem.menuId}
-                          editedMenuItem={editedMenuItem}
-                          cancelEditMenuItem={() =>
-                            cancelEditMenuItem(editedMenuItem)
-                          }
-                          handleUpdateMenuItem={() =>
-                            handleUpdateMenuItem(editedMenuItem)
-                          }
-                          type="update"
-                          onChange={(e) => {
-                            setEditedMenuItem(e);
-                          }}
-                        />
-                      ) : (
-                        <motion.tr key={menuItem.menuId}
-                          initial="enter"
-                          animate="visible"
-                          exit="exit"
-                          variants={variants}
-                          transition={{ duration: 0.3 }}>
-                          <td className="py-2 px-4 w-1/4">{menuItem.itemName}</td>
-                          <td className="py-2 px-4 w-1/4">
-                            {menuItem.description}
-                          </td>
-                          <td className="py-2 px-4 w-1/4">{menuItem.price}</td>
-                          <td className="py-2 px-4 w-1/4">
-                            <button
-                              onClick={() => handleEditMenuItem(menuItem)}
-                              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mx-2"
-                            >
-                              Edit
-                            </button>
-                            <button
-                              onClick={() => handleDeleteMenuItem(menuItem)}
-                              className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 mx-2"
-                            >
-                              Delete
-                            </button>
-                          </td>
-                        </motion.tr>
-                      )
-                    )
-                  }
-                </AnimatePresence>
-              </tbody>
-            </table>
-          )}
-        </div>
+          </BorderedPallete>
+          :
+          <BorderedPallete title="Menu">
+            <div className="flex flex-col">
+              <BorderedPallete type="notify">
+                <table>
+                  <tbody>
+                    <MenuEditRow
+                      editedMenuItem={newMenuItem}
+                      type="add"
+                      handleAddMenuItem={() => handleAddMenuItem()}
+                      onChange={(e) => {
+                        setNewMenuItem(e);
+                      }}
+                    />
+                  </tbody>
+                </table>
+              </BorderedPallete>
+              <div className="flex justify-center my-4">
+                {isLoading ? (
+                  <p>Loading menu items...</p>
+                ) : isError ? (
+                  <p>Error loading menu items.</p>
+                ) : updatedMenu?.length == 0 ? (
+                  <div className="flex w-3/4 justify-center rounded-lg border border-gray-300 bg-gray-100 p-5">
+                    <h1>Ready to Set the Table? Add an Item!</h1>
+                  </div>
+                ) : (
+                  <table className="w-3/4 mt-4">
+                    <thead>
+                      <tr>
+                        <th className="py-2 px-4 bg-gray-100 text-left">Item Name</th>
+                        <th className="py-2 px-4 bg-gray-100 text-left">Description</th>
+                        <th className="py-2 px-4 bg-gray-100 text-left">Price</th>
+                        <th className="py-2 px-4 bg-gray-100 text-left">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <AnimatePresence initial={false}>
+                        {!isLoading &&
+                          updatedMenu.map((menuItem) =>
+                            editItemId === menuItem.menuId && isEditing ? (
+                              <MenuEditRow
+                                key={menuItem.menuId}
+                                editedMenuItem={editedMenuItem}
+                                cancelEditMenuItem={() =>
+                                  cancelEditMenuItem(editedMenuItem)
+                                }
+                                handleUpdateMenuItem={() =>
+                                  handleUpdateMenuItem(editedMenuItem)
+                                }
+                                type="update"
+                                onChange={(e) => {
+                                  setEditedMenuItem(e);
+                                }}
+                              />
+                            ) : (
+                              <motion.tr key={menuItem.menuId}
+                                initial="enter"
+                                animate="visible"
+                                exit="exit"
+                                variants={variants}
+                                transition={{ duration: 0.3 }}>
+                                <td className="py-2 px-4 w-1/4">{menuItem.itemName}</td>
+                                <td className="py-2 px-4 w-1/4">
+                                  {menuItem.description}
+                                </td>
+                                <td className="py-2 px-4 w-1/4">{menuItem.price}</td>
+                                <td className="py-2 px-4 w-1/4">
+                                  <button
+                                    onClick={() => handleEditMenuItem(menuItem)}
+                                    className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mx-2"
+                                  >
+                                    Edit
+                                  </button>
+                                  <button
+                                    onClick={() => handleDeleteMenuItem(menuItem)}
+                                    className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 mx-2"
+                                  >
+                                    Delete
+                                  </button>
+                                </td>
+                              </motion.tr>
+                            )
+                          )
+                        }
+                      </AnimatePresence>
+                    </tbody>
+                  </table>
+                )}
+              </div>
+            </div>
+          </BorderedPallete>
+        }
         <button
           onClick={() => handleSaveMenu()}
           className={`bg-blue-500 text-white py-2 px-4 rounded mx-2 hover:bg-blue-600"}`}
