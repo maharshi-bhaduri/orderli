@@ -6,21 +6,6 @@ export default function Home() {
   const navigate = useNavigate();
   let { providerHandle } = useParams();
 
-  /*
-  React.useEffect(() => {
-    axios
-      .get(import.meta.env.VITE_APP_GET_MENU, {
-        params: { providerHandle: providerHandle },
-      })
-      .then((response) => {
-        Cookies.set("menu", JSON.stringify(response.data));
-        console.log(JSON.parse(Cookies.get("menu")));
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
-*/
   const data = getMenu(providerHandle);
   console.log(data);
   function goToMenu() {
