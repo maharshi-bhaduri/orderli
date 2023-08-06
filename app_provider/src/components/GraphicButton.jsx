@@ -4,7 +4,7 @@ import { buttonStyles } from "../utils/optionMap";
 export default function GraphicButton(props) {
   const style = props.buttonStyle || 'default'
   return (
-    <div className={`px-4 py-2 flex justify-center items-center rounded-lg select-none
+    <div className={`m-2 px-4 py-2 flex justify-center items-center rounded-lg select-none
     ` + (props.disabled && buttonStyles[style].dis || buttonStyles[style].org)
     }
       onClick={() => { props.onClick() }}

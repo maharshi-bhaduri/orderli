@@ -33,7 +33,11 @@ export const optionMap = [
 
 export const tabMap = [
   "Food",
-  "Stuff"
+  "Drinks",
+  "Desserts",
+  "cffebneje",
+  "bekkerjbvnwerv",
+  "cmenecec"
 ];
 
 export const menuRowOptions = [
