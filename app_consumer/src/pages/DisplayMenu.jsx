@@ -4,7 +4,6 @@ import Header from "../components/Header";
 import { useParams } from "react-router-dom";
 import ItemCard from "../components/ItemCard";
 
-import "../styles.css";
 export default function DisplayMenu() {
   let { providerHandle } = useParams();
   const { data: foodItems, isLoading } = getMenu(providerHandle);

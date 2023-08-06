@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <div className="consumer-container">
+      <div className="flex h-screen justify-center items-center bg-cover bg-center bg-multiply bg-opacity-10">
         <button
           onClick={goToMenu}
           className="order-btn bg-orderlee-primary-100 hover:bg-orange-500  text-white font-bold py-5 px-10 rounded-full"

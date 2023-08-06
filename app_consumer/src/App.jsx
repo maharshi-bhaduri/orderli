@@ -8,7 +8,7 @@ import DisplayMenu from "./pages/DisplayMenu";
 export default function App() {
   const queryClient = new QueryClient();
   return (
-    <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient} className="m-0 p-0 font-poppins">
       <>
         {/* <Header /> */}
 
