@@ -18,8 +18,8 @@ export default function App() {
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClient}>
-        <>
-          <Header />
+        <div className="px-2 bg-gray-200">
+          {/* <Header /> */}
           <Routes>
             <Route path="/" element={<Home />}></Route>
             <Route path="/account" element={<AccountHome />}></Route>
@@ -28,7 +28,7 @@ export default function App() {
             <Route path="/provider/:providerHandle/*" element={<Provider />}></Route>
             <Route path="/visuals/" element={<Visuals />}></Route>
           </Routes>
-        </>
+        </div>
       </QueryClientProvider>
     </AuthProvider>
   );

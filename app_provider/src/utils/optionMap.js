@@ -31,6 +31,11 @@ export const optionMap = [
   },
 ];
 
+export const tabMap = [
+  "Food",
+  "Stuff"
+];
+
 export const menuRowOptions = [
   {
     name: "Item Name",
@@ -74,4 +79,10 @@ export const buttonStyles = {
     org: "text-black transition duration-300 border border-black hover:bg-black hover:text-white cursor-pointer",
     dis: "text-white transition duration-300 bg-gray-200 hover:bg-gray-200 cursor-deault"
   }
+}
+
+export const palleteColours = {
+  notify: "bg-amber-50 border border-yellow-200 text-gray-500",
+  warning: "bg-red-50 border border-red-200",
+  default: ""
 }

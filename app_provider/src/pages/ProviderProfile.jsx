@@ -148,44 +148,44 @@ export default function ProviderProfile() {
   );
 
   return (
-    <div className="w-full px-8 mb-10 flex flex-col items-center">
-      <div className="w-full my-6 flex justify-between">
-        <header className="text-2xl font-medium">Profile</header>
-        {
-          editable ?
-            (
-              <>
-                <GraphicButton
-                  text="Save"
-                  onClick={() => {
-                    setEditable(false);
-                    updateProviderDetails(providerDetailsReplica);
-                  }}
-                />
-                <GraphicButton
-                  text="Cancel"
-                  onClick={() => {
-                    setProviderDetailsReplica(providerDetails)
-                    setEditable(false);
-                  }}
-                />
-              </>
-            ) :
-            <GraphicButton
-              text="Unlock"
-              onClick={() => setEditable(true)}
-            >
-              <span className="material-symbols-outlined">
-                lock_open
-              </span>
-            </GraphicButton>
-        }
-      </div>
+    <div className="w-full flex flex-col items-center">
       <div
         className={"rounded-lg bg-white " +
-          "w-full px-5 pt-5 transition ease-in-out flex flex-col justify-around items-center"}
+          "w-full transition ease-in-out flex flex-col justify-around items-center"}
       >
-        <BorderedPallete>
+        <div className="w-full mb-4 flex justify-between">
+          {
+            editable ?
+              (
+                <>
+                  <GraphicButton
+                    text="Save"
+                    onClick={() => {
+                      setEditable(false);
+                      updateProviderDetails(providerDetailsReplica);
+                    }}
+                  />
+                  <GraphicButton
+                    text="Cancel"
+                    onClick={() => {
+                      setProviderDetailsReplica(providerDetails)
+                      setEditable(false);
+                    }}
+                  />
+                </>
+              ) :
+              <GraphicButton
+                text="Unlock"
+                onClick={() => setEditable(true)}
+              >
+                <span className="material-symbols-outlined">
+                  lock_open
+                </span>
+              </GraphicButton>
+          }
+        </div>
+        <BorderedPallete
+          title='Business Details'>
           <div className="flex flex-col items-center">
             <img src={providerDetails?.qrData}
               alt="QR Code"
@@ -196,7 +196,6 @@ export default function ProviderProfile() {
           </div>
           <InfoGrid
             cols={2}
-            title='Business Details'
             infoList={businessInfolist}
             editable={editable}
             onChange={(e) => {
@@ -205,10 +204,10 @@ export default function ProviderProfile() {
           />
         </BorderedPallete>
 
-        <BorderedPallete>
+        <BorderedPallete
+          title='Location Details'>
           <InfoGrid
             cols={2}
-            title='Location Details'
             infoList={locationInfolist}
             editable={editable}
             onChange={(e) => {
@@ -216,10 +215,10 @@ export default function ProviderProfile() {
             }}
           />
         </BorderedPallete>
-        <BorderedPallete>
+        <BorderedPallete
+          title='Social Media'>
           <InfoGrid
             cols={2}
-            title='Social Media'
             infoList={socialInfolist}
             editable={editable}
             onChange={(e) => {

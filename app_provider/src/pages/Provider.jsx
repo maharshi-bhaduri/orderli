@@ -17,10 +17,11 @@ export default function Provider() {
   getFeedback(providerHandle);
 
   return (
-    <div className="flex mt-16 h-[calc(100vh-80px)] overflow-hidden">
+    <div className="flex h-screen overflow-hidden">
       <Sidebar optionMap={optionMap} />
-      <div className="rounded-tl-lg flex flex-grow flex-wrap w-full
-      md:w-3/4 h-[calc(100vh-80px)] overflow-y-auto bg-gray-100">
+      <div className="mx-2 mr-2 my-4 flex flex-grow flex-wrap w-full
+       h-[calc(100vh-32px)] overflow-y-auto bg-gray-200 rounded-lg bg-white
+          w-full p-5 justify-around">
         <Routes>
           <Route path={`/`} element={<ProviderDefault />} />
           <Route path={`/profile`} element={<ProviderProfile />} />
