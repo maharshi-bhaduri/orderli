@@ -1,7 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { dietCategoryOptions } from "../utils/OptionMap";
-
+import veg from "../images/veg.png";
+import nonVeg from "../images/nonveg.png";
 export default function ItemCard(props) {
   const navigate = useNavigate();
   const dietCategory = dietCategoryOptions.find(
@@ -12,12 +13,19 @@ export default function ItemCard(props) {
       <div className="bg-white rounded-lg shadow-md">
         <div className="p-4 mb-4 flex justify-between items-center">
           <div>
-            <h3 className="text-lg font-semibold mb-2">{props.itemName}</h3>
-            {dietCategory.value}
+            <div className="flex items-center mb-2">
+              <img
+                className="h-5 w-5 mr-1"
+                src={dietCategory.id == 2 ? veg : nonVeg}
+                alt=""
+              />
+              <h3 className="text-lg font-semibold">{props.itemName}</h3>
+            </div>
             <p className="text-gray-800 mb-2">{props.description}</p>
           </div>
-          <p className="text-gray-800 font-semibold">Rs. {props.price}</p>
-          {/* {props.category} {props.dietCategory} */}
+          <div className="flex justify-start">
+            <p className="text-gray-800 font-semibold ">Rs. {props.price}</p>
+          </div>
         </div>
       </div>
     </div>

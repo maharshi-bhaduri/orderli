@@ -7,6 +7,11 @@ export default {
     "./app_consumer/src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    extend: {
+      fontFamily: {
+        poppins: ["Poppins", "sans-serif"],
+      },
+    },
     colors: {
       ...colors,
       "orderlee-primary": {
