@@ -213,22 +213,29 @@ export default function ProviderMenu() {
 
   return (
     <div className="w-full flex flex-col items-center">
-      <div className="flex m-2 w-full items-center ">
-        <div className="h-full flex-grow rounded-lg p-2 bg-white items-center justify-center">
-          <TabGroup
-            tabMap={tabMap}
-            onSelect={handleCategorySelect}
-            newTab="+ Category"
-          />
+      {/* Category and actions menu parent div below */}
+      <div className="flex m-2 w-full">
+        {/* Category section below*/}
+        <div className="h-full w-3/4 pr-2">
+          <div className="flex items-center h-full w-full rounded-lg bg-white overflow-x-scroll">
+            <TabGroup
+              tabMap={tabMap}
+              onSelect={handleCategorySelect}
+              newTab="+ Category"
+            />
+          </div>
         </div>
-        <div className="h-full flex-grow justify-evenly flex rounded-lg ml-4 p-2 bg-white">
-          <button
-            onClick={() => handleSaveMenu()}
-            className={`bg-blue-500 text-white m-2 px-4 py-2 rounded-lg hover:bg-blue-600"}`}
-          >
-            Save
-          </button>
-          <GraphicButton text={"Add Item"} onClick={() => setAddingNewItem(!addingNewItem)} />
+        {/* Actions section below*/}
+        <div className="h-full w-1/4 pl-2">
+          <div className="h-full w-full flex justify-evenly rounded-lg p-2 bg-white">
+            <button
+              onClick={() => handleSaveMenu()}
+              className={`bg-blue-500 text-white m-2 px-4 py-2 rounded-lg hover:bg-blue-600"}`}
+            >
+              Save
+            </button>
+            <GraphicButton text={"Add Item"} onClick={() => setAddingNewItem(!addingNewItem)} />
+          </div>
         </div>
       </div>
       <div

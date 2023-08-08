@@ -37,7 +37,15 @@ export const tabMap = [
   "Desserts",
   "cffebneje",
   "bekkerjbvnwerv",
-  "cmenecec"
+  "cmenecec",
+  "nwuncer",
+  "njuenve",
+  "nucehove",
+  "nhcuonervqr",
+  "nwuncer",
+  "njuenve",
+  "nucehove",
+  "nhcuonervqr"
 ];
 
 export const menuRowOptions = [

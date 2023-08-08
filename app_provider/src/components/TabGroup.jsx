@@ -10,7 +10,7 @@ export default function TabGroup(props) {
   }
 
   return (
-    <div className="w-full flex flex-wrap">
+    <div className="w-full flex">
       {
         props.newTab &&
         <div
@@ -18,7 +18,7 @@ export default function TabGroup(props) {
            bg-blue-500 hover:bg-blue-700"
         >
           <div className="flex">
-            <h1 className="text-sm text-white">{props.newTab}</h1>
+            <h1 className="text-sm text-white whitespace-nowrap">{props.newTab}</h1>
           </div>
         </div>
 
