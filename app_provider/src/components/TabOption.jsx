@@ -5,7 +5,7 @@ export default function SidebarButton(props) {
     <div
       className={"rounded-lg border border-gray-200 m-2 p-2 transition ease-in-out cursor-pointer select-none" +
         " hover:bg-gray-200 " +
-        ((props.active) ? "text-white bg-orange-300 cursor-default hover:bg-orange-300" : "")}
+        ((props.active) ? "text-white bg-orange-300 cursor-default hover:bg-orange-300" : "bg-white")}
       onClick={() => props.onClick(props.name)}
     >
       <div className="">
