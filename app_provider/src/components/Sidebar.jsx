@@ -9,7 +9,7 @@ export default function Sidebar(props) {
       <div className="flex m-2 p-4 rounded-lg bg-white items-center justify-center ">
         <h1 className="text-2xl">orderlee.in</h1>
       </div>
-      <div className="flex-grow m-2 p-2 bg-white rounded-lg">
+      <div className=" m-2 p-2 bg-white rounded-lg">
         {props.optionMap.map((option, index) => (
           <NavLink end to={`${option.page}`}
             key={index}

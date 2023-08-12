@@ -11,9 +11,9 @@ export default function MenuEditRow(props) {
     });
 
   return (
-    <tr>
+    <div className="col-span-6 flex">
       {menuRowOptions.map((item, index) => {
-        return <td
+        return <div
           key={index}
           className="py-2 px-4 w-1/4">
           <input
@@ -23,11 +23,11 @@ export default function MenuEditRow(props) {
             onChange={(e) => handleInputChange(item.key, e.target.value)}
             className="w-50 border border-gray-300 px-2 py-1 rounded"
           />
-        </td>
+        </div>
       })}
       {type === "update" ?
         (
-          <td className="py-2 px-4 w-1/4">
+          <div className="py-2 px-4 w-1/4">
             <button
               onClick={() => props.handleUpdateMenuItem(editedMenuItem)}
               className={"bg-blue-500 text-white py-2 px-4 rounded mx-2 "
@@ -40,14 +40,14 @@ export default function MenuEditRow(props) {
                 + "hover:bg-gray-400"}
             >Cancel</button>
 
-          </td>
+          </div>
         ) :
-        <td className="py-2 px-4 w-1/4">
+        <div className="py-2 px-4 w-1/4">
           <button
             onClick={() => props.handleAddMenuItem()}
             className={"bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mx-2"}
           >Add Item</button>
-        </td>}
-    </tr>
+        </div>}
+    </div>
   );
 }

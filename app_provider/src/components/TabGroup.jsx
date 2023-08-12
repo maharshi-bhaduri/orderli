@@ -10,8 +10,8 @@ export default function TabGroup(props) {
   }
 
   return (
-    <div className="w-full flex">
-      {
+    <div className="w-full flex items-center">
+      {/* {
         props.newTab &&
         <div
           className="rounded-lg border border-gray-200 m-2 p-2 transition ease-in-out cursor-pointer select-none 
@@ -22,7 +22,7 @@ export default function TabGroup(props) {
           </div>
         </div>
 
-      }
+      } */}
       {props.tabMap.map((option, index) => (
         <TabOption name={option}
           key={index}

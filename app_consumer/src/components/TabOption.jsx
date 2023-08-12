@@ -2,17 +2,23 @@ import React from "react";
 import veg from "../images/veg.png";
 import nonVeg from "../images/nonveg.png";
 export default function TabOption(props) {
+  console.log(props.name, " is ", props.active)
   return (
     <div
       className={
-        "inline rounded-lg border border-black m-2 p-2 transition ease-in-out cursor-pointer select-none bg-white hover:bg-gray-300" +
+        "inline rounded-lg border border-gray-300 m-2 p-2 transition ease-in-out cursor-pointer select-none hover:bg-gray-300 " +
         (props.active
-          ? "text-white " +
-            ((props.name === "Veg" && "bg-green-50  border-green-700") ||
-              (props.name === "Non-Veg" && "bg-red-50  border-red-800") ||
-              (props.name === "All" && "bg-blue-100  border-red-800")) +
-            +" cursor-default"
-          : "")
+          ? (" cursor-default " +
+            (props.name === "Veg" ? "bg-green-50 border-green-700 "
+              : (props.name === "Non-Veg" ? "bg-red-50 border-red-800 "
+                : (props.name === "All" ? "bg-blue-100 border-blue-600 "
+                  : "bg-white"
+                )
+              )
+            )
+          )
+          : ""
+        )
       }
       onClick={() => props.onClick(props.name)}
     >
@@ -35,6 +41,6 @@ export default function TabOption(props) {
           {props.name}
         </h1>
       </div>
-    </div>
+    </div >
   );
 }

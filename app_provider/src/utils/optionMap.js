@@ -37,15 +37,33 @@ export const tabMap = [
   "Desserts",
   "cffebneje",
   "bekkerjbvnwerv",
-  "cmenecec",
-  "nwuncer",
-  "njuenve",
-  "nucehove",
-  "nhcuonervqr",
-  "nwuncer",
-  "njuenve",
-  "nucehove",
-  "nhcuonervqr"
+  // "cmenecec",
+  // "nwuncer",
+  // "njuenve",
+  // "nucehove",
+  // "nhcuonervqr",
+  // "nwuncer",
+  // "njuenve",
+  // "nucehove",
+  // "nhcuonervqr",
+  // "cmenecec",
+  // "nwuncer",
+  // "njuenve",
+  // "nucehove",
+  // "nhcuonervqr",
+  // "nwuncer",
+  // "njuenve",
+  // "nucehove",
+  // "nhcuonervqr",
+  // "cmenecec",
+  // "nwuncer",
+  // "njuenve",
+  // "nucehove",
+  // "nhcuonervqr",
+  // "nwuncer",
+  // "njuenve",
+  // "nucehove",
+  // "nhcuonervqr"
 ];
 
 export const menuRowOptions = [
@@ -97,4 +115,9 @@ export const palleteColours = {
   notify: "bg-amber-50 border border-yellow-200 text-gray-500",
   warning: "bg-red-50 border border-red-200",
   default: ""
+}
+
+export const dietCategoryMap = {
+  1: "Veg",
+  2: "Non-veg"
 }
