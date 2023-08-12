@@ -3,7 +3,8 @@ import Header from "./components/Header";
 import Home from "./pages/Home";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
-import DisplayMenu from "./pages/DisplayMenu";
+import Menu from "./pages/Menu";
+import PlaceHolder from "./pages/PlaceHolder";
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -13,12 +14,9 @@ export default function App() {
         {/* <Header /> */}
 
         <Routes>
-          <Route path="/" element={<Home />}></Route>
+          <Route path="/" element={<PlaceHolder />}></Route>
           <Route path="/:providerHandle" element={<Home />}></Route>
-          <Route
-            path="/:providerHandle/displaymenu"
-            element={<DisplayMenu />}
-          ></Route>
+          <Route path="/:providerHandle/menu" element={<Menu />}></Route>
         </Routes>
       </div>
     </QueryClientProvider>
