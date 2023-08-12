@@ -9,7 +9,7 @@ export default function Home() {
   const data = getMenu(providerHandle);
   console.log(data);
   function goToMenu() {
-    navigate(`/${providerHandle}/displaymenu`);
+    navigate(`/${providerHandle}/menu`);
   }
   return (
     <>
