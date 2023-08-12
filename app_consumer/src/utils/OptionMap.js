@@ -13,4 +13,4 @@ export const dietCategoryOptions = [
   },
 ];
 
-export const tabMap = ["Non-Veg", "Veg", "All"];
+export const tabMap = ["All", "Non-Veg", "Veg"];

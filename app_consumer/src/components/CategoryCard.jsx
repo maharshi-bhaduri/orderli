@@ -9,15 +9,17 @@ export default function CategoryCard({ categoryName, itemList }) {
   }
   return (
     <div
-      className="bg-white rounded-lg shadow-sm max-w-2xl mx-auto p-4 mb-4"
+      className="bg-white rounded-lg shadow-md max-w-2xl mx-auto py-4 px-2  mb-4 "
       key={categoryName}
     >
-      <div className="flex justify-between items-center">
-        <h2 className="text-lg font-bold">{categoryName}</h2>
+      <div
+        className="flex justify-between items-center"
+        onClick={(e) => handleExpansion(expand)}
+      >
+        <h2 className="text-base font-bold mx-4">{categoryName}</h2>
 
         <img
           src={expand ? expandLess : expandMore}
-          onClick={(e) => handleExpansion(expand)}
           alt=""
           className="h-6 w-6 cursor-pointer"
         />

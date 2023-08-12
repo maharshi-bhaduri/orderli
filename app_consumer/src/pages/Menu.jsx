@@ -81,7 +81,7 @@ export default function Menu() {
   return (
     <>
       <div className="bg-cover bg-center pt-5 ">
-        <div className="text-black flex justify-evenly">
+        <div className="text-black flex flex-col justify-center items-center w-full mx-auto fixed ">
           <div>
             <input
               type="text"
@@ -90,22 +90,24 @@ export default function Menu() {
               name="searchText"
               disabled={isLoading}
               onChange={handleChange}
-              className="border border-gray-300 px-2 py-1 rounded text-black"
+              className="border border-gray-300 px-2 py-2 mb-2 rounded-lg text-black w-auto"
             />
           </div>
 
           <div>
             <TabGroup tabMap={tabMap} onSelect={handleCategorySelect} />
           </div>
+          <p>All items are in INR</p>
         </div>
-        <div className="pt-4"></div>
-        {Object.keys(groupedItems).map((category, index) => (
-          <CategoryCard
-            key={category}
-            categoryName={category}
-            itemList={groupedItems[category]}
-          />
-        ))}
+        <div className="mt-36">
+          {Object.keys(groupedItems).map((category, index) => (
+            <CategoryCard
+              key={category}
+              categoryName={category}
+              itemList={groupedItems[category]}
+            />
+          ))}
+        </div>
       </div>
     </>
   );
