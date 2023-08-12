@@ -6,6 +6,7 @@ import { getMenu } from "../utils/queryService";
 import localforage from "localforage";
 import MenuEditRow from "../components/MenuEditRow";
 import { AnimatePresence, motion } from "framer-motion";
+import { dietCategoryMap } from "../utils/optionMap";
 import TabGroup from "../components/TabGroup";
 import { tabMap } from "../utils/optionMap";
 import BorderedPallete from "../components/BorderedPallete";
@@ -141,7 +142,6 @@ export default function ProviderMenu() {
   };
 
   const handleUpdateMenuItem = async (menuItem) => {
-    console.log("menuItem ", menuItem);
     if (menuItem.operation === "add") {
       const addOperations = await localforage.getItem("add");
       const updatedAddCache = addOperations.map((cachedItem) =>
@@ -209,10 +209,8 @@ export default function ProviderMenu() {
   const handleCategorySelect = async (categoryName) => {
     setCategory(categoryName);
   };
-  console.log(category)
 
   return (
-
     <div className="w-full grid grid-cols-5 rounded-lg my-2 bg-white">
       {/* Category section below*/}
       <div className="mb-4 rounded-lg col-span-5 bg-white flex overflow-x-scroll">
@@ -235,7 +233,7 @@ export default function ProviderMenu() {
         className="px-4 pb-4 h-[calc(100vh-112px)] overflow-y-auto
           w-full col-span-5"
       >
-        <div className="-mt-4 flex flex-col items-center text-sm w-full">
+        <div className="-mt-4 flex flex-col items-center text-sm w-full h-">
           {!category ?
             <BorderedPallete type="notify">
               <div className="w-full flex items-center justify-center ">
@@ -244,18 +242,6 @@ export default function ProviderMenu() {
             </BorderedPallete>
             :
             <BorderedPallete title="Menu">
-              {/* Actions section below*/}
-              <div className="w-auto pl-2 col-span-2">
-                <div className=" w-full flex justify-evenly rounded-lg  bg-white">
-                  <button
-                    onClick={() => handleSaveMenu()}
-                    className={`bg-blue-500 text-white m-2 px-4 py-2 rounded-lg hover:bg-blue-600"}`}
-                  >
-                    Save
-                  </button>
-                  <GraphicButton text={"Add Item"} onClick={() => setAddingNewItem(!addingNewItem)} />
-                </div>
-              </div>
               <div className="flex flex-col w-full">
                 {
                   addingNewItem &&
@@ -284,68 +270,73 @@ export default function ProviderMenu() {
                       <h1>Ready to Set the Table? Add an Item!</h1>
                     </div>
                   ) : (
-                    <table className="w-3/4 mt-4">
-                      <thead>
-                        <tr>
-                          <th className="py-2 px-4 bg-gray-100 text-left">Item Name</th>
-                          <th className="py-2 px-4 bg-gray-100 text-left">Description</th>
-                          <th className="py-2 px-4 bg-gray-100 text-left">Price</th>
-                          <th className="py-2 px-4 bg-gray-100 text-left">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <AnimatePresence initial={false}>
-                          {!isLoading &&
-                            updatedMenu.map((menuItem) =>
-                              editItemId === menuItem.menuId && isEditing ? (
-                                <MenuEditRow
-                                  key={menuItem.menuId}
-                                  editedMenuItem={editedMenuItem}
-                                  cancelEditMenuItem={() =>
-                                    cancelEditMenuItem(editedMenuItem)
-                                  }
-                                  handleUpdateMenuItem={() =>
-                                    handleUpdateMenuItem(editedMenuItem)
-                                  }
-                                  type="update"
-                                  onChange={(e) => {
-                                    setEditedMenuItem(e);
-                                  }}
-                                />
-                              ) : (
-                                <motion.tr key={menuItem.menuId}
-                                  initial="enter"
-                                  animate="visible"
-                                  exit="exit"
-                                  variants={variants}
-                                  transition={{ duration: 0.3 }}>
-                                  <td className="py-2 px-4 w-1/4">{menuItem.itemName}</td>
-                                  <td className="py-2 px-4 w-1/4">
-                                    {menuItem.description}
-                                  </td>
-                                  <td className="py-2 px-4 w-1/4">{menuItem.price}</td>
-                                  <td className="py-2 px-4 w-1/4 flex">
-                                    <button
-                                      onClick={() => handleEditMenuItem(menuItem)}
-                                      className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mx-2"
-                                    >
-                                      Edit
-                                    </button>
-                                    <button
-                                      onClick={() => handleDeleteMenuItem(menuItem)}
-                                      className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 mx-2"
-                                    >
-                                      Delete
-                                    </button>
-                                  </td>
-                                </motion.tr>
-                              )
-                            )
-                          }
-                        </AnimatePresence>
-                      </tbody>
-                    </table>
+                    <div className="grid grid-cols-6 gap-2">
+                      {/* Table Header */}
+                      <div className="font-semibold text-gray-600">Item Name</div>
+                      <div className="font-semibold text-gray-600" >Description</div>
+                      <div className="font-semibold text-gray-600">Diet Category</div>
+                      <div className="font-semibold text-gray-600">Serves</div>
+                      <div className="font-semibold text-gray-600">Price</div>
+                      <div className="font-semibold text-gray-600">Actions</div>
+
+                      {/* Menu Item Rows */}
+                      {!isLoading &&
+                        updatedMenu.map((item, index) =>
+                          editItemId === item.menuId && isEditing ? (
+                            <MenuEditRow
+                              key={item.menuId}
+                              editedMenuItem={editedMenuItem}
+                              cancelEditMenuItem={() =>
+                                cancelEditMenuItem(editedMenuItem)
+                              }
+                              handleUpdateMenuItem={() =>
+                                handleUpdateMenuItem(editedMenuItem)
+                              }
+                              type="update"
+                              onChange={(e) => {
+                                setEditedMenuItem(e);
+                              }}
+                            />
+                          ) : (
+                            <React.Fragment key={item.menuId}>
+                              <div className="border px-4 py-2">{item.itemName}</div>
+                              <div className="border px-4 py-2">{item.description}</div>
+                              <div className="border px-4 py-2">
+                                {dietCategoryMap[item.dietCategory]}
+                              </div>
+                              <div className="border px-4 py-2">{item.serves}</div>
+                              <div className="border px-4 py-2">{item.price}</div>
+                              <div className="border px-4 py-2">
+                                <button
+                                  onClick={() => handleEditMenuItem(item)}
+                                  className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mx-2"
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteMenuItem(item)}
+                                  className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 mx-2"
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </React.Fragment>
+                          ))}
+                    </div>
                   )}
+                </div>
+
+                {/* Actions section below*/}
+                <div className="w-auto pl-2 col-span-2">
+                  <div className=" w-full flex justify-evenly rounded-lg  bg-white">
+                    <button
+                      onClick={() => handleSaveMenu()}
+                      className={`bg-blue-500 text-white m-2 px-4 py-2 rounded-lg hover:bg-blue-600"}`}
+                    >
+                      Save
+                    </button>
+                    <GraphicButton text={"Add Item"} onClick={() => setAddingNewItem(!addingNewItem)} />
+                  </div>
                 </div>
               </div>
             </BorderedPallete>

@@ -116,3 +116,8 @@ export const palleteColours = {
   warning: "bg-red-50 border border-red-200",
   default: ""
 }
+
+export const dietCategoryMap = {
+  1: "Veg",
+  2: "Non-veg"
+}

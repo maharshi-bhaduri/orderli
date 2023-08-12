@@ -9,7 +9,7 @@ export default function CategoryCard({ categoryName, itemList }) {
   }
   return (
     <div
-      className="bg-white rounded-lg shadow-md max-w-2xl mx-auto py-4 px-2  mb-4 "
+      className="bg-white rounded-lg shadow-md max-w-2xl mx-auto py-4 px-2 mb-4 "
       key={categoryName}
     >
       <div
