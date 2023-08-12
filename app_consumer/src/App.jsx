@@ -10,7 +10,7 @@ export default function App() {
   const queryClient = new QueryClient();
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="bg-gray-200 m-0 p-0 px-2 font-poppins h-screen overflow-y-scroll">
+      <div className="m-0 p-0 font-poppins">
         {/* <Header /> */}
 
         <Routes>

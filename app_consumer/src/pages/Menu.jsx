@@ -79,7 +79,7 @@ export default function Menu() {
 
   return (
     <>
-      <div className="bg-cover bg-center pt-2">
+      <div className="bg-gray-200 bg-cover bg-center pt-2 px-2 h-screen overflow-y-scroll">
         <div className="text-black fixed left-1/2 -translate-x-1/2 max-w-2xl w-full mx-auto">
           <div className="rounded-lg bg-white p-2 mx-2 flex flex-col
                         justify-center items-center shadow-md">
@@ -91,7 +91,7 @@ export default function Menu() {
                 name="searchText"
                 disabled={isLoading}
                 onChange={handleChange}
-                className="border border-gray-300 px-2 py-2 mb-2 rounded-lg text-black w-auto"
+                className="border border-gray-300 px-2 py-2 mb-2 rounded-lg text-black w-full"
               />
             </div>
             <div>
