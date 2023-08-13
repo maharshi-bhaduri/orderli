@@ -14,15 +14,20 @@ export default function Home() {
   return (
     <>
       {/* <Header /> */}
-      <div className="fixed -z-10 bg-stone-600 opacity-50 blur-sm">
+      <div className="fixed -z-10 bg-stone-600 opacity-50 blur-sm w-full">
         <img src={bg}
-          className="object-cover h-screen"
+          className="object-cover h-screen w-full"
         />
       </div>
       <div className="flex flex-col h-screen justify-center items-center mx-4">
-        <h1 className="text-4xl mb-5">
-          Welcome to Cafe Magenta
-        </h1>
+        <div className="mb-5 flex flex-col justify-center items-center">
+          <h1 className="text-4xl mb-5">
+            Cafe Magenta
+          </h1>
+          <p className="text-center">
+            Join us for heartwarming breakfasts and soul-sweetening treats. Your cozy corner for indulgence.
+          </p>
+        </div>
         <button
           onClick={goToMenu}
           className="mt-10 order-btn bg-black hover:bg-warmGray-800 text-white
