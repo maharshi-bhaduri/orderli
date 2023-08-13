@@ -10,7 +10,7 @@ export default function TabGroup(props) {
   }
 
   return (
-    <div className="w-full flex">
+    <div className="w-full flex justify-center">
       {props.tabMap.map((option, index) => (
         <TabOption
           name={option}
