@@ -2,7 +2,6 @@ import React from "react";
 import veg from "../images/veg.png";
 import nonVeg from "../images/nonveg.png";
 export default function TabOption(props) {
-  console.log(props.name, " is ", props.active)
   return (
     <div
       className={

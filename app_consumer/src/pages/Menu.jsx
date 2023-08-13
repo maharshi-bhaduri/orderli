@@ -12,6 +12,7 @@ export default function Menu() {
   let filteredItems = [];
   const groupedItems = {};
   const { data: foodItems, isLoading } = getMenu(providerHandle);
+  console.log("providerHandle ", providerHandle)
 
   const [searchText, setSearchText] = React.useState("");
   const [consumerChoice, setConsumerChoice] = React.useState({
@@ -97,10 +98,10 @@ export default function Menu() {
             <div>
               <TabGroup tabMap={tabMap} onSelect={handleCategorySelect} />
             </div>
-            <p>All items are in INR</p>
+            {/* <p>All items are in INR</p> */}
           </div>
         </div>
-        <div className="mt-40">
+        <div className="mt-32">
           {Object.keys(groupedItems).map((category, index) => (
             <CategoryCard
               key={category}
