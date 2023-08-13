@@ -90,7 +90,7 @@ export default function Menu() {
             className="rounded-lg bg-white p-2 mx-2 flex flex-col
                         justify-center items-center shadow-md"
           >
-            <div className="w-full flex mb-2">
+            <div className="w-full flex mb-2 text-sm">
               <button
                 className="mr-2 px-2 border border-gray-300 text-gray-500
                 rounded-lg bg-white hover:bg-gray-300 transition ease-in-out"
@@ -108,13 +108,13 @@ export default function Menu() {
                 className="border border-gray-300 px-2 py-2 rounded-lg text-black w-full"
               />
             </div>
-            <div>
+            <div className="flex w-full">
               <TabGroup tabMap={tabMap} onSelect={handleCategorySelect} />
             </div>
             {/* <p>All items are in INR</p> */}
           </div>
         </div>
-        <div className="mt-32">
+        <div className="mt-28">
           {Object.keys(groupedItems).map((category, index) => (
             <CategoryCard
               key={category}

@@ -5,7 +5,7 @@ export default function TabOption(props) {
   return (
     <div
       className={
-        "inline rounded-lg text-gray-500 border border-gray-300 mx-2 p-2 w-[100px] transition ease-in-out cursor-pointer select-none hover:bg-gray-300 " +
+        "inline rounded-lg text-gray-500 border border-gray-300 mx-2 first:mx-0 last:mx-0 p-2 flex-grow transition ease-in-out cursor-pointer select-none md:hover:bg-gray-300 " +
         (props.active
           ? (" cursor-default " +
             (props.name === "Veg" ? "bg-green-50 border-green-700 "
@@ -40,6 +40,6 @@ export default function TabOption(props) {
           {props.name}
         </h1>
       </div>
-    </div >
+    </div>
   );
 }
