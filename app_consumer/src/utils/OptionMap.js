@@ -14,3 +14,9 @@ export const dietCategoryOptions = [
 ];
 
 export const tabMap = ["All", "Non-Veg", "Veg"];
+
+export const palleteColours = {
+  notify: "bg-amber-50 border border-yellow-200 text-gray-500",
+  warning: "bg-red-50 border border-red-200",
+  default: ""
+}
