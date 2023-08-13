@@ -85,7 +85,7 @@ export default function Menu() {
   return (
     <>
       <div className="bg-gray-300 bg-cover bg-center pt-2 px-2 h-screen overflow-y-scroll">
-        <div className="text-black fixed left-1/2 -translate-x-1/2 max-w-2xl w-full mx-auto">
+        <div className="text-black fixed left-1/2 -translate-x-1/2 max-w-2xl w-full">
           <div
             className="rounded-lg bg-white p-2 mx-2 flex flex-col
                         justify-center items-center shadow-md"
@@ -111,7 +111,6 @@ export default function Menu() {
             <div className="flex w-full">
               <TabGroup tabMap={tabMap} onSelect={handleCategorySelect} />
             </div>
-            {/* <p>All items are in INR</p> */}
           </div>
         </div>
         <div className="mt-28">

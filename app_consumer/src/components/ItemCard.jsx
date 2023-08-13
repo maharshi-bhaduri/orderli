@@ -9,7 +9,7 @@ export default function ItemCard(props) {
     (category) => category.id === props.dietCategory
   );
   return (
-    <div className="max-w-lg mx-auto px-2 ">
+    <div className="max-w-lg mx-auto px-2">
       <div className="bg-gray-100 rounded-lg shadow-md">
         <div className="p-4 mb-4 flex justify-between items-center">
           <div>
