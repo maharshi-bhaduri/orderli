@@ -34,7 +34,7 @@ export default function Menu() {
     });
   }
   function goHome() {
-    navigate("/:providerhandle");
+    navigate(`/${providerHandle}`);
   }
 
   function handleCategorySelect(option) {
@@ -64,14 +64,14 @@ export default function Menu() {
         return consumerChoice.searchText.toLowerCase() === ""
           ? item
           : item.itemName
-              .toLowerCase()
-              .includes(consumerChoice.searchText.toLowerCase()) ||
-              item.description
-                .toLowerCase()
-                .includes(consumerChoice.searchText.toLowerCase()) ||
-              item.category
-                .toLowerCase()
-                .includes(consumerChoice.searchText.toLowerCase());
+            .toLowerCase()
+            .includes(consumerChoice.searchText.toLowerCase()) ||
+          item.description
+            .toLowerCase()
+            .includes(consumerChoice.searchText.toLowerCase()) ||
+          item.category
+            .toLowerCase()
+            .includes(consumerChoice.searchText.toLowerCase());
       });
 
     filteredItems.forEach((item) => {
@@ -84,15 +84,16 @@ export default function Menu() {
 
   return (
     <>
-      <div className="bg-gray-200 bg-cover bg-center pt-2 px-2 h-screen overflow-y-scroll">
+      <div className="bg-gray-300 bg-cover bg-center pt-2 px-2 h-screen overflow-y-scroll">
         <div className="text-black fixed left-1/2 -translate-x-1/2 max-w-2xl w-full mx-auto">
           <div
             className="rounded-lg bg-white p-2 mx-2 flex flex-col
                         justify-center items-center shadow-md"
           >
-            <div className="w-full flex">
+            <div className="w-full flex mb-2">
               <button
-                className="mr-2 px-2 border border-red-100 rounded-md bg-gray-200"
+                className="mr-2 px-2 border border-gray-300 text-gray-500
+                rounded-lg bg-white hover:bg-gray-300 transition ease-in-out"
                 onClick={goHome}
               >
                 Home
@@ -104,7 +105,7 @@ export default function Menu() {
                 name="searchText"
                 disabled={isLoading}
                 onChange={handleChange}
-                className="border border-gray-300 px-2 py-2 mb-2 rounded-lg text-black w-full"
+                className="border border-gray-300 px-2 py-2 rounded-lg text-black w-full"
               />
             </div>
             <div>
