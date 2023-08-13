@@ -8,20 +8,19 @@ export default function Home() {
   let { providerHandle } = useParams();
 
   const data = getMenu(providerHandle);
-  console.log(data);
   function goToMenu() {
     navigate(`/${providerHandle}/menu`);
   }
   return (
     <>
       {/* <Header /> */}
-      <div className="fixed -z-10 bg-stone-600 opacity-50">
+      <div className="fixed -z-10 bg-stone-600 opacity-50 blur-sm">
         <img src={bg}
           className="object-cover h-screen"
         />
       </div>
       <div className="flex flex-col h-screen justify-center items-center mx-4">
-        <h1 className="text-4xl mb-5 shadow-inner">
+        <h1 className="text-4xl mb-5">
           Welcome to Cafe Magenta
         </h1>
         <button
