@@ -20,7 +20,7 @@ export default function CategoryCard({ categoryName, itemList }) {
 
         <img
           src={expand ? expandLess : expandMore}
-          alt=""
+          alt="background image of a cafe"
           className="h-6 w-6 cursor-pointer"
         />
       </div>
