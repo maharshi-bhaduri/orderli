@@ -3,7 +3,7 @@ import React from "react";
 export default function SidebarButton(props) {
   return (
     <div
-      className={"rounded-lg border border-gray-200 m-2 p-2 transition ease-in-out cursor-pointer select-none" +
+      className={"rounded-lg whitespace-nowrap border border-gray-200 mr-2 last:mr-0 p-2 transition ease-in-out cursor-pointer select-none" +
         " hover:bg-gray-200 " +
         ((props.active) ? "text-white bg-orange-300 cursor-default hover:bg-orange-300" : "bg-white")}
       onClick={() => props.onClick(props.name)}

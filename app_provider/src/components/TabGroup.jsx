@@ -1,9 +1,13 @@
 import { NavLink } from "react-router-dom";
 import TabOption from "./TabOption"
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { tabMap } from "../utils/optionMap";
 
 export default function TabGroup(props) {
-  const [selected, setSelected] = useState("")
+  const [selected, setSelected] = useState(tabMap[0])
+  useEffect(() => {
+    props.onSelect(tabMap[0])
+  }, [])
   function handleSelect(optionName) {
     setSelected(optionName)
     props.onSelect(optionName)
