@@ -9,8 +9,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import { dietMap } from "../utils/optionMap";
 import TabGroup from "../components/TabGroup";
 import { tabMap } from "../utils/optionMap";
+import MenuItemCard from "../components/MenuItemCard";
 import BorderedPallete from "../components/BorderedPallete";
 import GraphicButton from "../components/GraphicButton";
+import MenuItemGrid from "../components/MenuItemGrid";
 
 export default function ProviderMenu() {
   const location = useLocation();
@@ -20,6 +22,7 @@ export default function ProviderMenu() {
   const { data: menu, isLoading, isError } = getMenu(providerHandle);
   const [updatedMenu, setUpdatedMenu] = useState([]);
   const [category, setCategory] = useState("");
+  const [menuItem, setMenuItem] = useState(-1);
   const [addingNewItem, setAddingNewItem] = useState(false)
   const noCatText = "Please select a category to see items contained."
   const defaultNewMenuItem = {
@@ -212,10 +215,14 @@ export default function ProviderMenu() {
     setCategory(categoryName);
   };
 
+  const handleMenuItemSelect = async (menuId) => {
+    setMenuItem(menuId);
+  };
+
   return (
     <div className="w-full grid grid-cols-5 rounded-lg my-2 bg-white shadow-md">
       {/* Category section below*/}
-      <div className="mb-4 rounded-lg col-span-5  flex overflow-x-scroll">
+      <div className="rounded-lg col-span-5 flex items-start overflow-x-scroll bg-gray-100">
         <div
           className="rounded-lg border border-gray-200 m-2 p-2 transition ease-in-out cursor-pointer select-none 
            bg-blue-500 hover:bg-blue-700 sticky left-2"
@@ -224,7 +231,7 @@ export default function ProviderMenu() {
             <h1 className="text-sm text-white whitespace-nowrap">+ Category</h1>
           </div>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-start mt-2">
           <TabGroup
             tabMap={tabMap}
             onSelect={handleCategorySelect}
@@ -232,10 +239,10 @@ export default function ProviderMenu() {
         </div>
       </div>
       <div
-        className="px-4 pb-4 h-[calc(100vh-112px)] overflow-y-auto
+        className="pb-4 h-[calc(100vh-112px)] overflow-y-scroll
           w-full col-span-5"
       >
-        <div className="-mt-4 flex flex-col items-center text-sm w-full h-">
+        <div className="-mt-4 flex flex-col items-center text-sm w-full">
           {!category ?
             <BorderedPallete type="notify">
               <div className="w-full flex items-center justify-center ">
@@ -243,107 +250,150 @@ export default function ProviderMenu() {
               </div>
             </BorderedPallete>
             :
-            <BorderedPallete title="Menu">
-              <div className="flex flex-col w-full">
-                {
-                  addingNewItem &&
-                  <BorderedPallete type="notify">
-                    <table>
-                      <tbody>
-                        <MenuEditRow
-                          editedMenuItem={newMenuItem}
-                          type="add"
-                          handleAddMenuItem={() => handleAddMenuItem()}
-                          onChange={(e) => {
-                            setNewMenuItem(e);
-                          }}
-                        />
-                      </tbody>
-                    </table>
-                  </BorderedPallete>
-                }
-                <div className="flex justify-center my-4">
-                  {isLoading ? (
-                    <p>Loading menu items...</p>
-                  ) : isError ? (
-                    <p>Error loading menu items.</p>
-                  ) : updatedMenu?.length == 0 ? (
-                    <div className="flex w-3/4 justify-center rounded-lg border border-gray-300 bg-gray-100 p-5">
-                      <h1>Ready to Set the Table? Add an Item!</h1>
+            <div className="flex flex-col w-full">
+              {
+                addingNewItem &&
+                <BorderedPallete type="notify">
+                  <table>
+                    <tbody>
+                      <MenuEditRow
+                        editedMenuItem={newMenuItem}
+                        type="add"
+                        handleAddMenuItem={() => handleAddMenuItem()}
+                        onChange={(e) => {
+                          setNewMenuItem(e);
+                        }}
+                      />
+                    </tbody>
+                  </table>
+                </BorderedPallete>
+              }
+              {isLoading ? (
+                <p className="my-4">Loading menu items...</p>
+              ) : isError ? (
+                <p>Error loading menu items.</p>
+              ) : updatedMenu?.length == 0 ? (
+                <div className="flex w-3/4 my-4 justify-center rounded-lg border border-gray-300 bg-gray-100 p-5">
+                  <h1>Ready to Set the Table? Add an Item!</h1>
+                </div>
+              ) : (
+                <div className="grid grid-cols-5 mt-4">
+                  <div className="flex flex-col col-span-2">
+                    <div className="bg-gray-100 px-4 pb-2 flex items-center">
+                      <h2 className="text-xl">
+                        Items
+                      </h2>
+                      <div
+                        className="rounded-lg border border-gray-200 p-2 mx-2 transition ease-in-out cursor-pointer select-none 
+                                 bg-blue-500 hover:bg-blue-700 sticky left-2"
+                      >
+                        <h1 className="text-sm text-white whitespace-nowrap">+ New</h1>
+                      </div>
                     </div>
-                  ) : (
-                    <div className="grid grid-cols-6">
-                      {/* Table Header */}
-                      <div className="font-semibold text-gray-600 border border-b-0 rounded-tl-lg p-4 border-gray-300 bg-gray-100">Item Name</div>
-                      <div className="font-semibold text-gray-600 border-r border-t p-4 border-gray-300 bg-gray-100">Description</div>
-                      <div className="font-semibold text-gray-600 border-r border-t p-4 border-gray-300 bg-gray-100">Diet Category</div>
-                      <div className="font-semibold text-gray-600 border-r border-t p-4 border-gray-300 bg-gray-100">Serves</div>
-                      <div className="font-semibold text-gray-600 border-r border-t p-4 border-gray-300 bg-gray-100">Price</div>
-                      <div className="font-semibold text-gray-600 border-r border-t p-4 rounded-tr-lg border-gray-300 bg-gray-100">Actions</div>
-
-                      {/* Menu Item Rows */}
+                    <div className="pb-4 h-[calc(100vh-152px)] overflow-y-scroll">
                       {!isLoading &&
                         updatedMenu.map((item, index) =>
-                          editItemId === item.menuId && isEditing ? (
-                            <MenuEditRow
-                              key={item.menuId}
-                              editedMenuItem={editedMenuItem}
-                              cancelEditMenuItem={() =>
-                                cancelEditMenuItem(editedMenuItem)
-                              }
-                              handleUpdateMenuItem={() =>
-                                handleUpdateMenuItem(editedMenuItem)
-                              }
-                              type="update"
-                              onChange={(e) => {
-                                setEditedMenuItem(e);
-                              }}
-                            />
-                          ) : (
-                            <div key={item.menuId} className="grid grid-cols-6 col-span-6 last:border-b rounded-b-lg">
-                              <div className="px-2 py-2 border-x">{item.itemName}</div>
-                              <div className="px-2 py-2 border-r">{item.description}</div>
-                              <div className="px-2 py-2 border-r">
-                                {dietMap[item.dietCategory - 1]}
-                              </div>
-                              <div className="px-2 py-2 border-r">{item.serves}</div>
-                              <div className="px-2 py-2 border-r">{item.price}</div>
-                              <div className="py-2 border-r">
-                                <div className="flex">
-                                  <button
-                                    onClick={() => handleEditMenuItem(item)}
-                                    className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mx-2"
-                                  >
-                                    Edit
-                                  </button>
-                                  <button
-                                    onClick={() => handleDeleteMenuItem(item)}
-                                    className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 mx-2"
-                                  >
-                                    Delete
-                                  </button>
-                                </div>
+                          <MenuItemCard
+                            key={item.menuId}
+                            item={item}
+                            id={item.menuId}
+                            onSelect={handleMenuItemSelect}
+                          />
+                        )
+                      }
+                    </div>
+                  </div>
+                  <div className="col-span-3 px-4">
+                    <BorderedPallete title="Edit Menu Item">
+                      {
+                        menuItem &&
+                        <MenuItemGrid
+                          item={menuItem}
+                          handleUpdateMenuItem={() =>
+                            handleUpdateMenuItem(editedMenuItem)
+                          }
+                          type="update"
+                          onChange={(e) => {
+                            setEditedMenuItem(e);
+                          }}
+                        />
+                      }
+                    </BorderedPallete>
+                  </div>
+                  <div className="grid grid-cols-6 col-span-1">
+                    {/* Table Header */}
+                    <div className="font-semibold text-gray-600 border border-b-0 border-l-0 rounded-tl-lg p-4 border-gray-300 bg-gray-100">Item Name</div>
+                    <div className="font-semibold text-gray-600 border-r border-t p-4 border-gray-300 bg-gray-100">Description</div>
+                    <div className="font-semibold text-gray-600 border-r border-t p-4 border-gray-300 bg-gray-100">Diet Category</div>
+                    <div className="font-semibold text-gray-600 border-r border-t p-4 border-gray-300 bg-gray-100">Serves</div>
+                    <div className="font-semibold text-gray-600 border-r border-t p-4 border-gray-300 bg-gray-100">Price</div>
+                    <div className="font-semibold text-gray-600 border-r border-t p-4 rounded-tr-lg border-gray-300 bg-gray-100">Actions</div>
+
+                    {/* Menu Item Rows */}
+                    {!isLoading &&
+                      updatedMenu.map((item, index) =>
+                        editItemId === item.menuId && isEditing ? (
+                          <MenuEditRow
+                            key={item.menuId}
+                            editedMenuItem={editedMenuItem}
+                            cancelEditMenuItem={() =>
+                              cancelEditMenuItem(editedMenuItem)
+                            }
+                            handleUpdateMenuItem={() =>
+                              handleUpdateMenuItem(editedMenuItem)
+                            }
+                            type="update"
+                            onChange={(e) => {
+                              setEditedMenuItem(e);
+                            }}
+                          />
+                        ) : (
+                          <div key={item.menuId} className="grid grid-cols-6 col-span-6 last:border-b rounded-b-lg">
+                            <div className="px-2 py-2 border-r">{item.itemName}</div>
+                            <div className="px-2 py-2 border-r">{item.description}</div>
+                            <div className="px-2 py-2 border-r">
+                              {dietMap[item.dietCategory - 1]}
+                            </div>
+                            <div className="px-2 py-2 border-r">{item.serves}</div>
+                            <div className="px-2 py-2 border-r">{item.price}</div>
+                            <div className="py-2 border-r">
+                              <div className="flex flex-wrap">
+                                <button
+                                  onClick={() => handleEditMenuItem(item)}
+                                  className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mx-2"
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteMenuItem(item)}
+                                  className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 mx-2"
+                                >
+                                  Delete
+                                </button>
                               </div>
                             </div>
-                          ))}
-                    </div>
-                  )}
-                </div>
+                          </div>
+                        ))}
+                  </div>
 
-                {/* Actions section below*/}
-                <div className="w-auto pl-2 col-span-2">
-                  <div className=" w-full flex justify-evenly rounded-lg  bg-white">
-                    <button
-                      onClick={() => handleSaveMenu()}
-                      className={`bg-blue-500 text-white m-2 px-4 py-2 rounded-lg hover:bg-blue-600"}`}
-                    >
-                      Save
-                    </button>
-                    <GraphicButton text={"Add Item"} onClick={() => setAddingNewItem(!addingNewItem)} />
+                  <div className="grid grid-cols-6 col-span-1">
                   </div>
                 </div>
+              )}
+
+              {/* Actions section below*/}
+              <div className="w-auto pl-2 col-span-2">
+                <div className=" w-full flex justify-evenly rounded-lg  bg-white">
+                  <button
+                    onClick={() => handleSaveMenu()}
+                    className={`bg-blue-500 text-white m-2 px-4 py-2 rounded-lg hover:bg-blue-600"}`}
+                  >
+                    Save
+                  </button>
+                  <GraphicButton text={"Add Item"} onClick={() => setAddingNewItem(!addingNewItem)} />
+                </div>
               </div>
-            </BorderedPallete>
+            </div>
           }
         </div>
       </div>
