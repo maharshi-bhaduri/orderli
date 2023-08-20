@@ -25,6 +25,7 @@ export default function ProviderMenu() {
   const [category, setCategory] = useState("");
   const [menuItem, setMenuItem] = useState(false);
   const [addingNewItem, setAddingNewItem] = useState(false)
+  const [activeMenuId, setActiveMenuId] = useState(-1)
   const noCatText = "Please select a category to see items contained."
   const defaultNewMenuItem = {
     menuId: Date.now(), //temporary
@@ -38,8 +39,6 @@ export default function ProviderMenu() {
   };
 
   const [newMenuItem, setNewMenuItem] = useState(defaultNewMenuItem);
-  const [editItemId, setEditItemId] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
   const [categories, setCategories] = useState([]);
   const [editedMenuItem, setEditedMenuItem] = useState(null);
   const [newCategory, setNewCategory] = useState("")
@@ -61,7 +60,6 @@ export default function ProviderMenu() {
   const updateMenuItemsWithCachedOperations = async () => {
     // Create a Set to store unique categories
     const uniqueCategories = new Set(categories);
-
     // Loop through the API response and add categories to the Set
     menu.forEach(item => {
       if (item.category !== null) {
@@ -70,8 +68,7 @@ export default function ProviderMenu() {
     });
 
     // Convert the Set to an array
-    setCategories(Array.from(uniqueCategories));
-
+    setCategories(Array.from(uniqueCategories))
     const addOperations = (await localforage.getItem("add")) || [];
     const updateOperations = (await localforage.getItem("update")) || [];
     const deleteOperations = (await localforage.getItem("delete")) || [];
@@ -107,6 +104,12 @@ export default function ProviderMenu() {
       updateMenuItemsWithCachedOperations();
     }
   }, [menu]);
+
+  useEffect(() => {
+    if (!category) {
+      setCategory(categories[0])
+    }
+  }, [categories]);
 
   const { mutate: updateMenu } = useMutation(
     (cachedChanges) =>
@@ -151,21 +154,19 @@ export default function ProviderMenu() {
   };
 
   const handleAddMenuItem = async (menuItem) => {
+    setAddingNewItem(true);
     const addOperations = (await localforage.getItem("add")) || [];
-    console.log("addOperations ", addOperations)
-    console.log("menuItem ", menuItem)
     const newItem = { ...menuItem, operation: "add" }
     const isMenuItemAdded = addOperations.some(
       (operation) => operation.menuId === menuItem.menuId
     );
 
     if (!isMenuItemAdded) {
-      addOperations.push(menuItem);
+      addOperations.push(newItem);
     }
     const updatedAddCache = addOperations.map((cachedItem) =>
-      cachedItem.menuId === menuItem.menuId ? menuItem : cachedItem
+      cachedItem.menuId === newItem.menuId ? newItem : cachedItem
     );
-    console.log("updatedAddCache ", updatedAddCache)
     if (updatedAddCache.length == 0) {
       await localforage.setItem("add", [newItem]);
     }
@@ -200,10 +201,11 @@ export default function ProviderMenu() {
       await localforage.setItem("update", updatedOperations);
     }
     updateMenuItemsWithCachedOperations();
-    setIsEditing(false);
   };
 
   const handleDeleteMenuItem = async (menuItem) => {
+    setNewMenuItem(null);
+    setEditedMenuItem(null);
     if (menuItem.operation === "add") {
       const addOperations = await localforage.getItem("add");
       const indexToRemove = addOperations.findIndex(
@@ -224,21 +226,9 @@ export default function ProviderMenu() {
   };
 
   const handleEditMenuItem = (menuItem) => {
-    setEditItemId(menuItem.menuId);
-    setIsEditing(true);
-    setAddingNewItem(false)
+    setActiveMenuId(menuItem.menuId);
+    setAddingNewItem(false);
     setEditedMenuItem(menuItem);
-  };
-
-  const cancelEditMenuItem = async (editedMenuItem) => {
-    const updateOperations = (await localforage.getItem("update")) || [];
-
-    const updatedOperations = updateOperations.filter(
-      (operation) => operation.menuId !== editedMenuItem.menuId
-    );
-
-    await localforage.setItem("update", updatedOperations);
-    setIsEditing(false);
   };
 
   const handleCategorySelect = async (categoryName) => {
@@ -253,7 +243,7 @@ export default function ProviderMenu() {
     <div className="w-full grid grid-cols-5 rounded-lg my-2 bg-white shadow-md">
       <div className="grid grid-cols-5 col-span-5">
         {/* Category section below*/}
-        <div className="rounded-lg col-span-3 flex items-center overflow-x-scroll bg-gray-100">
+        <div className="rounded-lg col-span-5 flex items-center overflow-x-scroll bg-gray-100">
 
           {
             addCategory ?
@@ -286,34 +276,30 @@ export default function ProviderMenu() {
               </div>
 
           }
-          <div className="flex items-center ml-2">
+          <div className="flex items-center ml-2 flex-grow">
             <TabGroup
               tabMap={categories}
               onSelect={handleCategorySelect}
+              selectedOption={category ? category : categories[0]}
             />
           </div>
-        </div>
-        <div className="bg-white col-span-2">
-          {/* Actions section below*/}
-          <div className="w-auto pl-2 col-span-2">
-            <div className=" w-full flex justify-evenly rounded-lg  bg-white">
-              <button
-                onClick={() => handleSaveMenu()}
-                className={`bg-blue-500 text-white m-2 px-4 py-2 rounded-lg hover:bg-blue-600"}`}
-              >
-                Save
-              </button>
-              <GraphicButton text={"Add Item"} onClick={() => {
-                setNewMenuItem(defaultNewMenuItem);
-                setAddingNewItem(!addingNewItem)
-              }
-              } />
+          <div className="col-span-2 h-full ml-4 w-40 flex justify-end sticky top-0 right-0">
+            {/* Actions section below link*/}
+            <div className="w-auto pl-2 col-span-2 h-full flex items-center justify-end">
+              <div className=" w-full flex justify-evenly rounded-lg">
+                <button
+                  onClick={() => handleSaveMenu()}
+                  className={`bg-blue-500 text-white mx-4 px-4 py-2 rounded-lg hover:bg-blue-600"}`}
+                >
+                  Save
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
       <div
-        className="pb-4 h-[calc(100vh-112px)] overflow-y-scroll
+        className="pb-4 h-[calc(100vh-132px)]
           w-full col-span-5"
       >
         <div className="-mt-4 flex flex-col items-center text-sm w-full">
@@ -338,7 +324,7 @@ export default function ProviderMenu() {
                   <div className="flex flex-col col-span-2">
                     <div className="bg-gray-100 px-4 pb-2 flex items-center">
                       <h2 className="text-xl">
-                        Items
+                        {category}
                       </h2>
                       <div
                         className="rounded-lg border border-gray-200 p-2 mx-2 transition ease-in-out cursor-pointer select-none 
@@ -346,12 +332,13 @@ export default function ProviderMenu() {
                         onClick={() => {
                           setNewMenuItem(defaultNewMenuItem);
                           setAddingNewItem(true);
+                          setActiveMenuId(defaultNewMenuItem.menuId)
                         }}
                       >
                         <h1 className="text-sm text-white whitespace-nowrap">+ New</h1>
                       </div>
                     </div>
-                    <div className="pb-4 h-[calc(100vh-152px)] overflow-y-scroll">
+                    <div className="pb-4 h-[calc(100vh-162px)] overflow-y-scroll">
                       {!isLoading &&
                         updatedMenu.filter(
                           (item) => item.category === category
@@ -361,6 +348,7 @@ export default function ProviderMenu() {
                               key={item.menuId}
                               item={item}
                               id={item.menuId}
+                              activeId={activeMenuId}
                               onSelect={handleEditMenuItem}
                             />
                           )
@@ -368,37 +356,68 @@ export default function ProviderMenu() {
                     </div>
                   </div>
                   <div className="col-span-3 px-4">
+                    {
+                      !addingNewItem && !editedMenuItem &&
+                      <div className="h-full">
+                        <BorderedPallete type="notify">
+                          <div className="flex justify-center w-full">
+                            Select an item to edit or add a new item
+                          </div>
+                        </BorderedPallete>
+                      </div>
+                    }
                     {addingNewItem ? (
                       newMenuItem &&
-                      <BorderedPallete title="Add New Item">
-
-                        <MenuItemGrid
-                          item={newMenuItem}
-                          categories={categories}
-                          type="update"
-                          onChange={(e) => {
-                            console.log("e", e)
-                            setNewMenuItem(e);
-                            handleAddMenuItem(e);
-                          }}
-                        />
-                      </BorderedPallete>
+                      <div className="relative h-[calc(100vh-132px)] overflow-y-scroll">
+                        <BorderedPallete title="Add New Item">
+                          <div className="absolute my-4 top-0 right-0">
+                            <GraphicButton
+                              text="Delete"
+                              buttonStyle='red'
+                              onClick={
+                                () => handleDeleteMenuItem({ ...newMenuItem, operation: 'add' })
+                              }
+                            />
+                          </div>
+                          <MenuItemGrid
+                            item={newMenuItem}
+                            categories={categories}
+                            type="update"
+                            onChange={(e) => {
+                              setNewMenuItem(e);
+                              setCategory(e.category);
+                              handleAddMenuItem(e);
+                            }}
+                          />
+                        </BorderedPallete>
+                      </div>
                     )
                       :
                       (
                         editedMenuItem &&
-                        <BorderedPallete title="Edit Menu Item">
-
-                          <MenuItemGrid
-                            item={editedMenuItem}
-                            categories={categories}
-                            type="update"
-                            onChange={(e) => {
-                              setEditedMenuItem(e);
-                              handleUpdateMenuItem(e);
-                            }}
-                          />
-                        </BorderedPallete>
+                        <div className="relative h-[calc(100vh-132px)] overflow-y-scroll">
+                          <BorderedPallete title="Edit Menu Item">
+                            <div className="absolute my-4 top-0 right-0">
+                              <GraphicButton
+                                text="Delete"
+                                buttonStyle='red'
+                                onClick={
+                                  () => handleDeleteMenuItem(editedMenuItem)
+                                }
+                              />
+                            </div>
+                            <MenuItemGrid
+                              item={editedMenuItem}
+                              categories={categories}
+                              type="update"
+                              onChange={(e) => {
+                                setEditedMenuItem(e);
+                                setCategory(e.category);
+                                handleUpdateMenuItem(e);
+                              }}
+                            />
+                          </BorderedPallete>
+                        </div>
                       )
                     }
                   </div>
