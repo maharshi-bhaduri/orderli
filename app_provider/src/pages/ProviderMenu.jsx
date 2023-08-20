@@ -18,11 +18,12 @@ export default function ProviderMenu() {
   const location = useLocation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [addCategory, setAddCategory] = useState(false)
   const { providerHandle } = useParams();
   const { data: menu, isLoading, isError } = getMenu(providerHandle);
   const [updatedMenu, setUpdatedMenu] = useState([]);
   const [category, setCategory] = useState("");
-  const [menuItem, setMenuItem] = useState(-1);
+  const [menuItem, setMenuItem] = useState(false);
   const [addingNewItem, setAddingNewItem] = useState(false)
   const noCatText = "Please select a category to see items contained."
   const defaultNewMenuItem = {
@@ -30,14 +31,18 @@ export default function ProviderMenu() {
     itemName: "",
     description: "",
     dietCategory: 1,
+    category: category,
     serves: 1,
     price: 0,
+    activeFlag: 1
   };
 
   const [newMenuItem, setNewMenuItem] = useState(defaultNewMenuItem);
   const [editItemId, setEditItemId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [editedMenuItem, setEditedMenuItem] = useState({});
+  const [categories, setCategories] = useState([]);
+  const [editedMenuItem, setEditedMenuItem] = useState(null);
+  const [newCategory, setNewCategory] = useState("")
   const variants = {
     enter: {
       x: -50, // Slide in from the left
@@ -54,6 +59,19 @@ export default function ProviderMenu() {
   };
 
   const updateMenuItemsWithCachedOperations = async () => {
+    // Create a Set to store unique categories
+    const uniqueCategories = new Set(categories);
+
+    // Loop through the API response and add categories to the Set
+    menu.forEach(item => {
+      if (item.category !== null) {
+        uniqueCategories.add(item.category);
+      }
+    });
+
+    // Convert the Set to an array
+    setCategories(Array.from(uniqueCategories));
+
     const addOperations = (await localforage.getItem("add")) || [];
     const updateOperations = (await localforage.getItem("update")) || [];
     const deleteOperations = (await localforage.getItem("delete")) || [];
@@ -132,18 +150,23 @@ export default function ProviderMenu() {
     updateMenu(cachedChanges);
   };
 
-  const handleAddMenuItem = async () => {
+  const handleAddMenuItem = async (menuItem) => {
     const addOperations = (await localforage.getItem("add")) || [];
+    console.log("addOperations ", addOperations)
+    console.log("menuItem ", menuItem)
+    const updatedAddCache = addOperations.map((cachedItem) =>
+      cachedItem.menuId === menuItem.menuId ? menuItem : cachedItem
+    );
+    console.log("updatedAddCache ", updatedAddCache)
     // setNewAdditionDisabled(true);
     // const newItemOper = { ...newMenuItem, operation: "add" }
-    addOperations.push(newMenuItem);
+    // updatedAddCache.push(newMenuItem);
     // addMenuItem(newMenuItem);
     setUpdatedMenu((prevUpdatedMenu) => [
       ...prevUpdatedMenu,
       { ...newMenuItem, operation: "add" },
     ]);
-    await localforage.setItem("add", addOperations);
-    setNewMenuItem(defaultNewMenuItem);
+    await localforage.setItem("add", updatedAddCache);
   };
 
   const handleUpdateMenuItem = async (menuItem) => {
@@ -197,6 +220,7 @@ export default function ProviderMenu() {
   const handleEditMenuItem = (menuItem) => {
     setEditItemId(menuItem.menuId);
     setIsEditing(true);
+    setAddingNewItem(false)
     setEditedMenuItem(menuItem);
   };
 
@@ -221,21 +245,65 @@ export default function ProviderMenu() {
 
   return (
     <div className="w-full grid grid-cols-5 rounded-lg my-2 bg-white shadow-md">
-      {/* Category section below*/}
-      <div className="rounded-lg col-span-5 flex items-start overflow-x-scroll bg-gray-100">
-        <div
-          className="rounded-lg border border-gray-200 m-2 p-2 transition ease-in-out cursor-pointer select-none 
-           bg-blue-500 hover:bg-blue-700 sticky left-2"
-        >
-          <div className="">
-            <h1 className="text-sm text-white whitespace-nowrap">+ Category</h1>
+      <div className="grid grid-cols-5 col-span-5">
+        {/* Category section below*/}
+        <div className="rounded-lg col-span-3 flex items-center overflow-x-scroll bg-gray-100">
+
+          {
+            addCategory ?
+              <div className="h-full flex items-center bg-gray-300 rounded-lg sticky left-0">
+                <input type="text" className="border border-gray-300 w-28 px-2 ml-4 mr-2 py-1 rounded"
+                  autoFocus
+                  onChange={(e) => { setNewCategory(e.target.value) }}></input>
+                <div
+                  className="rounded-lg border border-gray-200 my-2 p-2 transition ease-in-out cursor-pointer select-none 
+                        bg-blue-500 hover:bg-blue-700 sticky left-2"
+                  onClick={() => setCategories([...categories, newCategory])}
+                >
+                  <h1 className="text-sm text-white whitespace-nowrap">Add</h1>
+                </div>
+                <div
+                  className="rounded-lg border border-gray-200 m-2 p-2 transition ease-in-out cursor-pointer select-none 
+                        bg-gray-500 hover:bg-gray-700 sticky left-2"
+                  onClick={() => setAddCategory(false)}
+                >
+                  <h1 className="text-sm text-white whitespace-nowrap">Cancel</h1>
+                </div>
+              </div>
+              :
+              <div
+                className="rounded-lg border border-gray-200 my-2 p-2 transition ease-in-out cursor-pointer select-none 
+                        bg-blue-500 hover:bg-blue-700 sticky left-2"
+                onClick={() => setAddCategory(true)}
+              >
+                <h1 className="text-sm text-white whitespace-nowrap">+ Category</h1>
+              </div>
+
+          }
+          <div className="flex items-center ml-2">
+            <TabGroup
+              tabMap={categories}
+              onSelect={handleCategorySelect}
+            />
           </div>
         </div>
-        <div className="flex items-start mt-2">
-          <TabGroup
-            tabMap={tabMap}
-            onSelect={handleCategorySelect}
-          />
+        <div className="bg-white col-span-2">
+          {/* Actions section below*/}
+          <div className="w-auto pl-2 col-span-2">
+            <div className=" w-full flex justify-evenly rounded-lg  bg-white">
+              <button
+                onClick={() => handleSaveMenu()}
+                className={`bg-blue-500 text-white m-2 px-4 py-2 rounded-lg hover:bg-blue-600"}`}
+              >
+                Save
+              </button>
+              <GraphicButton text={"Add Item"} onClick={() => {
+                setNewMenuItem(defaultNewMenuItem);
+                setAddingNewItem(!addingNewItem)
+              }
+              } />
+            </div>
+          </div>
         </div>
       </div>
       <div
@@ -251,23 +319,6 @@ export default function ProviderMenu() {
             </BorderedPallete>
             :
             <div className="flex flex-col w-full">
-              {
-                addingNewItem &&
-                <BorderedPallete type="notify">
-                  <table>
-                    <tbody>
-                      <MenuEditRow
-                        editedMenuItem={newMenuItem}
-                        type="add"
-                        handleAddMenuItem={() => handleAddMenuItem()}
-                        onChange={(e) => {
-                          setNewMenuItem(e);
-                        }}
-                      />
-                    </tbody>
-                  </table>
-                </BorderedPallete>
-              }
               {isLoading ? (
                 <p className="my-4">Loading menu items...</p>
               ) : isError ? (
@@ -286,113 +337,69 @@ export default function ProviderMenu() {
                       <div
                         className="rounded-lg border border-gray-200 p-2 mx-2 transition ease-in-out cursor-pointer select-none 
                                  bg-blue-500 hover:bg-blue-700 sticky left-2"
+                        onClick={() => {
+                          setNewMenuItem(defaultNewMenuItem);
+                          setAddingNewItem(!addingNewItem);
+                        }}
                       >
                         <h1 className="text-sm text-white whitespace-nowrap">+ New</h1>
                       </div>
                     </div>
                     <div className="pb-4 h-[calc(100vh-152px)] overflow-y-scroll">
                       {!isLoading &&
-                        updatedMenu.map((item, index) =>
-                          <MenuItemCard
-                            key={item.menuId}
-                            item={item}
-                            id={item.menuId}
-                            onSelect={handleMenuItemSelect}
-                          />
+                        updatedMenu.filter(
+                          (item) => item.category === category
                         )
+                          .map((item, index) =>
+                            <MenuItemCard
+                              key={item.menuId}
+                              item={item}
+                              id={item.menuId}
+                              onSelect={handleEditMenuItem}
+                            />
+                          )
                       }
                     </div>
                   </div>
                   <div className="col-span-3 px-4">
-                    <BorderedPallete title="Edit Menu Item">
-                      {
-                        menuItem &&
+                    {addingNewItem ? (
+                      newMenuItem &&
+                      <BorderedPallete title="Add New Item">
+
                         <MenuItemGrid
-                          item={menuItem}
-                          handleUpdateMenuItem={() =>
-                            handleUpdateMenuItem(editedMenuItem)
-                          }
+                          item={newMenuItem}
+                          categories={categories}
                           type="update"
                           onChange={(e) => {
-                            setEditedMenuItem(e);
+                            console.log("e", e)
+                            setNewMenuItem(e);
+                            handleAddMenuItem(e);
                           }}
                         />
-                      }
-                    </BorderedPallete>
-                  </div>
-                  <div className="grid grid-cols-6 col-span-1">
-                    {/* Table Header */}
-                    <div className="font-semibold text-gray-600 border border-b-0 border-l-0 rounded-tl-lg p-4 border-gray-300 bg-gray-100">Item Name</div>
-                    <div className="font-semibold text-gray-600 border-r border-t p-4 border-gray-300 bg-gray-100">Description</div>
-                    <div className="font-semibold text-gray-600 border-r border-t p-4 border-gray-300 bg-gray-100">Diet Category</div>
-                    <div className="font-semibold text-gray-600 border-r border-t p-4 border-gray-300 bg-gray-100">Serves</div>
-                    <div className="font-semibold text-gray-600 border-r border-t p-4 border-gray-300 bg-gray-100">Price</div>
-                    <div className="font-semibold text-gray-600 border-r border-t p-4 rounded-tr-lg border-gray-300 bg-gray-100">Actions</div>
+                      </BorderedPallete>
+                    )
+                      :
+                      (
+                        editedMenuItem &&
+                        <BorderedPallete title="Edit Menu Item">
 
-                    {/* Menu Item Rows */}
-                    {!isLoading &&
-                      updatedMenu.map((item, index) =>
-                        editItemId === item.menuId && isEditing ? (
-                          <MenuEditRow
-                            key={item.menuId}
-                            editedMenuItem={editedMenuItem}
-                            cancelEditMenuItem={() =>
-                              cancelEditMenuItem(editedMenuItem)
-                            }
-                            handleUpdateMenuItem={() =>
-                              handleUpdateMenuItem(editedMenuItem)
-                            }
+                          <MenuItemGrid
+                            item={editedMenuItem}
+                            categories={categories}
                             type="update"
                             onChange={(e) => {
                               setEditedMenuItem(e);
+                              handleUpdateMenuItem(e);
                             }}
                           />
-                        ) : (
-                          <div key={item.menuId} className="grid grid-cols-6 col-span-6 last:border-b rounded-b-lg">
-                            <div className="px-2 py-2 border-r">{item.itemName}</div>
-                            <div className="px-2 py-2 border-r">{item.description}</div>
-                            <div className="px-2 py-2 border-r">
-                              {dietMap[item.dietCategory - 1]}
-                            </div>
-                            <div className="px-2 py-2 border-r">{item.serves}</div>
-                            <div className="px-2 py-2 border-r">{item.price}</div>
-                            <div className="py-2 border-r">
-                              <div className="flex flex-wrap">
-                                <button
-                                  onClick={() => handleEditMenuItem(item)}
-                                  className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mx-2"
-                                >
-                                  Edit
-                                </button>
-                                <button
-                                  onClick={() => handleDeleteMenuItem(item)}
-                                  className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 mx-2"
-                                >
-                                  Delete
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
+                        </BorderedPallete>
+                      )
+                    }
                   </div>
-
                   <div className="grid grid-cols-6 col-span-1">
                   </div>
                 </div>
               )}
-
-              {/* Actions section below*/}
-              <div className="w-auto pl-2 col-span-2">
-                <div className=" w-full flex justify-evenly rounded-lg  bg-white">
-                  <button
-                    onClick={() => handleSaveMenu()}
-                    className={`bg-blue-500 text-white m-2 px-4 py-2 rounded-lg hover:bg-blue-600"}`}
-                  >
-                    Save
-                  </button>
-                  <GraphicButton text={"Add Item"} onClick={() => setAddingNewItem(!addingNewItem)} />
-                </div>
-              </div>
             </div>
           }
         </div>
