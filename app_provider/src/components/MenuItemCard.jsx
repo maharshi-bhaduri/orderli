@@ -3,13 +3,14 @@ import veg from "../images/veg.png";
 import nonVeg from "../images/nonveg.png";
 
 export default function MenuItemCard(props) {
-  const { item, id } = props
+  const { item, id, activeId } = props
   return (
     <div
-      className={"flex border border-gray-300 bg-gray-50 hover:bg-gray-300 " +
-        "hover:cursor-pointer border-slate-100 p-2 " +
+      className={"flex border border-gray-300  " +
+        " border-slate-100 p-2 " +
         "w-full transition ease-in-out " +
-        (id == 0 ? "bg-white border-dashed hover:bg-gray-200" : "")}
+        (activeId === id ? "bg-gray-200 border border-black hover:bg-gray-200 cursor-default" :
+          "bg-gray-50 hover:bg-gray-300 cursor-pointer")}
       onClick={() => props.onSelect(item)}
     >
       <div className="flex-grow">
@@ -25,18 +26,6 @@ export default function MenuItemCard(props) {
       <div className="flex items-center">
         <h2 className="text-base ml-2">{item.price}</h2>
       </div>
-      {/* <button
-        onClick={() => handleEditMenuItem(item)}
-        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-      >
-        Edit
-      </button> */}
-      {/* <button
-        onClick={() => handleDeleteMenuItem(item)}
-        className="absolute bottom-0 right-0 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
-      >
-        Delete
-      </button> */}
     </div>
   );
 }
