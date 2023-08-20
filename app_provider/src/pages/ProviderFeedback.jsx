@@ -8,12 +8,7 @@ import { motion } from "framer-motion";
 export default function ProviderFeedback() {
   const { providerHandle } = useParams();
   const { data: feedback, isLoading, isError } = getFeedback(providerHandle);
-  const options = [
-    { value: "ratingDescending", label: "Rating: Descending" },
-    { value: "ratingAscending", label: "Rating: Ascending" },
-    { value: "dateDescending", label: "Date: Descending" },
-    { value: "dateAscending", label: "Date: Ascending" },
-  ];
+  const options = ["ratingDescending", "ratingAscending", "dateDescending", "dateAscending"];
   const [selectedOption, setSelectedOption] = useState(options[0].value);
   const handleSelectChange = function (value) {
     setSelectedOption(value);

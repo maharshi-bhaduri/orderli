@@ -14,7 +14,7 @@ export default function TabGroup(props) {
   }
 
   return (
-    <div className="w-full flex items-center">
+    <div className="w-full flex items-center my-2 ml-2">
       {/* {
         props.newTab &&
         <div
