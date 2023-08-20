@@ -154,19 +154,25 @@ export default function ProviderMenu() {
     const addOperations = (await localforage.getItem("add")) || [];
     console.log("addOperations ", addOperations)
     console.log("menuItem ", menuItem)
+    const newItem = { ...menuItem, operation: "add" }
+    const isMenuItemAdded = addOperations.some(
+      (operation) => operation.menuId === menuItem.menuId
+    );
+
+    if (!isMenuItemAdded) {
+      addOperations.push(menuItem);
+    }
     const updatedAddCache = addOperations.map((cachedItem) =>
       cachedItem.menuId === menuItem.menuId ? menuItem : cachedItem
     );
     console.log("updatedAddCache ", updatedAddCache)
-    // setNewAdditionDisabled(true);
-    // const newItemOper = { ...newMenuItem, operation: "add" }
-    // updatedAddCache.push(newMenuItem);
-    // addMenuItem(newMenuItem);
-    setUpdatedMenu((prevUpdatedMenu) => [
-      ...prevUpdatedMenu,
-      { ...newMenuItem, operation: "add" },
-    ]);
-    await localforage.setItem("add", updatedAddCache);
+    if (updatedAddCache.length == 0) {
+      await localforage.setItem("add", [newItem]);
+    }
+    else {
+      await localforage.setItem("add", updatedAddCache);
+    }
+    updateMenuItemsWithCachedOperations();
   };
 
   const handleUpdateMenuItem = async (menuItem) => {
@@ -339,7 +345,7 @@ export default function ProviderMenu() {
                                  bg-blue-500 hover:bg-blue-700 sticky left-2"
                         onClick={() => {
                           setNewMenuItem(defaultNewMenuItem);
-                          setAddingNewItem(!addingNewItem);
+                          setAddingNewItem(true);
                         }}
                       >
                         <h1 className="text-sm text-white whitespace-nowrap">+ New</h1>

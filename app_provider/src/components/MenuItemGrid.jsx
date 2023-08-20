@@ -7,7 +7,6 @@ import { dietMap } from "../utils/optionMap";
 export default function MenuItemGrid(props) {
     const { item, categories } = props;
     const options = ["Non-Veg", "Veg"];
-    console.log(item)
 
     // const [selectedDietOption, setSelectedDietOption] = useState(options[item.dietCategory - 1]);
     const handleSelectDietChange = function (value) {
@@ -73,25 +72,25 @@ export default function MenuItemGrid(props) {
             <div
                 className="px-2 flex flex-col flex-grow items-start justify-center col-span-2">
                 <p className="text-xs font-semibold text-gray-500 mb-2">Price</p>
-                {/* <input
+                <input
                     type="number"
                     value={item.price}
                     onChange={
                         (e) => { handleInputChange('price', e.target.value) }
                     }
                     className="border border-gray-300 px-2 py-1 rounded"
-                /> */}
+                />
             </div>
             <div
                 className="px-2 flex flex-col flex-grow items-start justify-center col-span-2">
                 <p className="text-xs font-semibold text-gray-500 mb-2">Serves</p>
-                {/* <input
+                <input
                     type="number"
                     value={item.serves}
                     onChange={(e) => { handleInputChange('serves', e.target.value) }
                     }
                     className="border border-gray-300 px-2 py-1 rounded"
-                /> */}
+                />
             </div>
             <div
                 className="px-2 flex flex-col flex-grow items-start justify-center col-span-2">
