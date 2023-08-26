@@ -349,7 +349,7 @@ export default function ProviderMenu() {
                 </div>
               ) : isError ? (
                 <p>Error loading menu items.</p>
-              ) : updatedMenu?.length == 0 ? (
+              ) : updatedMenu?.length == 0 ? ( //this check should come later
                 <div className="flex w-3/4 my-4 justify-center rounded-lg border border-gray-300 bg-gray-100 p-5">
                   <h1>Ready to Set the Table? Add an Item!</h1>
                 </div>
@@ -357,6 +357,7 @@ export default function ProviderMenu() {
                 <div className="grid grid-cols-5">
                   <div className="flex flex-col col-span-2">
                     <div className="bg-gray-100 px-4 py-2 flex items-center">
+                      {/* somewhere after this div */}
                       <h2 className="text-xl">
                         {category}
                       </h2>
