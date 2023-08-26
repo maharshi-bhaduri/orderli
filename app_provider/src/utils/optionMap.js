@@ -116,7 +116,7 @@ export const buttonStyles = {
   },
   blueline: {
     org: "text-blue-500 transition duration-300 border border-blue-500 hover:text-white hover:bg-blue-700 cursor-pointer",
-    dis: "text-blue-500 border border-blue-300 bg-blue-100 hover:bg-blue-100 transition duration-300 cursor-default"
+    dis: "text-blue-400 border border-blue-300 bg-blue-100 hover:bg-blue-100 transition duration-300 cursor-default"
   }
 }
 

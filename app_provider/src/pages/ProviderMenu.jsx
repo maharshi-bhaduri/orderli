@@ -265,9 +265,9 @@ export default function ProviderMenu() {
 
   return (
     <div className="w-full grid grid-cols-5 rounded-lg my-2 bg-white shadow-md">
-      <div className="grid grid-cols-5 col-span-5">
+      <div className="col-span-5">
         {/* Category section below*/}
-        <div className="rounded-lg col-span-5 flex items-center overflow-x-scroll bg-gray-100">
+        <div className="rounded-lg col-span-5 flex items-center overflow-x-scroll">
 
           {
             addCategory ?
@@ -309,31 +309,30 @@ export default function ProviderMenu() {
           </div>
           <div className="col-span-2 h-full ml-4 w-[200px] flex justify-end sticky top-0 right-0">
             {/* Actions section below link*/}
-            {
-              isUpdatingMenu ?
-                <div className="w-auto pl-2 col-span-2 h-full flex items-center justify-end">
+
+            <div className="w-auto pl-2 col-span-2 flex items-center justify-end">
+              {
+                isUpdatingMenu ?
                   <GraphicButton buttonStyle="bluefill"
                     onClick={() => handleSaveMenu()}
                     disabled={true}
-                  ><Loader /></GraphicButton>
-                </div>
-                :
-                pendingChanges ?
-                  <div className="w-auto pl-2 col-span-2 h-full flex items-center justify-end">
-                    <GraphicButton buttonStyle="bluefill"
-                      onClick={() => handleSaveMenu()}
-                      disabled={isMenuLoading}
-                    >Save Changes</GraphicButton>
-                  </div>
+                  ><div className=""><Loader /></div></GraphicButton>
                   :
-                  <div className="w-auto pl-2 col-span-2 h-full flex items-center justify-end">
+                  pendingChanges ?
+                    (
+                      <GraphicButton buttonStyle="bluefill"
+                        onClick={() => handleSaveMenu()}
+                        disabled={isMenuLoading}
+                      >Save Changes</GraphicButton>
+                    )
+                    :
                     <GraphicButton
                       buttonStyle="blueline"
                       onClick={() => handleSaveMenu()}
                       disabled={true}
                     >Changes Saved</GraphicButton>
-                  </div>
-            }
+              }
+            </div>
           </div>
         </div>
       </div>
@@ -346,7 +345,7 @@ export default function ProviderMenu() {
             <div className="flex flex-col w-full h-full">
               {isMenuLoading ? (
                 <div className="w-full h-full flex items-center justify-center">
-                  <Loader></Loader>
+                  <Loader />
                 </div>
               ) : isError ? (
                 <p>Error loading menu items.</p>
@@ -355,9 +354,9 @@ export default function ProviderMenu() {
                   <h1>Ready to Set the Table? Add an Item!</h1>
                 </div>
               ) : (
-                <div className="grid grid-cols-5 mt-4">
+                <div className="grid grid-cols-5">
                   <div className="flex flex-col col-span-2">
-                    <div className="bg-gray-100 px-4 pb-2 flex items-center">
+                    <div className="bg-gray-100 px-4 py-2 flex items-center">
                       <h2 className="text-xl">
                         {category}
                       </h2>
@@ -431,7 +430,7 @@ export default function ProviderMenu() {
                       :
                       (
                         editedMenuItem &&
-                        <div className="relative h-[calc(100vh-132px)] overflow-y-scroll">
+                        <div className="relative h-[calc(100vh-112px)] overflow-y-scroll">
                           <BorderedPallete title="Edit Menu Item">
                             <div className="absolute my-4 top-0 right-0">
                               <GraphicButton
