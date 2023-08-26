@@ -18,6 +18,7 @@ export default function ProviderFeedback() {
   const handleSelectChange = function (value) {
     setSelectedOption(value);
   };
+  console.log(feedback);
 
   return (
     <div className="w-full px-8 flex flex-col items-center">
@@ -27,7 +28,7 @@ export default function ProviderFeedback() {
       <div
         className={
           "rounded-lg bg-white " +
-          "w-full p-5 transition ease-in-out flex flex-col justify-around items-center"
+          "w-full p-5 transition ease-in-out flex flex-col justify-around items-center "
         }
       >
         <Dropdown
@@ -35,8 +36,9 @@ export default function ProviderFeedback() {
           handleSelectChange={handleSelectChange}
           options={options}
         />
-        <div className="max-w-5xl mx-auto mt-8">
-          {!isLoading && feedback &&
+        <div className="w-5/6 mx-auto mt-8 max-h-[600px] overflow-y-scroll">
+          {!isLoading &&
+            feedback &&
             feedback
               .sort((feedback1, feedback2) => {
                 switch (selectedOption) {
@@ -66,6 +68,9 @@ export default function ProviderFeedback() {
                     rating={parseInt(Math.round(feedbackitem.rating))}
                     desc={feedbackitem.feedbackComments}
                     createdAt={feedbackitem.createdAt.substring(0, 10)}
+                    by={feedbackitem.consumerName}
+                    email={feedbackitem.consumerEmail}
+                    phone={feedbackitem.consumerPhone}
                   />
                 </motion.div>
               ))}
