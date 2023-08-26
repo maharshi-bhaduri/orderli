@@ -7,14 +7,14 @@ import TabGroup from "../components/TabGroup";
 import { tabMap } from "../utils/OptionMap.js";
 import { dietCategoryOptions } from "../utils/OptionMap.js";
 import CategoryCard from "../components/CategoryCard";
+import SearchService from "../utils/SearchService";
 export default function Menu() {
   let { providerHandle } = useParams();
   const navigate = useNavigate();
   let filteredItems = [];
   const groupedItems = {};
   const { data: foodItems, isLoading } = getMenu(providerHandle);
-  console.log("providerHandle ", providerHandle)
-
+  console.log(foodItems);
   const [searchText, setSearchText] = React.useState("");
   const [consumerChoice, setConsumerChoice] = React.useState({
     searchText: "",
@@ -49,30 +49,21 @@ export default function Menu() {
   }
 
   if (!isLoading) {
-    filteredItems = foodItems
-      .filter((item) => {
-        if (consumerChoice.all === true) return true;
-        if (consumerChoice.veg === true) {
-          return item.dietCategory === 2;
-        }
-        if (consumerChoice.nonveg === true) {
-          return item.dietCategory === 1 || item.dietCategory === 3;
-        }
-        return false;
-      })
-      .filter((item) => {
-        return consumerChoice.searchText.toLowerCase() === ""
-          ? item
-          : item.itemName
-            .toLowerCase()
-            .includes(consumerChoice.searchText.toLowerCase()) ||
-          item.description
-            .toLowerCase()
-            .includes(consumerChoice.searchText.toLowerCase()) ||
-          item.category
-            .toLowerCase()
-            .includes(consumerChoice.searchText.toLowerCase());
-      });
+    filteredItems = foodItems.filter((item) => {
+      if (consumerChoice.all === true) return true;
+      if (consumerChoice.veg === true) {
+        return item.dietCategory === 2;
+      }
+      if (consumerChoice.nonveg === true) {
+        return item.dietCategory === 1 || item.dietCategory === 3;
+      }
+      return false;
+    });
+    filteredItems = SearchService(consumerChoice.searchText, filteredItems, [
+      "itemName",
+      "description",
+      "category",
+    ]);
 
     filteredItems.forEach((item) => {
       if (!groupedItems[item.category]) {
