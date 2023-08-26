@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import BorderedPallete from "../components/BorderedPallete";
 import InfoGrid from "../components/InfoGrid";
 import GraphicButton from "../components/GraphicButton";
+import Loader from "../components/Loader";
 
 export default function ProviderProfile() {
   const { providerHandle } = useParams();
@@ -153,79 +154,87 @@ export default function ProviderProfile() {
         className="rounded-lg bg-white shadow-md p-5 h-[calc(100vh-32px)] overflow-y-auto
           w-full flex flex-col items-center"
       >
-        <div className="w-full flex justify-between">
-          {
-            editable ?
-              (
-                <>
-                  <GraphicButton
-                    text="Save"
-                    onClick={() => {
-                      setEditable(false);
-                      updateProviderDetails(providerDetailsReplica);
-                    }}
-                  />
-                  <GraphicButton
-                    text="Cancel"
-                    onClick={() => {
-                      setProviderDetailsReplica(providerDetails)
-                      setEditable(false);
-                    }}
-                  />
-                </>
-              ) :
-              <GraphicButton
-                text="Unlock"
-                onClick={() => setEditable(true)}
-              >
-                <span className="material-symbols-outlined">
-                  lock_open
-                </span>
-              </GraphicButton>
-          }
-        </div>
-        <BorderedPallete
-          title='Business Details'>
-          <div className="flex flex-col items-center">
-            <img src={providerDetails?.qrData}
-              alt="QR Code"
-              className="transition-transform hover:scale-110 cursor-pointer"
-            />
+        {isProfileLoading ?
+          <div className="w-full h-full flex items-center justify-center">
+            <Loader></Loader>
           </div>
-          <div className="m-4 border h-3/4">
-          </div>
-          <InfoGrid
-            cols={2}
-            infoList={businessInfolist}
-            editable={editable}
-            onChange={(e) => {
-              setProviderDetailsReplica({ ...providerDetailsReplica, ...e });
-            }}
-          />
-        </BorderedPallete>
+          :
+          <>
+            <div className="w-full flex justify-between">
+              {
+                editable ?
+                  (
+                    <>
+                      <GraphicButton
+                        text="Save"
+                        onClick={() => {
+                          setEditable(false);
+                          updateProviderDetails(providerDetailsReplica);
+                        }}
+                      />
+                      <GraphicButton
+                        text="Cancel"
+                        onClick={() => {
+                          setProviderDetailsReplica(providerDetails)
+                          setEditable(false);
+                        }}
+                      />
+                    </>
+                  ) :
+                  <GraphicButton
+                    text="Unlock"
+                    onClick={() => setEditable(true)}
+                  >
+                    <span className="material-symbols-outlined">
+                      lock_open
+                    </span>
+                  </GraphicButton>
+              }
+            </div>
+            <BorderedPallete
+              title='Business Details'>
+              <div className="flex flex-col items-center">
+                <img src={providerDetails?.qrData}
+                  alt="QR Code"
+                  className="transition-transform hover:scale-110 cursor-pointer"
+                />
+              </div>
+              <div className="m-4 border h-3/4">
+              </div>
+              <InfoGrid
+                cols={2}
+                infoList={businessInfolist}
+                editable={editable}
+                onChange={(e) => {
+                  setProviderDetailsReplica({ ...providerDetailsReplica, ...e });
+                }}
+              />
+            </BorderedPallete>
 
-        <BorderedPallete
-          title='Location Details'>
-          <InfoGrid
-            cols={2}
-            infoList={locationInfolist}
-            editable={editable}
-            onChange={(e) => {
-              setProviderDetailsReplica({ ...providerDetailsReplica, ...e });
-            }}
-          />
-        </BorderedPallete>
-        <BorderedPallete
-          title='Social Media'>
-          <InfoGrid
-            cols={2}
-            infoList={socialInfolist}
-            editable={editable}
-            onChange={(e) => {
-              setProviderDetailsReplica({ ...providerDetailsReplica, ...e });
-            }}
-          />
-        </BorderedPallete>
+            <BorderedPallete
+              title='Location Details'>
+              <InfoGrid
+                cols={2}
+                infoList={locationInfolist}
+                editable={editable}
+                onChange={(e) => {
+                  setProviderDetailsReplica({ ...providerDetailsReplica, ...e });
+                }}
+              />
+            </BorderedPallete>
+            <BorderedPallete
+              title='Social Media'>
+              <InfoGrid
+                cols={2}
+                infoList={socialInfolist}
+                editable={editable}
+                onChange={(e) => {
+                  setProviderDetailsReplica({ ...providerDetailsReplica, ...e });
+                }}
+              />
+            </BorderedPallete>
+          </>
+        }
       </div>
     </div>
   );
