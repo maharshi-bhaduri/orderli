@@ -43,6 +43,7 @@ export default function ProviderMenu() {
   const [categories, setCategories] = useState([]);
   const [editedMenuItem, setEditedMenuItem] = useState(null);
   const [newCategory, setNewCategory] = useState("")
+  const [pendingChanges, setPendingChanges] = useState(false)
   const variants = {
     enter: {
       x: -50, // Slide in from the left
@@ -112,7 +113,28 @@ export default function ProviderMenu() {
     }
   }, [categories]);
 
-  const { mutate: updateMenu } = useMutation(
+  useEffect(() => {
+    checkForChanges().then(hasChanges => {
+      setPendingChanges(hasChanges);
+    });
+  });
+  console.log("pendingChanges", pendingChanges)
+
+  const checkForChanges = async () => {
+    try {
+      const addList = await localforage.getItem('add') || [];
+      const updateList = await localforage.getItem('update') || [];
+      const deleteList = await localforage.getItem('delete') || [];
+      console.log("updateList", updateList > 0)
+      const hasChanges = addList.length > 0 || updateList.length > 0 || deleteList.length > 0;
+      return hasChanges;
+    } catch (error) {
+      console.error('Error checking for changes:', error);
+      return false;
+    }
+  };
+
+  const { mutate: updateMenu, isLoading: isUpdatingMenu } = useMutation(
     (cachedChanges) =>
       postService(import.meta.env.VITE_APP_UPDATE_MENU, cachedChanges),
     {
@@ -285,14 +307,33 @@ export default function ProviderMenu() {
               selectedOption={category ? category : categories[0]}
             />
           </div>
-          <div className="col-span-2 h-full ml-4 w-40 flex justify-end sticky top-0 right-0">
+          <div className="col-span-2 h-full ml-4 w-[200px] flex justify-end sticky top-0 right-0">
             {/* Actions section below link*/}
-            <div className="w-auto pl-2 col-span-2 h-full flex items-center justify-end">
-              <GraphicButton buttonStyle="bluefill"
-                onClick={() => handleSaveMenu()}
-                disabled={isMenuLoading}
-              >Save</GraphicButton>
-            </div>
+            {
+              isUpdatingMenu ?
+                <div className="w-auto pl-2 col-span-2 h-full flex items-center justify-end">
+                  <GraphicButton buttonStyle="bluefill"
+                    onClick={() => handleSaveMenu()}
+                    disabled={true}
+                  ><Loader /></GraphicButton>
+                </div>
+                :
+                pendingChanges ?
+                  <div className="w-auto pl-2 col-span-2 h-full flex items-center justify-end">
+                    <GraphicButton buttonStyle="bluefill"
+                      onClick={() => handleSaveMenu()}
+                      disabled={isMenuLoading}
+                    >Save Changes</GraphicButton>
+                  </div>
+                  :
+                  <div className="w-auto pl-2 col-span-2 h-full flex items-center justify-end">
+                    <GraphicButton
+                      buttonStyle="blueline"
+                      onClick={() => handleSaveMenu()}
+                      disabled={true}
+                    >Changes Saved</GraphicButton>
+                  </div>
+            }
           </div>
         </div>
       </div>
