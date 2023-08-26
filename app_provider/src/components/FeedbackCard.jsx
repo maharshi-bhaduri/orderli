@@ -14,18 +14,22 @@ export default function FeedbackCard({
   const toggleExpansion = function () {
     setExpanded(!expanded);
   };
-  let shortDesc = "";
+  const charLimit = 100,
+    lineLimit = 1;
+  let shortDesc =
+    desc.length > charLimit
+      ? desc.substring(0, charLimit)
+      : desc.split(/\r?\n|\r|\n/g).length > lineLimit
+      ? desc
+          .split(/\r?\n|\r|\n/g)
+          .slice(0, lineLimit)
+          .join("\n")
+      : desc;
   const dynamicColorClass = ratingColors[rating];
   const formattedDate = formatDate(createdAt);
 
-  if (desc.length > 100) {
-    shortDesc = desc.substring(0, 100);
-  }
   return (
-    <div
-      className="w-full mx-auto mt-4 max-h-fit bg-gray-100 rounded-lg p-4 space-x-4"
-      onClick={toggleExpansion}
-    >
+    <div className="w-full mx-auto mt-4 max-h-fit bg-gray-100 rounded-lg p-4 space-x-4">
       <div className="flex flex-row items-center">
         <div
           className={`flex justify-center items-center flex-shrink-0  h-10 w-10 rounded-lg ${dynamicColorClass}`}
@@ -41,7 +45,14 @@ export default function FeedbackCard({
       </div>
       {!expanded && (
         <div className="flex  pl-14">
-          <p className="text-gray-700">{shortDesc}</p>
+          <p className="text-gray-700">
+            {shortDesc}{" "}
+            {shortDesc !== desc && (
+              <div className="text-sm cursor-pointer" onClick={toggleExpansion}>
+                ... Read more
+              </div>
+            )}
+          </p>
         </div>
       )}
       {expanded && (
