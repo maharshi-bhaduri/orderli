@@ -8,11 +8,20 @@ import { motion } from "framer-motion";
 export default function ProviderFeedback() {
   const { providerHandle } = useParams();
   const { data: feedback, isLoading, isError } = getFeedback(providerHandle);
-  const options = ["ratingDescending", "ratingAscending", "dateDescending", "dateAscending"];
-  const [selectedOption, setSelectedOption] = useState(options[0].value);
+  // const options = ["ratingDescending", "ratingAscending", "dateDescending", "dateAscending"];
+  const options = {
+    ratingDescending: "Rating High to low",
+    ratingAscending: "Rating low to high",
+    dateAscending: "Date low to high",
+    dateDescending: "Date high to low",
+  };
+  const [selectedOption, setSelectedOption] = useState(
+    options.ratingDescending
+  );
   const handleSelectChange = function (value) {
     setSelectedOption(value);
   };
+  console.log(feedback);
 
   return (
     <div className="w-full px-8 flex flex-col items-center">
@@ -22,29 +31,30 @@ export default function ProviderFeedback() {
       <div
         className={
           "rounded-lg bg-white " +
-          "w-full p-5 transition ease-in-out flex flex-col justify-around items-center"
+          "w-full p-5 transition ease-in-out flex flex-col justify-around items-center "
         }
       >
         <Dropdown
           selectedOption={selectedOption}
           handleSelectChange={handleSelectChange}
-          options={options}
+          options={Object.values(options)}
         />
-        <div className="max-w-5xl mx-auto mt-8">
-          {!isLoading && feedback &&
+        <div className="w-5/6 mx-auto mt-8 max-h-[600px] overflow-y-scroll">
+          {!isLoading &&
+            feedback &&
             feedback
               .sort((feedback1, feedback2) => {
                 switch (selectedOption) {
-                  case "ratingDescending":
+                  case options.ratingDescending:
                     return feedback2.rating - feedback1.rating;
-                  case "ratingAscending":
+                  case options.ratingAscending:
                     return feedback1.rating - feedback2.rating;
-                  case "dateDescending":
+                  case options.dateDescending:
                     return (
                       new Date(feedback2.createdAt) -
                       new Date(feedback1.createdAt)
                     );
-                  case "dateAscending":
+                  case options.dateAscending:
                     return (
                       new Date(feedback1.createdAt) -
                       new Date(feedback2.createdAt)
@@ -61,6 +71,9 @@ export default function ProviderFeedback() {
                     rating={parseInt(Math.round(feedbackitem.rating))}
                     desc={feedbackitem.feedbackComments}
                     createdAt={feedbackitem.createdAt.substring(0, 10)}
+                    by={feedbackitem.consumerName}
+                    email={feedbackitem.consumerEmail}
+                    phone={feedbackitem.consumerPhone}
                   />
                 </motion.div>
               ))}
