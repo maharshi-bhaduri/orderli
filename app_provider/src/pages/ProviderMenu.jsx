@@ -13,6 +13,7 @@ import MenuItemCard from "../components/MenuItemCard";
 import BorderedPallete from "../components/BorderedPallete";
 import GraphicButton from "../components/GraphicButton";
 import MenuItemGrid from "../components/MenuItemGrid";
+import Loader from "../components/Loader";
 
 export default function ProviderMenu() {
   const location = useLocation();
@@ -20,7 +21,7 @@ export default function ProviderMenu() {
   const queryClient = useQueryClient();
   const [addCategory, setAddCategory] = useState(false)
   const { providerHandle } = useParams();
-  const { data: menu, isLoading, isError } = getMenu(providerHandle);
+  const { data: menu, isLoading: isMenuLoading, isError } = getMenu(providerHandle);
   const [updatedMenu, setUpdatedMenu] = useState([]);
   const [category, setCategory] = useState("");
   const [menuItem, setMenuItem] = useState(false);
@@ -224,6 +225,7 @@ export default function ProviderMenu() {
     }
     updateMenuItemsWithCachedOperations();
   };
+  // let isMenuLoading = true;
 
   const handleEditMenuItem = (menuItem) => {
     setActiveMenuId(menuItem.menuId);
@@ -286,14 +288,10 @@ export default function ProviderMenu() {
           <div className="col-span-2 h-full ml-4 w-40 flex justify-end sticky top-0 right-0">
             {/* Actions section below link*/}
             <div className="w-auto pl-2 col-span-2 h-full flex items-center justify-end">
-              <div className=" w-full flex justify-evenly rounded-lg">
-                <button
-                  onClick={() => handleSaveMenu()}
-                  className={`bg-blue-500 text-white mx-4 px-4 py-2 rounded-lg hover:bg-blue-600"}`}
-                >
-                  Save
-                </button>
-              </div>
+              <GraphicButton buttonStyle="bluefill"
+                onClick={() => handleSaveMenu()}
+                disabled={isMenuLoading}
+              >Save</GraphicButton>
             </div>
           </div>
         </div>
@@ -302,17 +300,13 @@ export default function ProviderMenu() {
         className="pb-4 h-[calc(100vh-132px)]
           w-full col-span-5"
       >
-        <div className="-mt-4 flex flex-col items-center text-sm w-full">
-          {!category ?
-            <BorderedPallete type="notify">
-              <div className="w-full flex items-center justify-center ">
-                {noCatText}
-              </div>
-            </BorderedPallete>
-            :
-            <div className="flex flex-col w-full">
-              {isLoading ? (
-                <p className="my-4">Loading menu items...</p>
+        <div className="-mt-4 flex flex-col items-center text-sm w-full h-full">
+          {
+            <div className="flex flex-col w-full h-full">
+              {isMenuLoading ? (
+                <div className="w-full h-full flex items-center justify-center">
+                  <Loader></Loader>
+                </div>
               ) : isError ? (
                 <p>Error loading menu items.</p>
               ) : updatedMenu?.length == 0 ? (
@@ -339,7 +333,7 @@ export default function ProviderMenu() {
                       </div>
                     </div>
                     <div className="pb-4 h-[calc(100vh-162px)] overflow-y-scroll">
-                      {!isLoading &&
+                      {!isMenuLoading &&
                         updatedMenu.filter(
                           (item) => item.category === category
                         )
@@ -377,6 +371,7 @@ export default function ProviderMenu() {
                               onClick={
                                 () => handleDeleteMenuItem({ ...newMenuItem, operation: 'add' })
                               }
+                              disabled={isMenuLoading}
                             />
                           </div>
                           <MenuItemGrid
