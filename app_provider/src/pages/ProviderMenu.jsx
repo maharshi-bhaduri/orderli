@@ -118,14 +118,14 @@ export default function ProviderMenu() {
       setPendingChanges(hasChanges);
     });
   });
-  console.log("pendingChanges", pendingChanges)
+  console.log("categories", categories)
+  console.log("category", category)
 
   const checkForChanges = async () => {
     try {
       const addList = await localforage.getItem('add') || [];
       const updateList = await localforage.getItem('update') || [];
       const deleteList = await localforage.getItem('delete') || [];
-      console.log("updateList", updateList > 0)
       const hasChanges = addList.length > 0 || updateList.length > 0 || deleteList.length > 0;
       return hasChanges;
     } catch (error) {
