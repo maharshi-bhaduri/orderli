@@ -7,7 +7,7 @@ import TabGroup from "../components/TabGroup";
 import { tabMap } from "../utils/OptionMap.js";
 import { dietCategoryOptions } from "../utils/OptionMap.js";
 import CategoryCard from "../components/CategoryCard";
-import SearchService from "../utils/searchService";
+import SearchService from "../utils/SearchService";
 export default function Menu() {
   let { providerHandle } = useParams();
   const navigate = useNavigate();
