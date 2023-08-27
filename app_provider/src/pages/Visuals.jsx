@@ -53,6 +53,16 @@ export default function Visuals() {
           delete
         </span>
       </GraphicButton>
+    },
+    {
+      key: "GraphicButton [buttonStyle: safe, no text]",
+      value:
+        <GraphicButton
+          buttonStyle="greenline"
+          disabled={true}
+        ><span className="material-symbols-outlined">
+            delete
+          </span></GraphicButton>
     }
   ]
 

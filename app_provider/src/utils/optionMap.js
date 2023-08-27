@@ -90,8 +90,8 @@ export const menuRowOptions = [
 ];
 
 export const ratingColors = {
-  5: "bg-green-800",
-  4: "bg-lime-700",
+  5: "bg-emerald-800",
+  4: "bg-emerald-700",
   3: "bg-yellow-400",
   2: "bg-orange-500",
   1: "bg-red-600",
@@ -117,6 +117,10 @@ export const buttonStyles = {
   blueline: {
     org: "text-blue-500 transition duration-300 border border-blue-500 hover:text-white hover:bg-blue-700 cursor-pointer",
     dis: "text-blue-400 border border-blue-300 bg-blue-100 hover:bg-blue-100 transition duration-300 cursor-default"
+  },
+  greenline: {
+    org: "text-emerald-500 transition duration-300 border border-emerald-500 hover:text-white hover:bg-emerald-700 cursor-pointer",
+    dis: "text-green-600 border border-green-500 bg-green-50 hover:bg-green-50 transition duration-300 cursor-default"
   }
 }
 
