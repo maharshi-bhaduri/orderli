@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { buttonStyles } from "../utils/optionMap";
+import { buttonStyles } from "../utils/OptionMap";
 
 export default function GraphicButton(props) {
   const style = props.buttonStyle || "default";
