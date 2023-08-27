@@ -1,6 +1,5 @@
 import axios from "axios";
 export async function getService(api, params, headers) {
-  console.log("api ", api)
   const mainHeaders = {
     "Content-Type": "application/json",
   };

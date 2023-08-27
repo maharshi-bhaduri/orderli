@@ -5,7 +5,7 @@ import { Route, Routes, BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Menu from "./pages/Menu";
 import PlaceHolder from "./pages/PlaceHolder";
-
+import Feedback from "./pages/Feedback";
 export default function App() {
   const queryClient = new QueryClient();
   return (
@@ -16,6 +16,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<PlaceHolder />}></Route>
           <Route path="/:providerHandle" element={<Home />}></Route>
+          <Route path="/:providerHandle/reviews" element={<Feedback />}></Route>
           <Route path="/:providerHandle/menu" element={<Menu />}></Route>
         </Routes>
       </div>
