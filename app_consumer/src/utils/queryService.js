@@ -12,3 +12,21 @@ export const getMenu = (providerHandle) =>
       staleTime: 1000 * 60 * 5,
     }
   );
+
+export const getFeedback = (providerHandle) =>
+  useQuery(
+    ["feedback", providerHandle],
+    () =>
+      getService(import.meta.env.VITE_APP_GET_FEEDBACK_CONSUMERS, {
+        providerHandle,
+      })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((err) => {
+          return err;
+        }),
+    {
+      staleTime: 1000 * 60 * 5,
+    }
+  );
