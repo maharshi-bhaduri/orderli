@@ -120,7 +120,7 @@ export const buttonStyles = {
   },
   greenline: {
     org: "text-emerald-500 transition duration-300 border border-emerald-500 hover:text-white hover:bg-emerald-700 cursor-pointer",
-    dis: "text-emerald-400 border border-emerald-300 bg-emerald-50 hover:bg-emerald-50 transition duration-300 cursor-default"
+    dis: "text-green-600 border border-green-500 bg-green-50 hover:bg-green-50 transition duration-300 cursor-default"
   }
 }
 
