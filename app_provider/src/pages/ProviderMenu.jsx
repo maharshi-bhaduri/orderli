@@ -43,6 +43,7 @@ export default function ProviderMenu() {
   const [categories, setCategories] = useState([]);
   const [editedMenuItem, setEditedMenuItem] = useState(null);
   const [newCategory, setNewCategory] = useState("")
+  const [pendingChanges, setPendingChanges] = useState(false)
   const variants = {
     enter: {
       x: -50, // Slide in from the left
@@ -112,7 +113,28 @@ export default function ProviderMenu() {
     }
   }, [categories]);
 
-  const { mutate: updateMenu } = useMutation(
+  useEffect(() => {
+    checkForChanges().then(hasChanges => {
+      setPendingChanges(hasChanges);
+    });
+  });
+  console.log("categories", categories)
+  console.log("category", category)
+
+  const checkForChanges = async () => {
+    try {
+      const addList = await localforage.getItem('add') || [];
+      const updateList = await localforage.getItem('update') || [];
+      const deleteList = await localforage.getItem('delete') || [];
+      const hasChanges = addList.length > 0 || updateList.length > 0 || deleteList.length > 0;
+      return hasChanges;
+    } catch (error) {
+      console.error('Error checking for changes:', error);
+      return false;
+    }
+  };
+
+  const { mutate: updateMenu, isLoading: isUpdatingMenu } = useMutation(
     (cachedChanges) =>
       postService(import.meta.env.VITE_APP_UPDATE_MENU, cachedChanges),
     {
@@ -243,9 +265,9 @@ export default function ProviderMenu() {
 
   return (
     <div className="w-full grid grid-cols-5 rounded-lg my-2 bg-white shadow-md">
-      <div className="grid grid-cols-5 col-span-5">
+      <div className="col-span-5">
         {/* Category section below*/}
-        <div className="rounded-lg col-span-5 flex items-center overflow-x-scroll bg-gray-100">
+        <div className="rounded-lg col-span-5 flex items-center overflow-x-scroll">
 
           {
             addCategory ?
@@ -285,13 +307,31 @@ export default function ProviderMenu() {
               selectedOption={category ? category : categories[0]}
             />
           </div>
-          <div className="col-span-2 h-full ml-4 w-40 flex justify-end sticky top-0 right-0">
+          <div className="col-span-2 h-full ml-4 w-[200px] flex justify-end sticky top-0 right-0">
             {/* Actions section below link*/}
-            <div className="w-auto pl-2 col-span-2 h-full flex items-center justify-end">
-              <GraphicButton buttonStyle="bluefill"
-                onClick={() => handleSaveMenu()}
-                disabled={isMenuLoading}
-              >Save</GraphicButton>
+
+            <div className="w-auto pl-2 col-span-2 flex items-center justify-end">
+              {
+                isUpdatingMenu ?
+                  <GraphicButton buttonStyle="bluefill"
+                    onClick={() => handleSaveMenu()}
+                    disabled={true}
+                  ><div className=""><Loader /></div></GraphicButton>
+                  :
+                  pendingChanges ?
+                    (
+                      <GraphicButton buttonStyle="bluefill"
+                        onClick={() => handleSaveMenu()}
+                        disabled={isMenuLoading}
+                      >Save Changes</GraphicButton>
+                    )
+                    :
+                    <GraphicButton
+                      buttonStyle="blueline"
+                      onClick={() => handleSaveMenu()}
+                      disabled={true}
+                    >Changes Saved</GraphicButton>
+              }
             </div>
           </div>
         </div>
@@ -305,18 +345,19 @@ export default function ProviderMenu() {
             <div className="flex flex-col w-full h-full">
               {isMenuLoading ? (
                 <div className="w-full h-full flex items-center justify-center">
-                  <Loader></Loader>
+                  <Loader />
                 </div>
               ) : isError ? (
                 <p>Error loading menu items.</p>
-              ) : updatedMenu?.length == 0 ? (
+              ) : updatedMenu?.length == 0 ? ( //this check should come later
                 <div className="flex w-3/4 my-4 justify-center rounded-lg border border-gray-300 bg-gray-100 p-5">
                   <h1>Ready to Set the Table? Add an Item!</h1>
                 </div>
               ) : (
-                <div className="grid grid-cols-5 mt-4">
+                <div className="grid grid-cols-5">
                   <div className="flex flex-col col-span-2">
-                    <div className="bg-gray-100 px-4 pb-2 flex items-center">
+                    <div className="bg-gray-100 px-4 py-2 flex items-center">
+                      {/* somewhere after this div */}
                       <h2 className="text-xl">
                         {category}
                       </h2>
@@ -390,7 +431,7 @@ export default function ProviderMenu() {
                       :
                       (
                         editedMenuItem &&
-                        <div className="relative h-[calc(100vh-132px)] overflow-y-scroll">
+                        <div className="relative h-[calc(100vh-112px)] overflow-y-scroll">
                           <BorderedPallete title="Edit Menu Item">
                             <div className="absolute my-4 top-0 right-0">
                               <GraphicButton

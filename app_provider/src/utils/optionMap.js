@@ -104,15 +104,19 @@ export const buttonStyles = {
   },
   blue: {
     org: "text-blue-500 transition duration-300 border border-blue-500 hover:text-white hover:bg-blue-700 cursor-pointer",
-    dis: "text-white transition duration-300 bg-blue-200 hover:bg-blue-200 cursor-deault"
+    dis: "text-white transition duration-300 bg-blue-200 hover:bg-blue-200 cursor-default"
   },
   bluefill: {
     org: "text-white transition duration-300 bg-blue-500 hover:bg-blue-700 cursor-pointer",
-    dis: "text-white transition duration-300 bg-blue-200 hover:bg-blue-200 cursor-deault"
+    dis: "text-white transition duration-300 bg-blue-200 hover:bg-blue-200 cursor-default"
   },
   default: {
     org: "text-black transition duration-300 border border-black hover:bg-black hover:text-white cursor-pointer",
-    dis: "text-white transition duration-300 bg-gray-200 hover:bg-gray-200 cursor-deault"
+    dis: "text-white transition duration-300 bg-gray-200 hover:bg-gray-200 cursor-default"
+  },
+  blueline: {
+    org: "text-blue-500 transition duration-300 border border-blue-500 hover:text-white hover:bg-blue-700 cursor-pointer",
+    dis: "text-blue-400 border border-blue-300 bg-blue-100 hover:bg-blue-100 transition duration-300 cursor-default"
   }
 }
 
