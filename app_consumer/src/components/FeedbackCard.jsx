@@ -1,6 +1,6 @@
 import { useState } from "react";
 import React from "react";
-import { ratingColors } from "../utils/optionMap.js";
+import { ratingColors } from "../utils/OptionMap.js";
 import formatDate from "../utils/formatDate.js";
 export default function FeedbackCard({
   rating,
