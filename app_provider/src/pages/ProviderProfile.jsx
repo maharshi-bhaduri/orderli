@@ -12,6 +12,7 @@ export default function ProviderProfile() {
   const { providerHandle } = useParams();
   const { data: providerDetails, isLoading: isProfileLoading, isError: isProfileError } = getProfile(providerHandle)
   const [editable, setEditable] = useState(true);
+  const [updating, setUpdating] = useState(false)
   const queryClient = useQueryClient();
   const [providerDetailsReplica, setProviderDetailsReplica] = useState(null);
 
@@ -114,6 +115,7 @@ export default function ProviderProfile() {
 
   const updateDetails = async () => {
     if (hasDifference(providerDetails, providerDetailsReplica)) {
+      setUpdating(true);
       updateProviderDetails(providerDetailsReplica)
     }
   };
