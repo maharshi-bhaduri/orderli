@@ -429,7 +429,7 @@ export default function ProviderMenu() {
                         :
                         (
                           editedMenuItem &&
-                          <div className="relative h-[calc(100vh-112px)] overflow-y-scroll mt-4">
+                          <div className="relative h-[calc(100vh-132px)] overflow-y-scroll mt-4">
                             <BorderedPallete title="Edit Menu Item">
                               <div className="absolute top-0 right-0">
                                 <GraphicButton
