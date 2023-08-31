@@ -24,8 +24,8 @@ export default function AccountHome() {
     : "";
 
   return (
-    <div className="mx-10 my-28">
-      <div className="w-full flex flex-col justify-center md:justify-start items-center my-6">
+    <div className="h-screen">
+      <div className="w-full flex flex-col justify-center md:justify-start items-center">
         <h1 className="text-2xl my-6">{message}</h1>
         <div className="sm:w-full md:w-3/4 lg:w-2/5 flex flex-col items-center m-0 p-6 border border-gray-300 bg-gray-100 rounded-lg">
           <div className="w-full mb-4 flex justify-items-start items-center">

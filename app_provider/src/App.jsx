@@ -18,7 +18,7 @@ export default function App() {
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClient}>
-        <div className="px-2 bg-gray-200">
+        <div className="px-2 bg-gray-200 h-full">
           {/* <Header /> */}
           <Routes>
             <Route path="/" element={<Home />}></Route>

@@ -3,30 +3,21 @@ import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { useParams } from "react-router-dom";
 import { postService } from "../utils/APIService";
 import { getProfile } from "../utils/queryService";
-import { useNavigate } from "react-router-dom";
 import BorderedPallete from "../components/BorderedPallete";
 import InfoGrid from "../components/InfoGrid";
-import GraphicButton from "../components/GraphicButton";
+import { hasDifference } from "../utils/common";
 import Loader from "../components/Loader";
 
 export default function ProviderProfile() {
   const { providerHandle } = useParams();
   const { data: providerDetails, isLoading: isProfileLoading, isError: isProfileError } = getProfile(providerHandle)
-  const [editable, setEditable] = useState(false)
-  const [isEditing, setIsEditing] = useState(false);
-  const navigate = useNavigate();
-  const [providerDetailsReplica, setProviderDetailsReplica] = useState(null)
-  const [profileUpdated, setProfileUpdated] = useState(false);
+  const [editable, setEditable] = useState(true);
+  const queryClient = useQueryClient();
+  const [providerDetailsReplica, setProviderDetailsReplica] = useState(null);
 
   useEffect(() => {
     setProviderDetailsReplica(providerDetails);
   }, [providerDetails])
-
-  useEffect(() => {
-    if (providerDetails && providerDetailsReplica) {
-      setProfileUpdated(providerDetails !== providerDetailsReplica);
-    }
-  }, [providerDetails, providerDetailsReplica])
 
   let businessInfolist = [
     {
@@ -112,7 +103,6 @@ export default function ProviderProfile() {
       postService(import.meta.env.VITE_APP_UPDATE_PROVIDER_DETAILS, updatedProviderDetails),
     {
       onSuccess: () => {
-        setIsEditing(false);
         queryClient.invalidateQueries(['provider', providerHandle]);
         console.log("Provider details updated successfully");
       },
@@ -122,8 +112,15 @@ export default function ProviderProfile() {
     }
   );
 
+  const updateDetails = async () => {
+    if (hasDifference(providerDetails, providerDetailsReplica)) {
+      updateProviderDetails(providerDetailsReplica)
+    }
+  };
+
+
   return (
-    <div className="w-full flex flex-col items-center my-2">
+    <div className="w-full flex flex-col items-center">
       <div
         className="rounded-lg bg-white shadow-md p-5 h-[calc(100vh-32px)] overflow-y-auto
           w-full flex flex-col items-center"
@@ -134,37 +131,6 @@ export default function ProviderProfile() {
           </div>
           :
           <>
-            <div className="w-full flex justify-between">
-              {
-                editable ?
-                  (
-                    <>
-                      <GraphicButton
-                        text="Save"
-                        onClick={() => {
-                          setEditable(false);
-                          updateProviderDetails(providerDetailsReplica);
-                        }}
-                      />
-                      <GraphicButton
-                        text="Cancel"
-                        onClick={() => {
-                          setProviderDetailsReplica(providerDetails)
-                          setEditable(false);
-                        }}
-                      />
-                    </>
-                  ) :
-                  <GraphicButton
-                    text="Unlock"
-                    onClick={() => setEditable(true)}
-                  >
-                    <span className="material-symbols-outlined">
-                      lock_open
-                    </span>
-                  </GraphicButton>
-              }
-            </div>
             <BorderedPallete
               title='Business Details'>
               <div className="flex flex-col items-center">
@@ -182,6 +148,7 @@ export default function ProviderProfile() {
                 onChange={(e) => {
                   setProviderDetailsReplica({ ...providerDetailsReplica, ...e });
                 }}
+                onUpdate={updateDetails}
               />
             </BorderedPallete>
 
@@ -194,6 +161,7 @@ export default function ProviderProfile() {
                 onChange={(e) => {
                   setProviderDetailsReplica({ ...providerDetailsReplica, ...e });
                 }}
+                onUpdate={updateDetails}
               />
             </BorderedPallete>
             <BorderedPallete
@@ -205,6 +173,7 @@ export default function ProviderProfile() {
                 onChange={(e) => {
                   setProviderDetailsReplica({ ...providerDetailsReplica, ...e });
                 }}
+                onUpdate={updateDetails}
               />
             </BorderedPallete>
           </>
