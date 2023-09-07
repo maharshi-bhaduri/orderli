@@ -9,7 +9,7 @@ export const getMenu = (providerHandle) =>
         providerHandle,
       }).then((response) => response.data),
     {
-      staleTime: 1000 * 60 * 5,
+      staleTime: 1000 * 60 * 5
     }
   );
 
@@ -42,5 +42,6 @@ export const getFeedback = (providerHandle) =>
         }),
     {
       staleTime: 1000 * 60 * 5,
+      initialData: []
     }
   );

@@ -7,7 +7,7 @@ export default function Sidebar(props) {
   return (
     <div className="w-60 flex flex-col my-2">
       <div className="flex m-2 p-4 rounded-lg bg-white items-center justify-center shadow-md">
-        <h1 className="text-2xl">orderlee.in</h1>
+        <h1 className="text-2xl">snaqr</h1>
       </div>
       <div className=" m-2 p-2 bg-white rounded-lg shadow-md">
         {props.optionMap.map((option, index) => (

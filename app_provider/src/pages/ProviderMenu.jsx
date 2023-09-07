@@ -4,11 +4,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { postService } from "../utils/APIService";
 import { getMenu } from "../utils/queryService";
 import localforage from "localforage";
-import MenuEditRow from "../components/MenuEditRow";
-import { AnimatePresence, motion } from "framer-motion";
-import { dietMap } from "../utils/optionMap";
 import TabGroup from "../components/TabGroup";
-import { tabMap } from "../utils/optionMap";
 import MenuItemCard from "../components/MenuItemCard";
 import BorderedPallete from "../components/BorderedPallete";
 import GraphicButton from "../components/GraphicButton";
@@ -29,7 +25,7 @@ export default function ProviderMenu() {
   const [activeMenuId, setActiveMenuId] = useState(-1)
   const noCatText = "Please select a category to see items contained."
   const defaultNewMenuItem = {
-    menuId: Date.now(), //temporary
+    menuId: Date.now(),
     itemName: "",
     description: "",
     dietCategory: 1,
@@ -329,7 +325,10 @@ export default function ProviderMenu() {
                       buttonStyle="greenline"
                       onClick={() => handleSaveMenu()}
                       disabled={true}
-                    >Menu Synced</GraphicButton>
+                    >Menu Synced
+                      <span class="material-symbols-outlined ml-2">
+                        check_circle
+                      </span></GraphicButton>
               }
             </div>
           </div>
@@ -392,7 +391,7 @@ export default function ProviderMenu() {
                     <div className="col-span-3 px-4">
                       {
                         !addingNewItem && !editedMenuItem &&
-                        <div className="h-full">
+                        <div className="h-full mt-4">
                           <BorderedPallete type="notify">
                             <div className="flex justify-center w-full">
                               Select an item to edit or add a new item
@@ -402,9 +401,9 @@ export default function ProviderMenu() {
                       }
                       {addingNewItem ? (
                         newMenuItem &&
-                        <div className="relative h-[calc(100vh-132px)] overflow-y-scroll">
+                        <div className="relative h-[calc(100vh-132px)] overflow-y-scroll mt-4">
                           <BorderedPallete title="Add New Item">
-                            <div className="absolute my-4 top-0 right-0">
+                            <div className="absolute top-0 right-0">
                               <GraphicButton
                                 text="Delete"
                                 buttonStyle='red'
@@ -430,9 +429,9 @@ export default function ProviderMenu() {
                         :
                         (
                           editedMenuItem &&
-                          <div className="relative h-[calc(100vh-112px)] overflow-y-scroll">
+                          <div className="relative h-[calc(100vh-132px)] overflow-y-scroll mt-4">
                             <BorderedPallete title="Edit Menu Item">
-                              <div className="absolute my-4 top-0 right-0">
+                              <div className="absolute top-0 right-0">
                                 <GraphicButton
                                   text="Delete"
                                   buttonStyle='red'
