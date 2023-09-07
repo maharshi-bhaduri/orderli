@@ -122,7 +122,7 @@ export default function ProviderProfile() {
 
 
   return (
-    <div className="w-full flex flex-col items-center">
+    <div className="w-full flex flex-col items-center my-2">
       <div
         className="rounded-lg bg-white shadow-md p-5 h-[calc(100vh-32px)] overflow-y-auto
           w-full flex flex-col items-center"
