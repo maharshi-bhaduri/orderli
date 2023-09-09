@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { getService } from "./APIService";
+import { getService, postService } from "./APIService";
 
 export const getMenu = (providerHandle) =>
   useQuery(
