@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Header from "./components/Header";
+import AddReviews from "./pages/AddReviews";
 import Home from "./pages/Home";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -19,8 +19,12 @@ export default function App() {
           <Route path="/" element={<PlaceHolder />}></Route>
           <Route path="/:providerHandle" element={<Home />}></Route>
           <Route path="/:providerHandle/reviews" element={<Feedback />}></Route>
-          {/* <Route path="/:providerHandle/menu" element={<Menu />}></Route> */}
+          <Route path="/:providerHandle/menu" element={<Menu />}></Route>
           <Route path="/:providerHandle/menubackup" element={<MenuBackup />}></Route>
+          <Route
+            path="/:providerHandle/addReview"
+            element={<AddReviews />}
+          ></Route>
         </Routes>
       </div>
     </QueryClientProvider>
