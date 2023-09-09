@@ -1,7 +1,6 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getMenu } from "../utils/queryService";
-import Header from "../components/Header";
 import bg from "../images/cafe_bg.jpg";
 import instagram from "../images/instagram.png";
 import facebook from "../images/facebook.png";
