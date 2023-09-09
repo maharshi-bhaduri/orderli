@@ -20,7 +20,7 @@ export default function App() {
           <Route path="/:providerHandle" element={<Home />}></Route>
           <Route path="/:providerHandle/reviews" element={<Feedback />}></Route>
           <Route path="/:providerHandle/menu" element={<Menu />}></Route>
-          <Route path="/:providerHandle/menubackup" element={<MenuBackup />}></Route>
+          <Route path="/menubackup" element={<MenuBackup />}></Route>
           <Route
             path="/:providerHandle/addReview"
             element={<AddReviews />}
