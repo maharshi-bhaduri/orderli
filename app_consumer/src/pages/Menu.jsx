@@ -1,13 +1,11 @@
 import React from "react";
 import { getMenu } from "../utils/queryService";
-import Header from "../components/Header";
 import { useParams, useNavigate } from "react-router-dom";
-import ItemCard from "../components/ItemCard";
 import TabGroup from "../components/TabGroup";
 import { tabMap } from "../utils/OptionMap.js";
-import { dietCategoryOptions } from "../utils/OptionMap.js";
 import CategoryCard from "../components/CategoryCard";
 import SearchService from "../utils/SearchService";
+
 export default function Menu() {
   let { providerHandle } = useParams();
   const navigate = useNavigate();
