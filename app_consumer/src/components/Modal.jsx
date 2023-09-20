@@ -22,7 +22,7 @@ export default function Modal({ open, onClose }) {
 
   const { mutate: postReviewData } = useMutation(
     (reviewInfo) => {
-      console.log("hereherhe");
+      console.log("inside postreviewdata");
       return postService(
         import.meta.env.VITE_APP_ADD_REVIEWS_CONSUMERS,
         reviewInfo

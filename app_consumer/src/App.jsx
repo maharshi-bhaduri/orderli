@@ -5,6 +5,7 @@ import { Route, Routes, BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Menu from "./pages/Menu";
 import PlaceHolder from "./pages/PlaceHolder";
+import SnaqrHome from "./pages/SnaqrHome";
 import Feedback from "./pages/Feedback";
 import MenuBackup from "./pages/MenuBackup";
 
@@ -16,7 +17,7 @@ export default function App() {
         {/* <Header /> */}
 
         <Routes>
-          <Route path="/" element={<PlaceHolder />}></Route>
+          <Route path="/" element={<SnaqrHome />}></Route>
           <Route path="/:providerHandle" element={<Home />}></Route>
           <Route path="/:providerHandle/reviews" element={<Feedback />}></Route>
           <Route path="/:providerHandle/menu" element={<Menu />}></Route>
