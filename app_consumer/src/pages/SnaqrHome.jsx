@@ -1,12 +1,10 @@
 import React from "react";
 import snaqrlogo from "../images/snaqrlogo.jpg";
 import backgroundImage from "../images/snaqr_landing.png";
+import heroImage from "../images/snaqr_hero.png";
 export default function PlaceHolder() {
   return (
-    <div
-      className="bg-cover bg-center relative min-h-screen "
-      style={{ backgroundImage: `url(${backgroundImage})` }}
-    >
+    <div>
       {/* Header */}
       <header className=" p-4 fixed w-full z-50">
         <div className="container mx-auto flex justify-between items-center">
@@ -22,10 +20,10 @@ export default function PlaceHolder() {
       </header>
 
       {/* Hero Section */}
-      <section className=" text-white py-20 px-4 ">
-        <div className="container mx-auto text-center">
-          <h1 className="text-4xl font-extrabold mb-4">SnaQR </h1>
-
+      {/* <div className="bg-cover bg-center relative h-screen "
+        style={{ backgroundImage: `url(${backgroundImage})` }}> */}
+      <section className="bg-orange-300 text-white px-14 h-screen flex">
+        <div className="w-1/3 flex flex-col h-full justify-center">
           <p className="text-lg">Elevate your culinary experience</p>
           <a
             href="#"
@@ -33,6 +31,11 @@ export default function PlaceHolder() {
           >
             Learn More
           </a>
+        </div>
+        <div className="w-2/3 flex flex-col h-full justify-center">
+          <img
+            src={heroImage}
+          />
         </div>
       </section>
 
