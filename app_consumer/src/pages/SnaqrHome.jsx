@@ -1,6 +1,6 @@
 import React from "react";
 import snaqrlogo from "../images/snaqrlogo.jpg";
-import backgroundImage from "../images/snaqr_landing.png";
+import heroMainImage from "../images/snaqr_hero_main.png";
 import heroImage from "../images/snaqr_hero.png";
 export default function PlaceHolder() {
   return (
@@ -9,21 +9,26 @@ export default function PlaceHolder() {
       <header className=" p-4 fixed w-full z-50">
         <div className="container mx-auto flex justify-between items-center">
           {/* <h1 className="text-white text-2xl font-bold">SnaQR</h1> */}
-          <img
+          {/* <img
             src={snaqrlogo}
             className="logo"
             alt="Vite logo"
             height={150}
             width={150}
-          />
+          /> */}
         </div>
       </header>
 
       {/* Hero Section */}
       {/* <div className="bg-cover bg-center relative h-screen "
         style={{ backgroundImage: `url(${backgroundImage})` }}> */}
-      <section className="bg-orange-300 text-white px-14 h-screen flex">
+      <div className="hero-bg h-screen w-full absolute -z-10"></div>
+      <section className="text-white px-14 h-screen flex flex-wrap w-full">
+
         <div className="w-1/3 flex flex-col h-full justify-center">
+          <h1 className="text-8xl text-white font-extrabold drop-shadow-lg mb-10">
+            snaqr
+          </h1>
           <p className="text-lg">Elevate your culinary experience</p>
           <a
             href="#"
@@ -32,9 +37,10 @@ export default function PlaceHolder() {
             Learn More
           </a>
         </div>
-        <div className="w-2/3 flex flex-col h-full justify-center">
+        <div className="w-2/3 flex flex-col h-full justify-center px-10">
           <img
-            src={heroImage}
+            src={heroMainImage}
+            className="drop-shadow-2xl"
           />
         </div>
       </section>
