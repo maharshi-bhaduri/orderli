@@ -10,6 +10,7 @@ export default {
     extend: {
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],
+        comfortaa: ["Comfortaa", "cursive"],
       },
     },
     colors: {

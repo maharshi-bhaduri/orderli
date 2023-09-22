@@ -47,3 +47,5 @@ export const buttonStyles = {
     dis: "text-white transition duration-300 bg-gray-200 hover:bg-gray-200 cursor-deault",
   },
 };
+
+export const partnerPortalLink = 'https://partner.snaqr.com'
