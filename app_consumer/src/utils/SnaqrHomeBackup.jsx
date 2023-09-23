@@ -6,10 +6,11 @@ import fbicon from "../images/icons8-facebook-24.png";
 import igicon from "../images/icons8-instagram-24.png";
 import { partnerPortalLink } from "../utils/OptionMap";
 import { features } from "../utils/OptionMap";
+import { motion, useWillChange } from "framer-motion";
+import { InView } from "react-intersection-observer";
 
 export default function PlaceHolder() {
   const [isSticky, setIsSticky] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {
@@ -17,11 +18,9 @@ export default function PlaceHolder() {
     };
   }, []);
 
-  useEffect(() => {}, []);
-
   const handleScroll = function () {
     console.log(scrollY);
-    if (window.scrollY > 500) setIsSticky(true);
+    if (window.scrollY > 540) setIsSticky(true);
     else setIsSticky(false);
   };
 
@@ -93,27 +92,45 @@ export default function PlaceHolder() {
 
       {/* Feature Section */}
 
-      <section className={`py-12 h-screen `}>
-        <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-8">Our Features</h2>
-          <div className="flex flex-col items-center w-full px-6">
-            {features.map((feature, i) => {
-              return (
-                <div
-                  key={feature.id}
-                  className="bg-orange-100 rounded-lg shadow-lg p-6 mb-6 w-1/2 hide "
-                >
-                  <h3 className="text-xl font-semibold mb-4">
-                    {feature.title}
-                  </h3>
-                  <p>{feature.desc}</p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
+      <InView threshold={0.1}>
+        {({ ref, inView }) => (
+          <motion.section
+            ref={ref}
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 0.8 }}
+            className={`py-12 h-screen `}
+          >
+            <div className="container mx-auto">
+              <h2 className="text-3xl font-bold text-center mb-8">
+                Our Features
+              </h2>
+              <div className="flex flex-col items-center w-full px-6">
+                {features.map((feature, i) => {
+                  return (
+                    <motion.div
+                      key={feature.id}
+                      className="bg-orange-100 rounded-lg shadow-lg p-6 mb-6 w-1/2"
+                      initial={{ opacity: 0, translateX: -5000, translateY: 0 }}
+                      animate={
+                        inView
+                          ? { opacity: 1, translateX: 50, translateY: 0 }
+                          : { opacity: 0, translateX: -5000, translateY: 0 }
+                      }
+                      transition={{ duration: 1, delay: i * 0.3 }}
+                    >
+                      <h3 className="text-xl font-semibold mb-4">
+                        {feature.title}
+                      </h3>
+                      <p>{feature.desc}</p>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+          </motion.section>
+        )}
+      </InView>
       {/* workflow Section */}
       <section className={`pt-24 flex h-screen`}>
         <div className="container mx-auto">
