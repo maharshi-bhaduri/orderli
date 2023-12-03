@@ -50,7 +50,25 @@ export const buttonStyles = {
 
 export const partnerPortalLink = "https://partner.snaqr.com";
 
-export const features = [
+export const partner_features = [
+  {
+    id: 1,
+    title: "Effortless",
+    desc: "Seamless, safe, and scrumptious dining with easy contactless ordering.",
+  },
+  {
+    id: 2,
+    title: "Precise",
+    desc: "Order accuracy and real-time tracking for a flawless dining experience.",
+  },
+  {
+    id: 3,
+    title: "Green",
+    desc: "Say goodbye to paper menus. Dine sustainably.",
+  },
+];
+
+export const consumer_features = [
   {
     id: 1,
     title: "Effortless",
