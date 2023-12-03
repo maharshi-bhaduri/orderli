@@ -55,8 +55,8 @@ export default function PlaceHolder() {
       <section className="flex flex-col pt-20 md:flex-row h-screen overflow-hidden">
 
         {/* Group 1: Brandname, Tagline, and Link */}
-        <div className="flex flex-col flex-grow justify-center md:w-1/2 px-10">
-          <h1 className="text-6xl text-white font-extrabold drop-shadow-lg mb-16 select-none md:text-left text-center">
+        <div className="flex flex-col md:w-1/2 px-10">
+          <h1 className="text-4xl md:text-6xl text-white font-extrabold drop-shadow-lg mt-10 select-none md:text-left text-center">
             Scan<br />
             Order<br />
             Eat</h1>
@@ -96,7 +96,7 @@ export default function PlaceHolder() {
       {/* Feature Section */}
       <section className="py-12">
         <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-center my-20">Why restaurants ❤️ us</h2>
+          <h2 className="text-3xl font-bold text-center my-20">Why restaurants<br />❤️ us</h2>
           <div className="flex flex-wrap justify-center">
             {partner_features.map((feature, i) => (
               <div
@@ -114,7 +114,7 @@ export default function PlaceHolder() {
       {/* Workflow Section */}
       <section className="mb-36">
         <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-center my-20">Why customers ❤️ us</h2>
+          <h2 className="text-3xl font-bold text-center my-20">Why customers<br />❤️ us</h2>
           <div className="flex flex-wrap justify-center">
             {consumer_features.map((feature, i) => (
               <div
