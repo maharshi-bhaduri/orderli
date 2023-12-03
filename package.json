@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite",
     "dev:provider": "vite --config vite.config.provider.js",
-    "dev:consumer": "vite --config vite.config.consumer.js",
+    "dev:consumer": "vite --config vite.config.consumer.js --host",
     "build": "vite build",
     "build:provider": "vite build --config vite.config.provider.js",
     "build:consumer": "vite build --config vite.config.consumer.js",
