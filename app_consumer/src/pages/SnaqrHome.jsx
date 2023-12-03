@@ -127,12 +127,12 @@ export default function PlaceHolder() {
 
       {/* Footer */}
       <section className="flex bg-orange-400 justify-center h-auto py-20">
-        <footer className="flex text-white w-full items-center sm:px-20">
+        <footer className="flex text-white w-full items-center px-10 sm:px-20">
           <img
             src={snaqrBrandTrans}
             href={'#'}
             alt="Hero Main"
-            className="drop-shadow-lg rounded-full w-52"
+            className="rounded-full w-32 sm:w-52"
           />
           <div className="flex-grow">
             <div className="text-center">
