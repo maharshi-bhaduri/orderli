@@ -55,7 +55,7 @@ export default function PlaceHolder() {
       <div className="hero-bg h-screen w-full absolute -z-10"></div>
 
       {/* Hero Section */}
-      <section className="flex flex-col pt-20 md:flex-row h-screen overflow-hidden">
+      <section className="flex flex-col pt-20 md:px-10 md:flex-row h-screen overflow-hidden">
 
         {/* Group 1: Brandname, Tagline, and Link */}
         <div className="flex flex-col justify-center sm:mb-10 md:w-1/2 px-10">
