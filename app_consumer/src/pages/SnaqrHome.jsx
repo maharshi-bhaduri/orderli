@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import heroMainImage from "../images/snaqr_hero_main.png";
 import snaqrLogo from "../images/snaqr_logo_s.png";
 import snaqrBrand from "../images/snaqr_brand.png";
+import snaqrBrandBold from "../images/snaqr_brand_b.png";
 import heroImage from "../images/snaqr_hero.png";
 import fbicon from "../images/icons8-facebook-24.png";
 import igicon from "../images/icons8-instagram-24.png";
@@ -34,7 +35,7 @@ export default function PlaceHolder() {
         <div className="container flex justify-between items-center h-full w-full">
           <a className="flex flex-grow items-center h-full ">
             <img
-              src={snaqrBrand}
+              src={snaqrBrandBold}
               href={'#'}
               alt="Hero Main"
               className="drop-shadow-lg rounded-full h-auto w-auto max-h-full max-w-full cursor-pointer"
