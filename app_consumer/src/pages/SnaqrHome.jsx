@@ -124,14 +124,14 @@ export default function PlaceHolder() {
       </section>
 
       {/* Footer */}
-      <section className="flex bg-orange-300 justify-center ">
+      <section className="flex bg-orange-400 justify-center h-auto py-20">
         <footer className=" text-white">
-          <div className="container mx-auto text-center">
-            &copy; {new Date().getFullYear()} SnaQR. All Rights Reserved.
-          </div>
           <img src={fbicon} alt="" />
           <img src={igicon} alt="" />
           <span>About us</span>
+          <div className="container mx-auto text-center mt-8">
+            &copy; {new Date().getFullYear()} Snaqr. All Rights Reserved.
+          </div>
         </footer>
       </section>
     </div>
