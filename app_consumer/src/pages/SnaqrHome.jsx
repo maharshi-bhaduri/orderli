@@ -3,6 +3,8 @@ import heroMainImage from "../images/snaqr_hero_main.png";
 import snaqrLogo from "../images/snaqr_logo_s.png";
 import snaqrBrand from "../images/snaqr_brand.png";
 import snaqrBrandBold from "../images/snaqr_brand_b.png";
+import snaqrBrandTrans from "../images/snaqr_brand_trans.png";
+import snaqrBrandTransQR from "../images/snaqr_brand_trans_qr.png";
 import heroImage from "../images/snaqr_hero.png";
 import fbicon from "../images/icons8-facebook-24.png";
 import igicon from "../images/icons8-instagram-24.png";
@@ -125,12 +127,24 @@ export default function PlaceHolder() {
 
       {/* Footer */}
       <section className="flex bg-orange-400 justify-center h-auto py-20">
-        <footer className=" text-white">
-          <img src={fbicon} alt="" />
-          <img src={igicon} alt="" />
-          <span>About us</span>
-          <div className="container mx-auto text-center mt-8">
-            &copy; {new Date().getFullYear()} Snaqr. All Rights Reserved.
+        <footer className="flex text-white w-full items-center px-20">
+          <img
+            src={snaqrBrandTrans}
+            href={'#'}
+            alt="Hero Main"
+            className="drop-shadow-lg rounded-full w-52"
+          />
+          <div className="flex-grow">
+            <div className="text-center">
+              <a
+                href={partnerPortalLink}
+              >
+                Partner Portal
+              </a>
+            </div>
+            <div className="container mx-auto text-center mt-8">
+              &copy; {new Date().getFullYear()} Snaqr &bull; All Rights Reserved.
+            </div>
           </div>
         </footer>
       </section>
