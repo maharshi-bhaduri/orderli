@@ -31,7 +31,7 @@ export default function PlaceHolder() {
     <div>
       {/* Header */}
       <header className="p-4 fixed w-full z-50 h-20">
-        <div className="container mx-auto flex justify-between items-center h-full">
+        <div className="container flex justify-between items-center h-full w-full">
           <a className="flex flex-grow items-center h-full ">
             <img
               src={snaqrBrand}
@@ -51,18 +51,19 @@ export default function PlaceHolder() {
         </div>
       </header>
 
-      {/* Hero Section */}
-
+      {/* Background */}
       <div className="hero-bg h-screen w-full absolute -z-10"></div>
+
+      {/* Hero Section */}
       <section className="flex flex-col pt-20 md:flex-row h-screen overflow-hidden">
 
         {/* Group 1: Brandname, Tagline, and Link */}
-        <div className="flex flex-col md:w-1/2 px-10">
-          <h1 className="text-4xl md:text-6xl text-white font-extrabold drop-shadow-lg mt-10 select-none md:text-left text-center">
+        <div className="flex flex-col justify-center sm:mb-10 md:w-1/2 px-10">
+          <h1 className="text-4xl md:text-6xl text-white font-extrabold drop-shadow-lg mt-10 sm:mt-0 select-none md:text-left text-center">
             Scan.<br />
             Order.<br />
             Eat.</h1>
-          <p className="mt-2 text-lg text-white font-semibold mb-5 drop-shadow-sm text-center md:text-left">Elevate your dining experience</p>
+          <p className="text-xl text-white font-normal my-8 drop-shadow-md text-center md:text-left">Elevate your dining experience</p>
           <div className="flex justify-center md:justify-start">
             <a
               href="#"
