@@ -127,7 +127,7 @@ export default function PlaceHolder() {
 
       {/* Footer */}
       <section className="flex bg-orange-400 justify-center h-auto py-20">
-        <footer className="flex text-white w-full items-center px-20">
+        <footer className="flex text-white w-full items-center sm:px-20">
           <img
             src={snaqrBrandTrans}
             href={'#'}
@@ -143,7 +143,7 @@ export default function PlaceHolder() {
               </a>
             </div>
             <div className="container mx-auto text-center mt-8">
-              &copy; {new Date().getFullYear()} Snaqr &bull; All Rights Reserved.
+              &copy; {new Date().getFullYear()} Snaqr<br />All Rights Reserved
             </div>
           </div>
         </footer>
