@@ -97,10 +97,19 @@ export default function PlaceHolder() {
             {partner_features.map((feature, i) => (
               <div
                 key={feature.id}
-                className="flex-shrink-0 bg-orange-100 rounded-lg shadow-lg p-6 mb-6 mx-4 w-5/6 md:w-1/2 lg:w-1/3 xl:w-1/4"
+                className="flex-shrink-0 border rounded-lg shadow-lg mb-6 mx-4 
+                w-5/6 md:w-1/2 lg:w-1/3 xl:w-1/4 overflow-hidden"
               >
-                <h3 className="text-xl font-semibold mb-4">{feature.title}</h3>
-                <p>{feature.desc}</p>
+                <div className="h-48 overflow-hidden flex items-center">
+                  <img
+                    src={feature.src}
+                    className="w-auto"
+                  />
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold">{feature.title}</h3>
+                  <p>{feature.desc}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -108,14 +117,14 @@ export default function PlaceHolder() {
       </section>
 
       {/* Workflow Section */}
-      <section className="mb-36">
+      < section className="mb-36" >
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-center my-20">Why customers<br />❤️ us</h2>
           <div className="flex flex-wrap justify-center">
             {consumer_features.map((feature, i) => (
               <div
                 key={feature.id}
-                className="flex-shrink-0 bg-orange-100 rounded-lg shadow-lg p-6 mb-6 mx-4 w-5/6 md:w-1/2 lg:w-1/3 xl:w-1/4"
+                className="flex-shrink-0 border rounded-lg shadow-lg p-6 mb-6 mx-4 w-5/6 md:w-1/2 lg:w-1/3 xl:w-1/4"
               >
                 <h3 className="text-xl font-semibold mb-4">{feature.title}</h3>
                 <p>{feature.desc}</p>
@@ -123,10 +132,10 @@ export default function PlaceHolder() {
             ))}
           </div>
         </div>
-      </section>
+      </section >
 
       {/* Footer */}
-      <section className="flex bg-orange-400 justify-center h-auto py-20">
+      < section className="flex bg-orange-400 justify-center h-auto py-20" >
         <footer className="flex text-white w-full items-center px-10 sm:px-20">
           <img
             src={snaqrBrandTrans}
@@ -147,7 +156,7 @@ export default function PlaceHolder() {
             </div>
           </div>
         </footer>
-      </section>
-    </div>
+      </section >
+    </div >
   );
 }

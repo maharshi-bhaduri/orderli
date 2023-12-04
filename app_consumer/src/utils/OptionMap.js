@@ -1,3 +1,8 @@
+import sGreen from "../images/snaqr_is_green.png";
+import sEfficient from "../images/snaqr_efficient.png";
+import sInsightful from "../images/snaqr_is_insightful.png";
+
+
 export const dietCategoryOptions = [
   {
     id: 1,
@@ -55,16 +60,19 @@ export const partner_features = [
     id: 1,
     title: "Efficient",
     desc: "Reduce order processing time and enable swift adaptability.",
+    src: sEfficient
   },
   {
     id: 2,
     title: "Insightful",
     desc: "Focus on the important stuff using a data driven approach.",
+    src: sInsightful
   },
   {
     id: 3,
     title: "Green",
     desc: "Say goodbye to paper menus. Dine sustainably.",
+    src: sGreen
   },
 ];
 
@@ -76,12 +84,12 @@ export const consumer_features = [
   },
   {
     id: 2,
-    title: "Trackable",
-    desc: "Embark on a culinary adventure– follow your food's journey!",
+    title: "Engaging",
+    desc: "Beautiful menus- like the opening act to a great meal.",
   },
   {
     id: 3,
-    title: "Engaging",
-    desc: "Beautiful menus- like the opening act to a great meal.",
+    title: "Trackable",
+    desc: "Embark on a culinary adventure– follow your food's journey!",
   },
 ];
