@@ -107,7 +107,7 @@ export default function PlaceHolder() {
                   />
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold">{feature.title}</h3>
+                  <h3 className="text-xl font-semibold mb-4">{feature.title}</h3>
                   <p>{feature.desc}</p>
                 </div>
               </div>
