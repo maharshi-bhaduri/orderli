@@ -100,10 +100,10 @@ export default function PlaceHolder() {
         {/* Row 1: Text on the left, Image on the right, subtle skew left */}
         <div className="flex flex-col md:flex-row items-center pt-12">
           <div className="w-full md:w-1/2 text-left md:pr-6 space-y-2">
-            <h2 className="text-2xl font-bold mb-2">Your own space</h2>
+            <h2 className="text-2xl font-bold mb-2">Your Personalized Space</h2>
             <p className="text-gray-700">
-              Description for the first row. This is where you can add
-              information about the content of this section.
+              Here's where you, our partners, get to put out their identity and
+              establish their image
             </p>
           </div>
           <div className="w-full md:w-1/2 mt-4 md:mt-0 transform skew-y-6">
@@ -126,11 +126,11 @@ export default function PlaceHolder() {
           </div>
           <div className="w-full md:w-1/2 text-left md:pl-6 order-1 md:order-2 space-y-2">
             <h2 className="text-2xl font-bold mb-2">
-              Dyanamic Interactive menus
+              Dyanamic Interactive Menus
             </h2>
             <p className="text-gray-700">
-              Description for the second row. This is where you can add
-              information about the content of this section.
+              Here's to making life easier for you, our customers, to navigate
+              through the menus
             </p>
           </div>
         </div>
@@ -138,10 +138,12 @@ export default function PlaceHolder() {
         {/* Row 3: Text on the left, Image on the right, subtle skew left */}
         <div className="flex flex-col md:flex-row items-center pt-12">
           <div className="w-full md:w-1/2 text-left md:pr-6 space-y-2">
-            <h2 className="text-2xl font-bold mb-2">Digital Menu management</h2>
+            <h2 className="text-2xl font-bold mb-2">
+              Digital Account Management
+            </h2>
             <p className="text-gray-700">
-              Description for the third row. This is where you can add
-              information about the content of this section.
+              A complete solution for our partners to manage their account,
+              profile and more!
             </p>
           </div>
           <div className="w-full md:w-1/2 mt-4 md:mt-0 transform skew-y-6">
