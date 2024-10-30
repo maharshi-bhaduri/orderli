@@ -96,9 +96,9 @@ export default function PlaceHolder() {
         </div>
       </section>
 
-      <section className="container mx-auto p-6 space-y-12">
+      <section className="container mx-auto p-6 my-12 space-y-12">
         {/* Row 1: Text on the left, Image on the right, subtle skew left */}
-        <div className="flex flex-col md:flex-row items-center pt-12">
+        <div className="flex flex-col md:flex-row items-center my-24">
           <div className="w-full md:w-1/2 text-left md:pr-6 space-y-2">
             <h2 className="text-2xl font-bold mb-2">Your Personalized Space</h2>
             <p className="text-gray-700">
@@ -106,22 +106,36 @@ export default function PlaceHolder() {
               establish their image
             </p>
           </div>
-          <div className="w-full md:w-1/2 mt-4 md:mt-0 transform skew-y-6">
+          <div
+            className="w-full md:w-1/2 mt-4 md:mt-0"
+            style={{ perspective: "1000px" }}
+          >
             <img
               src={image1}
               alt="Image for Row 1"
               className="w-full h-auto object-cover rounded-lg shadow-lg"
+              style={{
+                transformStyle: "preserve-3d",
+                transform: "rotateY(-30deg)",
+              }}
             />
           </div>
         </div>
 
         {/* Row 2: Image on the left, Text on the right, subtle skew right */}
-        <div className="flex flex-col md:flex-row items-center pt-12">
-          <div className="w-full md:w-1/2 mt-4 md:mt-0 order-2 md:order-1 transform -skew-y-6">
+        <div className="flex flex-col md:flex-row items-center my-24">
+          <div
+            className="w-full md:w-1/2 mt-4 md:mt-0 order-2 md:order-1 "
+            style={{ perspective: "1000px" }}
+          >
             <img
               src={image2}
               alt="Image for Row 2"
               className="w-full h-auto object-cover rounded-lg shadow-lg"
+              style={{
+                transformStyle: "preserve-3d",
+                transform: "rotateY(30deg)",
+              }}
             />
           </div>
           <div className="w-full md:w-1/2 text-left md:pl-6 order-1 md:order-2 space-y-2">
@@ -136,7 +150,7 @@ export default function PlaceHolder() {
         </div>
 
         {/* Row 3: Text on the left, Image on the right, subtle skew left */}
-        <div className="flex flex-col md:flex-row items-center pt-12">
+        <div className="flex flex-col md:flex-row items-center ">
           <div className="w-full md:w-1/2 text-left md:pr-6 space-y-2">
             <h2 className="text-2xl font-bold mb-2">
               Digital Account Management
@@ -146,11 +160,18 @@ export default function PlaceHolder() {
               profile and more!
             </p>
           </div>
-          <div className="w-full md:w-1/2 mt-4 md:mt-0 transform skew-y-6">
+          <div
+            className="w-full md:w-1/2 mt-4 md:mt-0"
+            style={{ perspective: "1000px" }}
+          >
             <img
               src={image4}
               alt="Image for Row 3"
               className="w-full h-auto object-cover rounded-lg shadow-lg"
+              style={{
+                transformStyle: "preserve-3d",
+                transform: "rotateY(-30deg)",
+              }}
             />
           </div>
         </div>
