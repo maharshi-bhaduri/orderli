@@ -17,9 +17,9 @@ export default function Provider() {
   getFeedback(providerHandle);
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen overflow-hidden bg-gray-200">
       <Sidebar optionMap={optionMap} />
-      <div className="mx-2 mr-2 my-2 flex flex-grow flex-wrap w-full bg-gray-200">
+      <div className="mx-2 mr-2 flex flex-grow flex-wrap w-full">
         <Routes>
           <Route path={`/`} element={<ProviderDefault />} />
           <Route path={`/profile`} element={<ProviderProfile />} />

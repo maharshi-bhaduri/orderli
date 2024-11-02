@@ -8,47 +8,50 @@ import InfoGrid from "../components/InfoGrid";
 import { hasDifference } from "../utils/common";
 import Loader from "../components/Loader";
 
-export default function ProviderProfile() {
-  const { providerHandle } = useParams();
-  const { data: providerDetails, isLoading: isProfileLoading, isError: isProfileError } = getProfile(providerHandle)
+export default function PartnerProfile() {
+  const { partnerHandle } = useParams();
+  const { data: partnerDetails, isLoading: isProfileLoading, isError: isProfileError } = getProfile(partnerHandle)
   const [editable, setEditable] = useState(true);
   const [updating, setUpdating] = useState(false)
   const queryClient = useQueryClient();
-  const [providerDetailsReplica, setProviderDetailsReplica] = useState(null);
+  const [partnerDetailsReplica, setPartnerDetailsReplica] = useState(null);
 
   useEffect(() => {
-    setProviderDetailsReplica(providerDetails);
-  }, [providerDetails])
+    setPartnerDetailsReplica(partnerDetails);
+  }, [partnerDetails])
+  console.log('partnerDetails', partnerDetails)
+  console.log('isProfileLoading', isProfileLoading)
+  console.log('isProfileError', isProfileError)
 
   let businessInfolist = [
     {
       label: "Name",
-      value: providerDetailsReplica?.providerName,
-      key: "providerName"
+      value: partnerDetailsReplica?.partnerName,
+      key: "partnerName"
     },
     {
       label: "Handle",
-      value: providerDetailsReplica?.providerHandle,
-      key: "providerHandle"
+      value: partnerDetailsReplica?.partnerHandle,
+      key: "partnerHandle"
     },
     {
       label: "Type",
-      value: providerDetailsReplica?.providerType,
-      key: "providerType"
+      value: partnerDetailsReplica?.partnerType,
+      key: "partnerType"
     },
     {
       label: "About",
-      value: providerDetailsReplica?.about,
+      value: partnerDetailsReplica?.about,
       key: "about"
     },
     {
       label: "Website",
-      value: providerDetailsReplica?.website,
+      value: partnerDetailsReplica?.website,
       key: "website"
     },
     {
       label: "Contact",
-      value: providerDetailsReplica?.contactNo,
+      value: partnerDetailsReplica?.contactNo,
       key: "contactNo"
     },
   ];
@@ -56,27 +59,27 @@ export default function ProviderProfile() {
   const locationInfolist = [
     {
       label: "Address",
-      value: providerDetailsReplica?.address,
+      value: partnerDetailsReplica?.address,
       key: "address"
     },
     {
       label: "State",
-      value: providerDetailsReplica?.state,
+      value: partnerDetailsReplica?.state,
       key: "state"
     },
     {
       label: "City",
-      value: providerDetailsReplica?.city,
+      value: partnerDetailsReplica?.city,
       key: "city"
     },
     {
       label: "Zip Code",
-      value: providerDetailsReplica?.postalCode,
+      value: partnerDetailsReplica?.postalCode,
       key: "postalCode"
     },
     {
       label: "Country",
-      value: providerDetailsReplica?.country,
+      value: partnerDetailsReplica?.country,
       key: "country"
     },
   ]
@@ -84,39 +87,39 @@ export default function ProviderProfile() {
   const socialInfolist = [
     {
       label: "Social Account 1",
-      value: providerDetailsReplica?.social1,
+      value: partnerDetailsReplica?.social1,
       key: "social1"
     },
     {
       label: "Social Account 2",
-      value: providerDetailsReplica?.social2,
+      value: partnerDetailsReplica?.social2,
       key: "social2"
     },
     {
       label: "Social Account 3",
-      value: providerDetailsReplica?.social3,
+      value: partnerDetailsReplica?.social3,
       key: "social3"
     },
   ]
 
-  const { mutate: updateProviderDetails } = useMutation(
-    (updatedProviderDetails) =>
-      postService(import.meta.env.VITE_APP_UPDATE_PROVIDER_DETAILS, updatedProviderDetails),
+  const { mutate: updatePartnerDetails } = useMutation(
+    (updatedPartnerDetails) =>
+      postService(import.meta.env.VITE_APP_UPDATE_PROVIDER_DETAILS, updatedPartnerDetails),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['provider', providerHandle]);
-        console.log("Provider details updated successfully");
+        queryClient.invalidateQueries(['partner', partnerHandle]);
+        console.log("Partner details updated successfully");
       },
       onError: (error) => {
-        console.error("Failed to update provider details:", error);
+        console.error("Failed to update partner details:", error);
       }
     }
   );
 
   const updateDetails = async () => {
-    if (hasDifference(providerDetails, providerDetailsReplica)) {
+    if (hasDifference(partnerDetails, partnerDetailsReplica)) {
       setUpdating(true);
-      updateProviderDetails(providerDetailsReplica)
+      updatePartnerDetails(partnerDetailsReplica)
     }
   };
 
@@ -136,7 +139,7 @@ export default function ProviderProfile() {
             <BorderedPallete
               title='Business Details'>
               <div className="flex flex-col items-center">
-                <img src={providerDetails?.qrData}
+                <img src={partnerDetails?.qrData}
                   alt="QR Code"
                   className="transition-transform hover:scale-110 cursor-pointer"
                 />
@@ -148,7 +151,7 @@ export default function ProviderProfile() {
                 infoList={businessInfolist}
                 editable={editable}
                 onChange={(e) => {
-                  setProviderDetailsReplica({ ...providerDetailsReplica, ...e });
+                  setPartnerDetailsReplica({ ...partnerDetailsReplica, ...e });
                 }}
                 onUpdate={updateDetails}
               />
@@ -161,7 +164,7 @@ export default function ProviderProfile() {
                 infoList={locationInfolist}
                 editable={editable}
                 onChange={(e) => {
-                  setProviderDetailsReplica({ ...providerDetailsReplica, ...e });
+                  setPartnerDetailsReplica({ ...partnerDetailsReplica, ...e });
                 }}
                 onUpdate={updateDetails}
               />
@@ -173,7 +176,7 @@ export default function ProviderProfile() {
                 infoList={socialInfolist}
                 editable={editable}
                 onChange={(e) => {
-                  setProviderDetailsReplica({ ...providerDetailsReplica, ...e });
+                  setPartnerDetailsReplica({ ...partnerDetailsReplica, ...e });
                 }}
                 onUpdate={updateDetails}
               />
