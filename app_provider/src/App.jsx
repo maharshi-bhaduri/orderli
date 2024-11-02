@@ -24,7 +24,7 @@ export default function App() {
             <Route path="/addRestaurant" element={<AddProvider />}></Route>
             <Route path="/login" element={<LogIn />}></Route>
             <Route
-              path="/partner/:providerHandle/*"
+              path="/partner/:partnerHandle/*"
               element={<Provider />}
             ></Route>
             <Route path="/visuals/" element={<Visuals />}></Route>

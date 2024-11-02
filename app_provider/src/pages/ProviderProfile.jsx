@@ -19,9 +19,6 @@ export default function PartnerProfile() {
   useEffect(() => {
     setPartnerDetailsReplica(partnerDetails);
   }, [partnerDetails])
-  console.log('partnerDetails', partnerDetails)
-  console.log('isProfileLoading', isProfileLoading)
-  console.log('isProfileError', isProfileError)
 
   let businessInfolist = [
     {

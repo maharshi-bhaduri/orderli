@@ -16,14 +16,15 @@ export default function ProviderMenu() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [addCategory, setAddCategory] = useState(false)
-  const { providerHandle } = useParams();
-  const { data: menu, isLoading: isMenuLoading, isError } = getMenu(providerHandle);
+  const { partnerHandle } = useParams();
+  const { data: menu, isLoading: isMenuLoading, isError } = getMenu(partnerHandle);
   const [updatedMenu, setUpdatedMenu] = useState([]);
   const [category, setCategory] = useState("");
   const [menuItem, setMenuItem] = useState(false);
   const [addingNewItem, setAddingNewItem] = useState(false)
   const [activeMenuId, setActiveMenuId] = useState(-1)
   const noCatText = "Please select a category to see items contained."
+
   const defaultNewMenuItem = {
     menuId: Date.now(),
     itemName: "",
@@ -134,7 +135,7 @@ export default function ProviderMenu() {
       postService(import.meta.env.VITE_APP_UPDATE_MENU, cachedChanges),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["menu", providerHandle]);
+        queryClient.invalidateQueries(["menu", partnerHandle]);
       },
     }
   );
@@ -158,7 +159,7 @@ export default function ProviderMenu() {
     const deleteListWithoutOperation = deleteOperations.map(removeOperationKey);
 
     const cachedChanges = {
-      providerHandle: providerHandle,
+      partnerHandle: partnerHandle,
       addMenuItems: addListWithoutOperation,
       updateMenuItems: updateListWithoutOperation,
       deleteMenuItems: deleteListWithoutOperation,

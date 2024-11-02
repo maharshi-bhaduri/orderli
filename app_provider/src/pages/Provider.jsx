@@ -11,10 +11,10 @@ import ProviderFeedback from "./ProviderFeedback";
 import ProviderSettings from "./ProviderSettings";
 export default function Provider() {
   const location = useLocation();
-  const { providerHandle } = useParams();
-  getProfile(providerHandle);
-  getMenu(providerHandle);
-  getFeedback(providerHandle);
+  const { partnerHandle } = useParams();
+  getProfile(partnerHandle);
+  getMenu(partnerHandle);
+  getFeedback(partnerHandle);
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-200">
