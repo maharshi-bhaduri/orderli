@@ -11,15 +11,15 @@ import ProviderFeedback from "./ProviderFeedback";
 import ProviderSettings from "./ProviderSettings";
 export default function Provider() {
   const location = useLocation();
-  const { providerHandle } = useParams();
-  getProfile(providerHandle);
-  getMenu(providerHandle);
-  getFeedback(providerHandle);
+  const { partnerHandle } = useParams();
+  getProfile(partnerHandle);
+  getMenu(partnerHandle);
+  getFeedback(partnerHandle);
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen overflow-hidden bg-gray-200">
       <Sidebar optionMap={optionMap} />
-      <div className="mx-2 mr-2 my-2 flex flex-grow flex-wrap w-full bg-gray-200">
+      <div className="mx-2 mr-2 flex flex-grow flex-wrap w-full">
         <Routes>
           <Route path={`/`} element={<ProviderDefault />} />
           <Route path={`/profile`} element={<ProviderProfile />} />

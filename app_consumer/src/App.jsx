@@ -18,12 +18,12 @@ export default function App() {
 
         <Routes>
           <Route path="/" element={<SnaqrHome />}></Route>
-          <Route path="/:providerHandle" element={<Home />}></Route>
-          <Route path="/:providerHandle/reviews" element={<Feedback />}></Route>
-          <Route path="/:providerHandle/menu" element={<Menu />}></Route>
+          <Route path="/:partnerHandle" element={<Home />}></Route>
+          <Route path="/:partnerHandle/reviews" element={<Feedback />}></Route>
+          <Route path="/:partnerHandle/menu" element={<Menu />}></Route>
           <Route path="/menubackup" element={<MenuBackup />}></Route>
           <Route
-            path="/:providerHandle/addReview"
+            path="/:partnerHandle/addReview"
             element={<AddReviews />}
           ></Route>
         </Routes>
