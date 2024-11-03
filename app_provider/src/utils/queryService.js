@@ -1,38 +1,40 @@
 import { useQuery } from "react-query";
 import { getService } from "./APIService";
 
-export const getMenu = (providerHandle) =>
+export const getMenu = (partnerHandle) =>
   useQuery(
-    ["menu", providerHandle],
+    ["menu", partnerHandle],
     () =>
       getService(import.meta.env.VITE_APP_GET_PROVIDER_MENU, {
-        providerHandle,
+        partnerHandle,
       }).then((response) => response.data),
     {
       staleTime: 1000 * 60 * 5
     }
   );
 
-export const getProfile = (providerHandle) =>
+export const getProfile = (partnerHandle) =>
   useQuery(
-    ["provider", providerHandle],
+    ["partner", partnerHandle],
     () =>
       getService(import.meta.env.VITE_APP_GET_PROVIDER_DETAILS, {
-        providerHandle,
+        partnerHandle,
       }).then((response) => {
+        console.log('response', response)
         return response.data[0];
       }),
     {
       staleTime: 1000 * 60 * 5,
+      enabled: !!partnerHandle
     }
   );
 
-export const getFeedback = (providerHandle) =>
+export const getFeedback = (partnerHandle) =>
   useQuery(
-    ["feedback", providerHandle],
+    ["feedback", partnerHandle],
     () =>
       getService(import.meta.env.VITE_APP_GET_FEEDBACK, {
-        providerHandle,
+        partnerHandle,
       })
         .then((response) => {
           return response.data;

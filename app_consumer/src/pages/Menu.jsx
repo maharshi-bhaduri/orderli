@@ -5,14 +5,15 @@ import TabGroup from "../components/TabGroup";
 import { tabMap } from "../utils/OptionMap.js";
 import CategoryCard from "../components/CategoryCard";
 import SearchService from "../utils/SearchService";
+import Loader from "../components/Loader"; // Import the Loader component
 
 export default function Menu() {
-  let { providerHandle } = useParams();
+  let { partnerHandle } = useParams();
   const navigate = useNavigate();
   let filteredItems = [];
   const groupedItems = {};
-  const { data: foodItems, isLoading } = getMenu(providerHandle);
-  console.log(foodItems);
+  const { data: foodItems, isLoading } = getMenu(partnerHandle);
+  console.log("foodItems", foodItems);
   const [searchText, setSearchText] = React.useState("");
   const [consumerChoice, setConsumerChoice] = React.useState({
     searchText: "",
@@ -32,7 +33,7 @@ export default function Menu() {
     });
   }
   function goHome() {
-    navigate(`/${providerHandle}`);
+    navigate(`/${partnerHandle}`);
   }
 
   function handleCategorySelect(option) {
@@ -47,7 +48,7 @@ export default function Menu() {
   }
 
   if (!isLoading) {
-    filteredItems = foodItems.filter((item) => {
+    filteredItems = Array.isArray(foodItems) ? foodItems.filter((item) => {
       if (consumerChoice.all === true) return true;
       if (consumerChoice.veg === true) {
         return item.dietCategory === 2;
@@ -56,7 +57,7 @@ export default function Menu() {
         return item.dietCategory === 1 || item.dietCategory === 3;
       }
       return false;
-    });
+    }) : [];
     filteredItems = SearchService(consumerChoice.searchText, filteredItems, [
       "itemName",
       "description",
@@ -77,12 +78,12 @@ export default function Menu() {
         <div className="text-black fixed left-1/2 -translate-x-1/2 max-w-2xl w-full">
           <div
             className="rounded-lg bg-white p-2 mx-2 flex flex-col
-                        justify-center items-center shadow-md"
+                            justify-center items-center shadow-md"
           >
             <div className="w-full flex mb-2 text-sm">
               <button
                 className="mr-2 px-2 border border-gray-300 text-gray-500
-                rounded-lg bg-white hover:bg-gray-300 transition ease-in-out"
+                    rounded-lg bg-white hover:bg-gray-300 transition ease-in-out"
                 onClick={goHome}
               >
                 Home
@@ -102,15 +103,19 @@ export default function Menu() {
             </div>
           </div>
         </div>
-        <div className="mt-28">
-          {Object.keys(groupedItems).map((category, index) => (
-            <CategoryCard
-              key={category}
-              categoryName={category}
-              itemList={groupedItems[category]}
-            />
-          ))}
-        </div>
+        {isLoading ? (
+          <Loader /> // Show the loader while loading
+        ) : (
+          <div className="mt-28">
+            {Object.keys(groupedItems).map((category, index) => (
+              <CategoryCard
+                key={category}
+                categoryName={category}
+                itemList={groupedItems[category]}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </>
   );

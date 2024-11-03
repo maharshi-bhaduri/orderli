@@ -5,12 +5,12 @@ import { useNavigate } from "react-router-dom";
 import Alert from "../components/Alert";
 import Cookies from "js-cookie";
 
-export default function AddProvider() {
+export default function AddPartner() {
   let navigate = useNavigate();
-  const [providerFormData, setProviderFormData] = React.useState({
-    providerName: "",
-    providerHandle: "",
-    providerType: "cafe",
+  const [partnerFormData, setPartnerFormData] = React.useState({
+    partnerName: "",
+    partnerHandle: "",
+    partnerType: "cafe",
     about: "",
   });
   const [alert, setAlert] = React.useState('');
@@ -21,7 +21,7 @@ export default function AddProvider() {
     axios
       .post(
         import.meta.env.VITE_APP_CREATE_PROVIDER,
-        JSON.stringify(providerFormData),
+        JSON.stringify(partnerFormData),
         {
           headers: {
             "Content-Type": "application/json",
@@ -32,7 +32,7 @@ export default function AddProvider() {
       )
       .then((response) => {
         // Handle the API response
-        navigate(`/provider/${providerFormData.providerHandle}`);
+        navigate(`/partner/${partnerFormData.partnerHandle}`);
       })
       .catch((error) => {
         // Handle error
@@ -42,44 +42,43 @@ export default function AddProvider() {
   };
 
   function handleChange(event) {
-    setProviderFormData((prevFormData) => {
+    setPartnerFormData((prevFormData) => {
       return {
         ...prevFormData,
         [event.name]: event.value,
       };
     });
-    if (event.name == "providerName") {
+    if (event.name === "partnerName") {
       let handle = event.value.replace(/\s+/g, "").toLowerCase();
-      setProviderFormData((prevFormData) => {
+      setPartnerFormData((prevFormData) => {
         return {
           ...prevFormData,
-          providerHandle: handle,
+          partnerHandle: handle,
         };
       });
     }
   }
+
   return (
     <div>
       <div className="restaurant mx-10 my-28">
         <h1 className="text-4xl">Register yourself</h1>
-        {
-          alert && <Alert heading='Oops' message={alert} />
-        }
+        {alert && <Alert heading="Oops" message={alert} />}
         <form onSubmit={handleSubmit} className="restaurant-form">
           <TextInput
             labelName="Let's start with a name."
-            name="providerName"
+            name="partnerName"
             inputHint="Your awesome place"
-            value={providerFormData.providerName}
+            value={partnerFormData.partnerName}
             multiLine={false}
             onChange={handleChange}
           />
           <TextInput
             labelName="This will be your handle at orderlee."
-            name="providerHandle"
+            name="partnerHandle"
             prependText="orderlee.in/"
             inputHint="yourawesomeplace"
-            value={providerFormData.providerHandle}
+            value={partnerFormData.partnerHandle}
             multiLine={false}
             onChange={handleChange}
           />
@@ -87,7 +86,7 @@ export default function AddProvider() {
             labelName="Describe your place."
             name="about"
             inputHint="It's the best place."
-            value={providerFormData.about}
+            value={partnerFormData.about}
             multiLine={true}
             onChange={handleChange}
           />

@@ -1,33 +1,52 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getMenu } from "../utils/queryService";
+import { getMenu, getPartnerDetails } from "../utils/queryService";
 import bg from "../images/cafe_bg.jpg";
-import instagram from "../images/instagram.png";
-import facebook from "../images/facebook.png";
+import instagramIcon from "../images/instagram.png";
+import facebookIcon from "../images/facebook.png";
+
 export default function Home() {
   const navigate = useNavigate();
-  let { providerHandle } = useParams();
+  const { partnerHandle } = useParams();
 
-  const data = getMenu(providerHandle);
+  // Fetch menu data and partner details using React Query hooks
+  const { data: menuData } = getMenu(partnerHandle);
+  const { data: partnerDetails, isLoading } = getPartnerDetails(partnerHandle);
+
   function goToMenu() {
-    navigate(`/${providerHandle}/menu`);
+    navigate(`/${partnerHandle}/menu`);
   }
 
   function goToReviews() {
-    navigate(`/${providerHandle}/reviews`);
+    navigate(`/${partnerHandle}/reviews`);
   }
+
+  // Identify social media links and corresponding images
+  const getSocialMediaLinks = () => {
+    if (!partnerDetails || !partnerDetails.socialLinks) return [];
+    const socialLinks = [];
+    const { facebook, instagram } = partnerDetails.socialLinks;
+
+    if (facebook) socialLinks.push({ url: facebook, image: facebookIcon });
+    if (instagram) socialLinks.push({ url: instagram, image: instagramIcon });
+
+    return socialLinks;
+  };
+
+  const socialMediaLinks = getSocialMediaLinks();
+
   return (
     <>
-      {/* <Header /> */}
       <div className="fixed -z-10 bg-stone-600 opacity-50 blur-sm w-full">
         <img src={bg} className="object-cover h-screen w-full" />
       </div>
       <div className="flex flex-col h-screen justify-center items-center mx-4">
         <div className="mb-5 flex flex-col justify-center items-center">
-          <h1 className="text-4xl mb-5">Cafe Magenta</h1>
+          <h1 className="text-4xl mb-5">
+            {isLoading ? "Loading..." : partnerDetails?.name || "Cafe Name"}
+          </h1>
           <p className="text-center mb-4">
-            Join us for heartwarming breakfasts and soul-sweetening treats. Your
-            cozy corner for indulgence.
+            {isLoading ? "Loading description..." : partnerDetails?.about || "Cafe description"}
           </p>
         </div>
         <button
@@ -44,26 +63,23 @@ export default function Home() {
         >
           Reviews
         </button>
-        <div className="fixed bottom-10">
-          <div className="rounded-full bg-white/20 flex">
-            <a href="https://www.instagram.com/themagentacafe">
-              <p
-                className="text-sm 
-                          transition-all ease-in-out duration-300 p-2 flex items-center opacity-70 hover:opacity-100"
-              >
-                <img src={instagram} className="w-[35px] h-[35px]" />
-              </p>
-            </a>
-            <a href="https://www.facebook.com/profile.php?id=61550546901072">
-              <p
-                className="text-sm
-                          transition-all ease-in-out duration-300 p-2 flex items-center opacity-70 hover:opacity-100"
-              >
-                <img src={facebook} className="w-[35px] h-[35px]" />
-              </p>
-            </a>
+        {/* Conditionally render social media links */}
+        {socialMediaLinks.length > 0 && (
+          <div className="fixed bottom-10">
+            <div className="rounded-full bg-white/20 flex">
+              {socialMediaLinks.map((link, index) => (
+                <a key={index} href={link.url} target="_blank" rel="noopener noreferrer">
+                  <p
+                    className="text-sm 
+                              transition-all ease-in-out duration-300 p-2 flex items-center opacity-70 hover:opacity-100"
+                  >
+                    <img src={link.image} alt="social icon" className="w-[35px] h-[35px]" />
+                  </p>
+                </a>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );
