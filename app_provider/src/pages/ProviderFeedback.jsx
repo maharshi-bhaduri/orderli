@@ -4,10 +4,11 @@ import { getFeedback } from "../utils/queryService";
 import FeedbackCard from "../components/FeedbackCard";
 import Dropdown from "../components/Dropdown";
 import { motion } from "framer-motion";
+import Loader from "../components/Loader";
 
 export default function ProviderFeedback() {
-  const { providerHandle } = useParams();
-  const { data: feedback, isLoading, isError } = getFeedback(providerHandle);
+  const { partnerHandle } = useParams();
+  const { data: feedback, isLoading, isError } = getFeedback(partnerHandle);
   // const options = ["ratingDescending", "ratingAscending", "dateDescending", "dateAscending"];
   const options = {
     ratingDescending: "Rating High to low",
@@ -21,7 +22,6 @@ export default function ProviderFeedback() {
   const handleSelectChange = function (value) {
     setSelectedOption(value);
   };
-  console.log(feedback);
 
   return (
     <div className="w-full px-8 flex flex-col items-center">
@@ -40,7 +40,11 @@ export default function ProviderFeedback() {
           options={Object.values(options)}
         />
         <div className="w-5/6 mx-auto mt-8 max-h-[600px] overflow-y-scroll">
-          {!isLoading &&
+          {isLoading ? (
+            <div className="flex justify-center">
+              <Loader />
+            </div>
+          ) : (
             feedback &&
             feedback
               .sort((feedback1, feedback2) => {
@@ -76,7 +80,8 @@ export default function ProviderFeedback() {
                     phone={feedbackitem.consumerPhone}
                   />
                 </motion.div>
-              ))}
+              ))
+          )}
         </div>
       </div>
     </div>
