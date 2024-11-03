@@ -9,7 +9,7 @@ export default function useInViewRotation(ref, rotateDeg) {
       ([entry]) => {
         setIsInView(entry.isIntersecting);
       },
-      { threshold: 0.2 }
+      { threshold: 0.7 }
     );
     observer.observe(ref.current);
     return () => {

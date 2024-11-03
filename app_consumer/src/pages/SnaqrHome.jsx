@@ -37,7 +37,7 @@ export default function PlaceHolder() {
   useEffect(() => {}, []);
 
   const handleScroll = function () {
-    console.log(scrollY);
+    // console.log(scrollY);
     if (window.scrollY > 500) setIsSticky(true);
     else setIsSticky(false);
   };
@@ -126,7 +126,7 @@ export default function PlaceHolder() {
               style={{
                 transformStyle: "preserve-3d",
                 transform: rotateStyle1,
-                transition: "transform 0.5s ease",
+                transition: "transform 1s ease",
               }}
             />
           </div>
@@ -146,7 +146,7 @@ export default function PlaceHolder() {
               style={{
                 transformStyle: "preserve-3d",
                 transform: rotateStyle2,
-                transition: "transform 0.5s ease",
+                transition: "transform 1s ease",
               }}
             />
           </div>
@@ -184,7 +184,7 @@ export default function PlaceHolder() {
               style={{
                 transformStyle: "preserve-3d",
                 transform: rotateStyle3,
-                transition: "transform 0.5s ease",
+                transition: "transform 1s ease",
               }}
             />
           </div>
