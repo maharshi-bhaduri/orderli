@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import heroMainImage from "../images/snaqr_hero_main.png";
 import snaqrLogo from "../images/snaqr_logo_s.png";
 import snaqrBrand from "../images/snaqr_brand.png";
@@ -13,10 +13,18 @@ import { partner_features } from "../utils/OptionMap";
 import { consumer_features } from "../utils/OptionMap";
 import image1 from "../images/img1.jpg";
 import image2 from "../images/img2.jpg";
-import image3 from "../images/img3.jpg";
+
 import image4 from "../images/img4.jpg";
+import useInViewRotation from "../components/useInViewRotation";
 
 export default function PlaceHolder() {
+  const ref1 = useRef(null);
+  const ref2 = useRef(null);
+  const ref3 = useRef(null);
+  // Get rotation style based on visibility for each image
+  const rotateStyle1 = useInViewRotation(ref1, -15);
+  const rotateStyle2 = useInViewRotation(ref2, 15);
+  const rotateStyle3 = useInViewRotation(ref3, -15);
   const [isSticky, setIsSticky] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
@@ -111,12 +119,14 @@ export default function PlaceHolder() {
             style={{ perspective: "1000px" }}
           >
             <img
+              ref={ref1}
               src={image1}
               alt="Image for Row 1"
               className="w-full h-auto object-cover rounded-lg shadow-lg"
               style={{
                 transformStyle: "preserve-3d",
-                transform: "rotateY(-30deg)",
+                transform: rotateStyle1,
+                transition: "transform 0.5s ease",
               }}
             />
           </div>
@@ -129,12 +139,14 @@ export default function PlaceHolder() {
             style={{ perspective: "1000px" }}
           >
             <img
+              ref={ref2}
               src={image2}
               alt="Image for Row 2"
               className="w-full h-auto object-cover rounded-lg shadow-lg"
               style={{
                 transformStyle: "preserve-3d",
-                transform: "rotateY(30deg)",
+                transform: rotateStyle2,
+                transition: "transform 0.5s ease",
               }}
             />
           </div>
@@ -165,12 +177,14 @@ export default function PlaceHolder() {
             style={{ perspective: "1000px" }}
           >
             <img
+              ref={ref3}
               src={image4}
               alt="Image for Row 3"
               className="w-full h-auto object-cover rounded-lg shadow-lg"
               style={{
                 transformStyle: "preserve-3d",
-                transform: "rotateY(-30deg)",
+                transform: rotateStyle3,
+                transition: "transform 0.5s ease",
               }}
             />
           </div>
