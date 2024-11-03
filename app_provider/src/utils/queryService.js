@@ -7,9 +7,11 @@ export const getMenu = (partnerHandle) =>
     () =>
       getService(import.meta.env.VITE_APP_GET_PROVIDER_MENU, {
         partnerHandle,
-      }).then((response) => response.data),
+      }).then((response) => {
+        return response.data;
+      }),
     {
-      staleTime: 1000 * 60 * 5
+      staleTime: 1000 * 60 * 5,
     }
   );
 
@@ -20,23 +22,23 @@ export const getProfile = (partnerHandle) =>
       getService(import.meta.env.VITE_APP_GET_PROVIDER_DETAILS, {
         partnerHandle,
       }).then((response) => {
-        console.log('response', response)
         return response.data[0];
       }),
     {
       staleTime: 1000 * 60 * 5,
-      enabled: !!partnerHandle
+      enabled: !!partnerHandle,
     }
   );
 
-export const getFeedback = (partnerHandle) =>
-  useQuery(
+export const getFeedback = (partnerHandle) => {
+  return useQuery(
     ["feedback", partnerHandle],
     () =>
       getService(import.meta.env.VITE_APP_GET_FEEDBACK, {
         partnerHandle,
       })
         .then((response) => {
+          console.log("output result", response.data);
           return response.data;
         })
         .catch((err) => {
@@ -44,6 +46,6 @@ export const getFeedback = (partnerHandle) =>
         }),
     {
       staleTime: 1000 * 60 * 5,
-      initialData: []
     }
   );
+};
