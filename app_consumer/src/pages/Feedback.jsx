@@ -8,8 +8,8 @@ import GraphicButton from "../components/GraphicButton";
 import Modal from "../components/Modal";
 export default function Feedback() {
   const navigate = useNavigate();
-  const { providerHandle } = useParams();
-  const { data: feedback, isLoading, isError } = getFeedback(providerHandle);
+  const { partnerHandle } = useParams();
+  const { data: feedback, isLoading, isError } = getFeedback(partnerHandle);
   const [isOpen, setIsOpen] = useState();
 
   return (
