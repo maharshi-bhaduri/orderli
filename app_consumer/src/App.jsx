@@ -7,6 +7,7 @@ import Menu from "./pages/Menu";
 import PlaceHolder from "./pages/PlaceHolder";
 import SnaqrHome from "./pages/SnaqrHome";
 import Feedback from "./pages/Feedback";
+import Feedback1 from "./pages/Feedback1";
 import MenuBackup from "./pages/MenuBackup";
 
 export default function App() {
@@ -19,7 +20,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<SnaqrHome />}></Route>
           <Route path="/:partnerHandle" element={<Home />}></Route>
-          <Route path="/:partnerHandle/reviews" element={<Feedback />}></Route>
+          <Route path="/:partnerHandle/reviews" element={<Feedback1 />}></Route>
           <Route path="/:partnerHandle/menu" element={<Menu />}></Route>
           <Route path="/menubackup" element={<MenuBackup />}></Route>
           <Route
