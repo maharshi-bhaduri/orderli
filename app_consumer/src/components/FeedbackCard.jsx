@@ -29,18 +29,21 @@ export default function FeedbackCard({
   const formattedDate = formatDate(createdAt);
 
   return (
-    <div className="w-full mx-auto mt-4 max-h-fit bg-gray-100 rounded-lg p-4 space-x-4">
-      <div className="flex flex-row items-center">
+    <div className="mx-auto mt-4 max-h-fit bg-gray-100 rounded-lg p-4 space-x-4">
+      <div className="flex flex-row items-center ">
         <div
           className={`flex justify-center items-center flex-shrink-0  h-10 w-10 rounded-lg ${dynamicColorClass}`}
         >
           <span className="text-lg font-semibold  text-white">{rating}</span>
         </div>
-        <div className="flex-grow ml-8">
-          <p className="text-gray-700 font-semibold">{by}</p>
-        </div>
-        <div className="flex-shrink-0">
-          <span className="text-gray-700">{formattedDate}</span>
+        <div className="flex">
+          <div className="flex-grow ml-8">
+            <p className="text-gray-700 font-semibold">{by}</p>
+          </div>
+          <h3>&#x2022;</h3>
+          <div className="flex-shrink-0">
+            <span className="text-gray-700">{formattedDate}</span>
+          </div>
         </div>
       </div>
       {!expanded && (
