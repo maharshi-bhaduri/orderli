@@ -1,15 +1,18 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import { useMutation } from "react-query";
 import { postService } from "../utils/APIService";
 export default function Modal({ open, onClose }) {
+  const { partnerHandle } = useParams();
   const [reviewInfo, setReviewInfo] = useState({
+    partnerHandle,
     consumerName: "",
     consumerEmail: "",
     consumerPhone: "",
     rating: "",
     feedbackComments: "",
   });
-  console.log(reviewInfo);
+
   const handleChange = function (event) {
     setReviewInfo((prevReview) => {
       const { name, value } = event.target;
@@ -22,9 +25,8 @@ export default function Modal({ open, onClose }) {
 
   const { mutate: postReviewData } = useMutation(
     (reviewInfo) => {
-      console.log("inside postreviewdata");
       return postService(
-        import.meta.env.VITE_APP_ADD_REVIEWS_CONSUMERS,
+        import.meta.env.VITE_APP_ADD_FEEDBACK_CONSUMERS,
         reviewInfo
       );
     },
@@ -39,6 +41,11 @@ export default function Modal({ open, onClose }) {
       },
     }
   );
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    postReviewData(reviewInfo);
+  }
 
   if (!open) return null;
   return (
@@ -143,7 +150,7 @@ export default function Modal({ open, onClose }) {
             <button
               type="submit"
               className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-              onClick={postReviewData}
+              onClick={handleSubmit}
             >
               Submit
             </button>
