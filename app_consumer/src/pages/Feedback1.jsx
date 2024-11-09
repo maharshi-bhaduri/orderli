@@ -35,41 +35,44 @@ export default function Feedback1() {
 
   return (
     <>
-      <div className="bg-gray-300 bg-cover bg-center pt-2 px-2 h-screen overflow-y-scroll">
-        <div className="text-black   left-1/2 translate-x-1/2 max-w-2xl w-full">
-          <div
-            className="rounded-lg bg-white p-2 mx-2 flex flex-col
+      <div className="bg-gray-300 flex justify-center pt-2 px-2 h-screen overflow-y-scroll">
+        <div className="text-black max-w-2xl w-full">
+
+          <div className="text-black fixed left-1/2 -translate-x-1/2 max-w-2xl w-full">
+            <div
+              className="rounded-lg bg-white p-2 mx-2 mb-2 flex flex-col
                             justify-center items-center shadow-md"
-          >
-            <div className="w-full flex mb-2 text-sm">
-              <button
-                className="mr-2 px-2 border border-gray-300 text-gray-500
+            >
+              <div className="w-full flex text-sm">
+                <button
+                  className="mr-2 px-2 border border-gray-300 text-gray-500
                     rounded-lg bg-white hover:bg-gray-300 transition ease-in-out"
-                onClick={goHome}
-              >
-                Home
-              </button>
-              <input
-                type="text"
-                value={searchText}
-                placeholder="Search"
-                name="searchText"
-                disabled={isLoading}
-                onChange={handleChange}
-                className="border border-gray-300 px-2 py-2 rounded-lg text-black w-full"
-              />
-              <button
-                className="ml-2 px-2 border border-gray-300 text-gray-500
+                  onClick={goHome}
+                >
+                  Home
+                </button>
+                <input
+                  type="text"
+                  value={searchText}
+                  placeholder="Search"
+                  name="searchText"
+                  disabled={isLoading}
+                  onChange={handleChange}
+                  className="border border-gray-300 px-2 py-2 rounded-lg text-black w-full"
+                />
+                <button
+                  className="ml-2 px-2 border border-gray-300 text-gray-500
                     rounded-lg bg-white hover:bg-gray-300 transition ease-in-out"
-                onClick={() => setIsOpen(true)}
-              >
-                Add
-              </button>
+                  onClick={() => setIsOpen(true)}
+                >
+                  Add
+                </button>
+              </div>
             </div>
           </div>
           {isOpen && <Modal open={isOpen} onClose={() => setIsOpen(false)} />}
           {/* this is where the refactoring begins */}
-          <div className=" rounded-lg bg-white mt-14 p-4 items-center shadow-md">
+          <div className="mt-16 rounded-lg bg-white p-4 items-center shadow-md">
             {isLoading ? (
               <Loader />
             ) : (
