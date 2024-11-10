@@ -4,6 +4,7 @@ import { useMutation } from "react-query";
 import { postService } from "../utils/APIService";
 export default function Modal({ open, onClose }) {
   const { partnerHandle } = useParams();
+  const [loading, setLoading] = useState();
   const [reviewInfo, setReviewInfo] = useState({
     partnerHandle,
     consumerName: "",
@@ -33,6 +34,8 @@ export default function Modal({ open, onClose }) {
     {
       onSuccess: () => {
         console.log("Review posted successfully");
+        setLoading(false);
+        onClose();
       },
     },
     {
@@ -42,17 +45,19 @@ export default function Modal({ open, onClose }) {
     }
   );
 
-  function handleSubmit(event) {
+  const handleSubmit = async function (event) {
+    console.log("inside handle submit");
     event.preventDefault();
+    setLoading(true);
     postReviewData(reviewInfo);
-  }
+  };
 
   if (!open) return null;
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
       <div className="md:w-2/3 w-full h-2/3 p-6 m-2 bg-white shadow-md rounded-lg overflow-y-scroll">
         <h1 className="text-2xl font-semibold mb-4">Add a Review</h1>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
               htmlFor="name"
@@ -144,15 +149,16 @@ export default function Modal({ open, onClose }) {
               type="button"
               className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
               onClick={onClose}
+              disabled={loading}
             >
               Close
             </button>{" "}
             <button
               type="submit"
+              disabled={loading}
               className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-              onClick={handleSubmit}
             >
-              Submit
+              {loading ? "Submitting..." : "Submit"}
             </button>
           </div>
         </form>
