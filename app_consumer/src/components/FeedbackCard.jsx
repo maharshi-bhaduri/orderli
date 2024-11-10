@@ -26,6 +26,7 @@ export default function FeedbackCard({
           .join("\n")
       : desc;
   const dynamicColorClass = ratingColors[rating];
+  console.log(createdAt);
   const formattedDate = formatDate(createdAt);
 
   return (
@@ -36,11 +37,13 @@ export default function FeedbackCard({
         >
           <span className="text-lg font-semibold  text-white">{rating}</span>
         </div>
-        <div className="flex">
-          <div className="flex-grow ml-8">
+        <div className="flex ">
+          <div className="flex-grow ml-8 mr-2">
             <p className="text-gray-700 font-semibold">{by}</p>
           </div>
-          <h3>&#x2022;</h3>
+          <div className="mr-2">
+            <h3>&#x2022;</h3>
+          </div>
           <div className="flex-shrink-0">
             <span className="text-gray-700">{formattedDate}</span>
           </div>
