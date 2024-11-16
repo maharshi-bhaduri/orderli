@@ -30,7 +30,7 @@ export const optionMap = [
     icon: "settings",
   },
   {
-    name: "tables",
+    name: "Tables",
     page: "tables",
     icon: "table",
   },
