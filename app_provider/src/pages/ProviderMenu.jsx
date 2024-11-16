@@ -12,15 +12,12 @@ import MenuItemGrid from "../components/MenuItemGrid";
 import Loader from "../components/Loader";
 
 export default function ProviderMenu() {
-  const location = useLocation();
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [addCategory, setAddCategory] = useState(false)
   const { partnerHandle } = useParams();
   const { data: menu, isLoading: isMenuLoading, isError } = getMenu(partnerHandle);
   const [updatedMenu, setUpdatedMenu] = useState([]);
   const [category, setCategory] = useState("");
-  const [menuItem, setMenuItem] = useState(false);
   const [addingNewItem, setAddingNewItem] = useState(false)
   const [activeMenuId, setActiveMenuId] = useState(-1)
   const noCatText = "Please select a category to see items contained."
@@ -255,83 +252,89 @@ export default function ProviderMenu() {
     setCategory(categoryName);
   };
 
-  const handleMenuItemSelect = async (menuId) => {
-    setMenuItem(menuId);
-  };
-
   return (
-    <div className="w-full grid grid-cols-5 rounded-lg my-2 bg-white shadow-md">
-      <div className="col-span-5">
-        {/* Category section below*/}
-        <div className="rounded-lg col-span-5 flex items-center overflow-x-scroll">
-
-          {
-            addCategory ?
-              <div className="h-full flex items-center bg-gray-300 rounded-lg sticky left-0">
-                <input type="text" className="border border-gray-300 w-28 px-2 ml-4 mr-2 py-1 rounded"
-                  autoFocus
-                  onChange={(e) => { setNewCategory(e.target.value) }}></input>
-                <div
-                  className="rounded-lg border border-gray-200 my-2 p-2 transition ease-in-out cursor-pointer select-none 
-                        bg-blue-500 hover:bg-blue-700 sticky left-2"
-                  onClick={() => setCategories([...categories, newCategory])}
-                >
-                  <h1 className="text-sm text-white whitespace-nowrap">Add</h1>
-                </div>
-                <div
-                  className="rounded-lg border border-gray-200 m-2 p-2 transition ease-in-out cursor-pointer select-none 
-                        bg-gray-500 hover:bg-gray-700 sticky left-2"
-                  onClick={() => setAddCategory(false)}
-                >
-                  <h1 className="text-sm text-white whitespace-nowrap">Cancel</h1>
-                </div>
-              </div>
-              :
+    <div className="w-full rounded-lg">
+      {/* Category section below*/}
+      <div className="w-full flex">
+        {
+          addCategory ?
+            <div className="h-full flex items-center bg-gray-300 rounded-lg sticky left-0">
+              <input type="text" className="border border-gray-300 w-28 px-2 ml-4 mr-2 py-1 rounded"
+                autoFocus
+                onChange={(e) => { setNewCategory(e.target.value) }}></input>
               <div
                 className="rounded-lg border border-gray-200 my-2 p-2 transition ease-in-out cursor-pointer select-none 
                         bg-blue-500 hover:bg-blue-700 sticky left-2"
-                onClick={() => setAddCategory(true)}
+                onClick={() => {
+                  setCategories([...categories, newCategory])
+                  setAddCategory(false)
+                }}
               >
-                <h1 className="text-sm text-white whitespace-nowrap">+ Category</h1>
+                <h1 className="text-sm text-white whitespace-nowrap">Add</h1>
               </div>
+              <div
+                className="rounded-lg border border-gray-200 m-2 p-2 transition ease-in-out cursor-pointer select-none 
+                        bg-gray-500 hover:bg-gray-700 sticky left-2"
+                onClick={() => setAddCategory(false)}
+              >
+                <h1 className="text-sm text-white whitespace-nowrap">Cancel</h1>
+              </div>
+            </div>
+            :
+            <div
+              className="rounded-lg border border-gray-200 m-2 p-2 cursor-pointer select-none 
+                        bg-blue-500 hover:bg-blue-700 sticky left-2"
+              onClick={() => setAddCategory(true)}
+            >
+              <h1 className="text-sm text-white whitespace-nowrap">+ Category</h1>
+            </div>
 
-          }
-          <div className="flex items-center ml-2 flex-grow">
-            <TabGroup
-              tabMap={categories}
-              onSelect={handleCategorySelect}
-              selectedOption={category ? category : categories[0]}
-            />
-          </div>
-          <div className="col-span-2 h-full ml-4 w-[200px] flex justify-end sticky top-0 right-0">
-            {/* Actions section below link*/}
+        }
+        <div className="flex flex-auto mt-2 overflow-x-scroll"
+          style={{ scrollbarGutter: "stable" }}>
+          <TabGroup
+            tabMap={categories}
+            onSelect={handleCategorySelect}
+            selectedOption={category ? category : categories[0]}
+          />
+        </div>
+        {/* <div className="h-full ml-4 flex justify-end sticky top-0 right-0"> */}
+        <div className="h-full ml-4 flex justify-end sticky top-0 right-0">
+          {/* Actions section below link*/}
 
-            <div className="w-auto pl-2 col-span-2 flex items-center justify-end">
-              {
-                isUpdatingMenu ?
-                  <GraphicButton buttonStyle="bluefill"
+          <div className="w-auto flex items-center ">
+            {
+              isUpdatingMenu ?
+                <GraphicButton buttonStyle="bluefill"
+                  onClick={() => handleSaveMenu()}
+                  disabled={true}>
+                  Syncing
+                  <span className="ml-2 relative flex justify-center items-center w-full h-full">
+                    <span className="w-3/ h-3/4 border-[8px] border-solid border-transparent border-t-blue-500 border-b-blue-500 rounded-full animate-spin"></span>
+                  </span>
+                </GraphicButton>
+                :
+                pendingChanges ?
+                  (
+                    <GraphicButton buttonStyle="bluefill"
+                      onClick={() => handleSaveMenu()}
+                      disabled={isMenuLoading}
+                    >
+                      Sync
+                    </GraphicButton>
+                  )
+                  :
+                  <GraphicButton
+                    buttonStyle="greenline"
                     onClick={() => handleSaveMenu()}
                     disabled={true}
-                  ><div className=""><Loader /></div></GraphicButton>
-                  :
-                  pendingChanges ?
-                    (
-                      <GraphicButton buttonStyle="bluefill"
-                        onClick={() => handleSaveMenu()}
-                        disabled={isMenuLoading}
-                      >Sync Menu</GraphicButton>
-                    )
-                    :
-                    <GraphicButton
-                      buttonStyle="greenline"
-                      onClick={() => handleSaveMenu()}
-                      disabled={true}
-                    >Menu Synced
-                      <span class="material-symbols-outlined ml-2">
-                        check_circle
-                      </span></GraphicButton>
-              }
-            </div>
+                  >
+                    Synced
+                    <span class="material-symbols-outlined ml-2">
+                      check_circle
+                    </span>
+                  </GraphicButton>
+            }
           </div>
         </div>
       </div>
@@ -339,7 +342,7 @@ export default function ProviderMenu() {
         className="pb-4 h-[calc(100vh-132px)]
           w-full col-span-5"
       >
-        <div className="-mt-4 flex flex-col items-center text-sm w-full h-full">
+        <div className="flex flex-col items-center text-sm w-full h-full">
           {
             <div className="flex flex-col w-full h-full">
               {isMenuLoading ? (
@@ -464,6 +467,6 @@ export default function ProviderMenu() {
           }
         </div>
       </div>
-    </div>
+    </div >
   );
 }
