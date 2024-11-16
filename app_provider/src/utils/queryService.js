@@ -15,13 +15,17 @@ export const getMenu = (partnerHandle) =>
     }
   );
 
-export const getProfile = (partnerHandle) =>
-  useQuery(
+export const getProfile = function (partnerHandle) {
+  return useQuery(
     ["partner", partnerHandle],
     () =>
       getService(import.meta.env.VITE_APP_GET_PROVIDER_DETAILS, {
         partnerHandle,
       }).then((response) => {
+        if (!localStorage.getItem("partnerId")) {
+          console.log("setting up partnerId in local storage");
+          localStorage.setItem("partnerId", response.data[0].partnerId);
+        }
         return response.data[0];
       }),
     {
@@ -29,6 +33,7 @@ export const getProfile = (partnerHandle) =>
       enabled: !!partnerHandle,
     }
   );
+};
 
 export const getFeedback = (partnerHandle) => {
   return useQuery(
@@ -38,7 +43,6 @@ export const getFeedback = (partnerHandle) => {
         partnerHandle,
       })
         .then((response) => {
-          console.log("output result", response.data);
           return response.data;
         })
         .catch((err) => {
@@ -49,3 +53,21 @@ export const getFeedback = (partnerHandle) => {
     }
   );
 };
+
+export const getTables = (partnerId, refreshTables) =>
+  useQuery(
+    ["tables", partnerId],
+    () =>
+      getService(import.meta.env.VITE_APP_GET_TABLES, { partnerId })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((err) => {
+          throw err;
+        }),
+    {
+      staleTime: 1000 * 60 * 5,
+      enabled: !!partnerId && refreshTables, // Only run if partnerId exists and refreshTables is true
+      refetchOnWindowFocus: false, // Optional: Prevent refetching on window focus
+    }
+  );
