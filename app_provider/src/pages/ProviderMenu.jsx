@@ -355,7 +355,7 @@ export default function ProviderMenu() {
               ) :
                 (
                   <div className="grid grid-cols-5">
-                    <div className="flex flex-col col-span-2 mx-2 mt-1">
+                    <div className="flex flex-col col-span-2 mx-2 mt-2">
                       <div className="bg-gray-100 px-4 py-2 flex items-center border border-gray-200 border-b-0 rounded-t-lg">
                         <h2 className="text-xl">
                           {category}
@@ -372,7 +372,7 @@ export default function ProviderMenu() {
                           <h1 className="text-sm text-white whitespace-nowrap">+ New</h1>
                         </div>
                       </div>
-                      <div className="pb-4 overflow-y-scroll max-h-[calc(100vh-142px)] bg-gray-100 border border-x-gray-200 border-t-0 pl-2 rounded-b-lg">
+                      <div className="pb-4 overflow-y-scroll max-h-[calc(100vh-146px)] bg-gray-100 border border-x-gray-200 border-t-0 pl-2 rounded-b-lg">
                         {!isMenuLoading &&
                           updatedMenu?.length == 0 ? (
                           <div className="flex w-3/4 my-4 justify-center rounded-lg border border-gray-300 bg-gray-100 p-5">
@@ -393,7 +393,7 @@ export default function ProviderMenu() {
                         }
                       </div>
                     </div>
-                    <div className="col-span-3 px-4">
+                    <div className="col-span-3 px-2">
                       {
                         !addingNewItem && !editedMenuItem &&
                         <div className="h-full mt-4">
