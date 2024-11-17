@@ -1,0 +1,13 @@
+
+drop table if exists order_items; 
+CREATE TABLE order_items (
+    orderItemId INTEGER PRIMARY KEY AUTO_INCREMENT,
+    partnerId INTEGER NOT NULL,
+    menuId INTEGER NOT NULL,
+    itemName VARCHAR(255) NOT NULL,
+    quantity INTEGER NOT NULL DEFAULT 1,
+    itemPrice DECIMAL(10, 2) NOT NULL,
+    itemStatus INTEGER DEFAULT 1,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+);

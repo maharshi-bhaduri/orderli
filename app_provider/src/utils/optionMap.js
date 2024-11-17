@@ -15,6 +15,16 @@ export const optionMap = [
     icon: "restaurant", //"restaurant_menu", menu_book
   },
   {
+    name: "Tables",
+    page: "tables",
+    icon: "table_bar",
+  },
+  {
+    name: "Orders",
+    page: "orders",
+    icon: "checklist",
+  },
+  {
     name: "Promotions",
     page: "promotions",
     icon: "celebration", //celebration, star
@@ -28,11 +38,6 @@ export const optionMap = [
     name: "Settings",
     page: "settings",
     icon: "settings",
-  },
-  {
-    name: "Tables",
-    page: "tables",
-    icon: "table",
   },
 ];
 

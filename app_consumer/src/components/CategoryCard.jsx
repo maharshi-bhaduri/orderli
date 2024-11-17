@@ -35,6 +35,8 @@ export default function CategoryCard({ categoryName, itemList }) {
               price={item.price}
               category={item.category}
               dietCategory={item.dietCategory}
+              partnerId={item.partnerId}
+              menuId={item.menuId}
             />
           ))}
         </div>

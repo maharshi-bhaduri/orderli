@@ -283,15 +283,14 @@ export default function ProviderMenu() {
             :
             <div
               className="rounded-lg border border-gray-200 m-2 p-2 cursor-pointer select-none 
-                        bg-blue-500 hover:bg-blue-700"
+                        bg-blue-500 hover:bg-blue-700 sticky left-2"
               onClick={() => setAddCategory(true)}
             >
               <h1 className="text-sm text-white whitespace-nowrap">+ Category</h1>
             </div>
 
         }
-        <div className="w-0 border-r-2 border-gray-300 mx-1 my-3 rounded-full">&nbsp;</div>
-        <div className="flex flex-auto mt-2 mx-2 overflow-x-scroll"
+        <div className="flex flex-auto mt-2 overflow-x-scroll"
           style={{ scrollbarGutter: "stable" }}>
           <TabGroup
             tabMap={categories}
@@ -299,8 +298,8 @@ export default function ProviderMenu() {
             selectedOption={category ? category : categories[0]}
           />
         </div>
-        <div className="w-0 border-r-2 border-gray-300 mx-1 my-3 rounded-full">&nbsp;</div>
-        <div className="h-full flex justify-end sticky top-0 right-0">
+        {/* <div className="h-full ml-4 flex justify-end sticky top-0 right-0"> */}
+        <div className="h-full ml-4 flex justify-end sticky top-0 right-0">
           {/* Actions section below link*/}
 
           <div className="w-auto flex items-center ">
@@ -355,8 +354,8 @@ export default function ProviderMenu() {
               ) :
                 (
                   <div className="grid grid-cols-5">
-                    <div className="flex flex-col col-span-2 mx-2 mt-2">
-                      <div className="bg-gray-100 px-4 py-2 flex items-center border border-gray-200 border-b-0 rounded-t-lg">
+                    <div className="flex flex-col col-span-2">
+                      <div className="bg-gray-100 px-4 py-2 flex items-center">
                         <h2 className="text-xl">
                           {category}
                         </h2>
@@ -372,7 +371,7 @@ export default function ProviderMenu() {
                           <h1 className="text-sm text-white whitespace-nowrap">+ New</h1>
                         </div>
                       </div>
-                      <div className="pb-4 overflow-y-scroll max-h-[calc(100vh-146px)] bg-gray-100 border border-x-gray-200 border-t-0 pl-2 rounded-b-lg">
+                      <div className="pb-4 h-[calc(100vh-162px)] overflow-y-scroll">
                         {!isMenuLoading &&
                           updatedMenu?.length == 0 ? (
                           <div className="flex w-3/4 my-4 justify-center rounded-lg border border-gray-300 bg-gray-100 p-5">
@@ -393,7 +392,7 @@ export default function ProviderMenu() {
                         }
                       </div>
                     </div>
-                    <div className="col-span-3 px-2">
+                    <div className="col-span-3 px-4">
                       {
                         !addingNewItem && !editedMenuItem &&
                         <div className="h-full mt-4">
@@ -468,6 +467,6 @@ export default function ProviderMenu() {
           }
         </div>
       </div>
-    </div>
+    </div >
   );
 }

@@ -6,11 +6,10 @@ export default function MenuItemCard(props) {
   const { item, id, activeId } = props
   return (
     <div
-      className={"flex border border-gray-300  " +
-        " border-slate-100 p-2 " +
+      className={"flex border p-2 border-x-gray-200 border-b-0 last:border-b border-b-gray-200 first:rounded-t-lg last:rounded-b-lg " +
         "w-full transition ease-in-out " +
-        (activeId === id ? "bg-gray-200 border border-black hover:bg-gray-200 cursor-default" :
-          "bg-gray-50 hover:bg-gray-300 cursor-pointer")}
+        (activeId === id ? "bg-gray-200 border hover:bg-gray-200 cursor-default" :
+          "bg-gray-50 hover:bg-gray-200 cursor-pointer")}
       onClick={() => props.onSelect(item)}
     >
       <div className="flex-grow">
