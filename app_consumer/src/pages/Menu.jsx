@@ -74,13 +74,13 @@ export default function Menu() {
 
   return (
     <>
-      <div className="bg-gray-300 bg-cover bg-center pt-2 px-2 h-screen overflow-y-scroll">
-        <div className="text-black fixed left-1/2 -translate-x-1/2 max-w-2xl w-full">
+      <div className="bg-orange-300 bg-cover bg-center pt-2 px-2 h-screen overflow-y-scroll">
+        <div className="text-black w-full flex items-center justify-center">
           <div
-            className="rounded-lg bg-white p-2 mx-2 flex flex-col
-                            justify-center items-center shadow-md"
+            className="rounded-b-lg bg-white p-2 mx-2 flex flex-col fixed top-0
+                            justify-center items-center shadow-md w-full max-w-2xl"
           >
-            <div className="w-full flex mb-2 text-sm">
+            <div className="w-full flex mb-2 text-sm ">
               <button
                 className="mr-2 px-2 border border-gray-300 text-gray-500
                     rounded-lg bg-white hover:bg-gray-300 transition ease-in-out"
@@ -104,7 +104,7 @@ export default function Menu() {
           </div>
         </div>
         {isLoading ? (
-          <Loader /> // Show the loader while loading
+          <Loader />
         ) : (
           <div className="mt-28">
             {Object.keys(groupedItems).map((category, index) => (

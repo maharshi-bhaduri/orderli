@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:provider": "vite --config vite.config.provider.js",
+    "dev:provider": "vite --config vite.config.provider.js --port 3006",
     "dev:consumer": "vite --config vite.config.consumer.js --host",
     "build": "vite build",
     "build:provider": "vite build --config vite.config.provider.js",
@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@material-tailwind/react": "^2.0.4",
+    "@supabase/supabase-js": "^2.46.1",
     "@tanstack/react-query-devtools": "^4.29.23",
     "axios": "^1.4.0",
     "dotenv": "^16.3.1",

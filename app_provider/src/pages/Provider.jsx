@@ -15,6 +15,7 @@ import { useParams } from "react-router-dom";
 import ProviderFeedback from "./ProviderFeedback";
 import ProviderSettings from "./ProviderSettings";
 import ProviderTables from "./ProviderTables";
+import PartnerOrders from "./PartnerOrders";
 
 export default function Provider() {
   const location = useLocation();
@@ -36,6 +37,7 @@ export default function Provider() {
           <Route path={`/feedback`} element={<ProviderFeedback />} />
           <Route path={`/settings`} element={<ProviderSettings />} />
           <Route path={`/tables`} element={<ProviderTables />} />
+          <Route path={`/orders`} element={<PartnerOrders />} />
         </Routes>
       </div>
     </div>
