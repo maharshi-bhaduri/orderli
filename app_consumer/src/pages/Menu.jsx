@@ -5,7 +5,8 @@ import TabGroup from "../components/TabGroup";
 import { tabMap } from "../utils/OptionMap.js";
 import CategoryCard from "../components/CategoryCard";
 import SearchService from "../utils/SearchService";
-import Loader from "../components/Loader"; // Import the Loader component
+import Loader from "../components/Loader";
+import { useCart } from "../utils/CartContext.jsx";
 
 export default function Menu() {
   let { partnerHandle } = useParams();
@@ -13,8 +14,8 @@ export default function Menu() {
   let filteredItems = [];
   const groupedItems = {};
   const { data: foodItems, isLoading } = getMenu(partnerHandle);
-  console.log("foodItems", foodItems);
-  const [searchText, setSearchText] = React.useState("");
+  const { cart } = useCart();
+  const totalCartItems = Object.keys(cart.cartItems).length;
   const [consumerChoice, setConsumerChoice] = React.useState({
     searchText: "",
     veg: false,
@@ -24,40 +25,34 @@ export default function Menu() {
 
   function handleChange(e) {
     const { name, value, type, checked } = e.target;
-    setConsumerChoice((oldConsumerChoice) => {
-      const result = type === "checkbox" ? checked : value;
-      return {
-        ...oldConsumerChoice,
-        [name]: result,
-      };
-    });
+    setConsumerChoice((oldConsumerChoice) => ({
+      ...oldConsumerChoice,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   }
+
   function goHome() {
     navigate(`/${partnerHandle}`);
   }
 
   function handleCategorySelect(option) {
-    setConsumerChoice((oldConsumerChoice) => {
-      return {
-        ...oldConsumerChoice,
-        veg: option === "Veg" ? true : false,
-        nonveg: option === "Non-Veg" ? true : false,
-        all: option === "All" ? true : false,
-      };
-    });
+    setConsumerChoice((oldConsumerChoice) => ({
+      ...oldConsumerChoice,
+      veg: option === "Veg",
+      nonveg: option === "Non-Veg",
+      all: option === "All",
+    }));
   }
 
   if (!isLoading) {
-    filteredItems = Array.isArray(foodItems) ? foodItems.filter((item) => {
-      if (consumerChoice.all === true) return true;
-      if (consumerChoice.veg === true) {
-        return item.dietCategory === 2;
-      }
-      if (consumerChoice.nonveg === true) {
-        return item.dietCategory === 1 || item.dietCategory === 3;
-      }
-      return false;
-    }) : [];
+    filteredItems = Array.isArray(foodItems)
+      ? foodItems.filter((item) => {
+        if (consumerChoice.all) return true;
+        if (consumerChoice.veg) return item.dietCategory === 2;
+        if (consumerChoice.nonveg) return item.dietCategory === 1 || item.dietCategory === 3;
+        return false;
+      })
+      : [];
     filteredItems = SearchService(consumerChoice.searchText, filteredItems, [
       "itemName",
       "description",
@@ -80,7 +75,7 @@ export default function Menu() {
             className="rounded-b-lg bg-white p-2 mx-2 flex flex-col fixed top-0
                             justify-center items-center shadow-md w-full max-w-2xl"
           >
-            <div className="w-full flex mb-2 text-sm ">
+            <div className="w-full flex mb-2 text-sm h-10">
               <button
                 className="mr-2 px-2 border border-gray-300 text-gray-500
                     rounded-lg bg-white hover:bg-gray-300 transition ease-in-out"
@@ -97,6 +92,21 @@ export default function Menu() {
                 onChange={handleChange}
                 className="border border-gray-300 px-2 py-2 rounded-lg text-black w-full"
               />
+              <button
+                className="ml-2 px-2 border border-gray-300 text-gray-500
+               rounded-lg bg-white hover:bg-gray-300 transition ease-in-out relative"
+                onClick={() => navigate(`/${partnerHandle}/cart`)}
+              >
+                Cart
+                {totalCartItems > 0 && (
+                  <span
+                    className="absolute top-0 right-0 -mt-2 -mr-2 bg-orange-500
+                 text-white text-xs rounded-full px-2 py-1"
+                  >
+                    {totalCartItems}
+                  </span>
+                )}
+              </button>
             </div>
             <div className="flex w-full">
               <TabGroup tabMap={tabMap} onSelect={handleCategorySelect} />
