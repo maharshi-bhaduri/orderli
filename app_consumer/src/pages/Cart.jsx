@@ -136,11 +136,16 @@ export default function Cart() {
                             <h2 className="text-2xl font-bold">${totalAmount.toFixed(2)}</h2>
                         </div>
                         <button
-                            className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600"
+                            className={`px-4 py-2 bg-green-500 text-white font-semibold rounded-lg ${cart.cartItems && Object.keys(cart.cartItems).length === 0
+                                    ? "bg-gray-400 cursor-not-allowed"
+                                    : "hover:bg-green-600"
+                                }`}
                             onClick={handlePlaceOrder}
+                            disabled={cart.cartItems && Object.keys(cart.cartItems).length === 0}
                         >
                             Place Order
                         </button>
+
 
                     </div>
                 </div>
