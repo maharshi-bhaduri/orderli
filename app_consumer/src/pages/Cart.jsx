@@ -1,6 +1,8 @@
 import React from "react";
 import { useCart } from "../utils/CartContext";
 import { useNavigate, useParams } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 export default function Cart() {
     let { partnerHandle } = useParams();
@@ -20,6 +22,33 @@ export default function Cart() {
 
     const handleRemove = (menuId) => {
         dispatch({ type: "REMOVE_ITEM", payload: { menuId } });
+    };
+
+    const placeOrderMutation = useMutation(
+        (payload) => axios.post(import.meta.env.VITE_APP_POST_ADD_ORDER, payload),
+        {
+            onSuccess: () => {
+                // Clear the cart only on success
+                dispatch({ type: "CLEAR_CART" });
+                localStorage.removeItem("cart");
+                console.log("Order placed successfully");
+            },
+            onError: (error) => {
+                console.error("Error placing order:", error);
+            },
+        }
+    );
+
+    const handlePlaceOrder = () => {
+        // Construct the payload as a list of objects with partnerId and menuId
+        const payload = Object.values(cart.cartItems).map(({ itemDetails }) => ({
+            partnerId: itemDetails.partnerId,
+            menuId: itemDetails.menuId,
+        }));
+        console.log("payload", payload);
+
+        // Trigger the mutation
+        placeOrderMutation.mutate(payload);
     };
 
     return (
@@ -101,14 +130,19 @@ export default function Cart() {
                       shadow-md w-full max-w-2xl"
                 >
                     <div className="flex justify-between items-center w-full">
-                        <h2 className="text-lg font-bold">Total:</h2>
-                        <h2 className="text-xl font-bold">${totalAmount.toFixed(2)}</h2>
+                        <h2 className="text-2xl font-bold mx-4">Table: 1</h2>
+                        <div className="flex justify-center items-center">
+                            <h2 className="text-2xl font-bold mx-4">Total:</h2>
+                            <h2 className="text-2xl font-bold">${totalAmount.toFixed(2)}</h2>
+                        </div>
+                        <button
+                            className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600"
+                            onClick={handlePlaceOrder}
+                        >
+                            Place Order
+                        </button>
+
                     </div>
-                    <button
-                        className="mt-4 px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 ml-auto"
-                    >
-                        Place Order
-                    </button>
                 </div>
             </div>
         </div>

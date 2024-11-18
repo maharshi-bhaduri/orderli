@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getService, postService } from "./APIService";
 
 export const getMenu = (partnerHandle) =>
@@ -24,7 +24,6 @@ export const getPartnerDetails = (partnerHandle) =>
       })
         .then((response) => {
           const { partnerId, partnerName, about, social1, social2, social3 } = response.data.data;
-
           return {
             id: partnerId,
             name: partnerName,
