@@ -16,16 +16,17 @@ import ProviderFeedback from "./ProviderFeedback";
 import ProviderSettings from "./ProviderSettings";
 import ProviderTables from "./ProviderTables";
 import PartnerOrders from "./PartnerOrders";
+import { useEffect, useState } from "react";
 
 export default function Provider() {
   const location = useLocation();
   const { partnerHandle } = useParams();
-  const partnerId = localStorage.getItem("partnerId");
-  console.log("partnerid", partnerId);
-  getProfile(partnerHandle);
+  const [partnerId, setPartnerId] = useState(localStorage.getItem("partnerId")); // Local state for partnerId
+  getProfile(partnerHandle, setPartnerId);
   getMenu(partnerHandle);
   getFeedback(partnerHandle);
-  getTables(partnerId, true);
+
+  if (partnerId) getTables(partnerId, true);
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-200">
