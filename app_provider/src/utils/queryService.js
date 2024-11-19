@@ -16,13 +16,14 @@ export const getMenu = (partnerHandle) =>
   );
 
 export const getProfile = function (partnerHandle) {
+  const partnerId = localStorage.getItem("partnerId");
   return useQuery(
     ["partner", partnerHandle],
     () =>
       getService(import.meta.env.VITE_APP_GET_PROVIDER_DETAILS, {
         partnerHandle,
       }).then((response) => {
-        if (!localStorage.getItem("partnerId")) {
+        if (!partnerId || partnerId == null) {
           console.log("setting up partnerId in local storage");
           localStorage.setItem("partnerId", response.data[0].partnerId);
         }
@@ -67,7 +68,7 @@ export const getTables = (partnerId, refreshTables) =>
         }),
     {
       staleTime: 1000 * 60 * 5,
-      enabled: !!partnerId && refreshTables, // Only run if partnerId exists and refreshTables is true
+      enabled: !!partnerId, // Only run if partnerId exists and refreshTables is true
       refetchOnWindowFocus: false, // Optional: Prevent refetching on window focus
     }
   );

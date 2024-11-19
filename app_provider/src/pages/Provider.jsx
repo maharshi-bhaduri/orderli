@@ -21,6 +21,7 @@ export default function Provider() {
   const location = useLocation();
   const { partnerHandle } = useParams();
   const partnerId = localStorage.getItem("partnerId");
+  console.log("partnerid", partnerId);
   getProfile(partnerHandle);
   getMenu(partnerHandle);
   getFeedback(partnerHandle);
