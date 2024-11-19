@@ -24,11 +24,11 @@ export default function Provider() {
   getProfile(partnerHandle);
   getMenu(partnerHandle);
   getFeedback(partnerHandle);
-  getTables(partnerId);
+  getTables(partnerId, true);
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-200">
-      <Sidebar optionMap={optionMap} />
+      <Sidebar optionMap={optionMap} partnerHandle={partnerHandle} />
       <div className="mr-2 flex flex-grow flex-wrap w-full rounded-lg my-2 bg-white shadow-md overflow-hidden">
         <Routes>
           <Route path={`/`} element={<ProviderDefault />} />
