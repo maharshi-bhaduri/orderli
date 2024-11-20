@@ -15,26 +15,23 @@ export const getMenu = (partnerHandle) =>
     }
   );
 
-export const getProfile = function (partnerHandle, setPartnerId) {
+export const getProfile = function (partnerHandle) {
+  const partnerId = localStorage.getItem("partnerId");
   return useQuery(
     ["partner", partnerHandle],
     () =>
       getService(import.meta.env.VITE_APP_GET_PROVIDER_DETAILS, {
         partnerHandle,
       }).then((response) => {
-        const fetchedPartnerId = response.data[0].partnerId;
-        if (!localStorage.getItem("partnerId")) {
+        if (!partnerId || partnerId == null) {
           console.log("setting up partnerId in local storage");
-          localStorage.setItem("partnerId", fetchedPartnerId);
+          localStorage.setItem("partnerId", response.data[0].partnerId);
         }
         return response.data[0];
       }),
     {
       staleTime: 1000 * 60 * 5,
       enabled: !!partnerHandle,
-      onSuccess: (data) => {
-        if (setPartnerId) setPartnerId(data.partnerId);
-      },
     }
   );
 };
