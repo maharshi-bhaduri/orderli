@@ -55,7 +55,7 @@ export const getFeedback = (partnerHandle) => {
   );
 };
 
-export const getTables = (partnerId, refreshTables) =>
+export const getTables = (partnerId) =>
   useQuery(
     ["tables", partnerId],
     () =>

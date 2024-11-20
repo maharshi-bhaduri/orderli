@@ -46,7 +46,7 @@ export async function postService(api, data, headers) {
     })
     .then((response) => {
       // Handle the API response
-      console.log("response.data from apiservice", response.data);
+
       return response.data;
     })
     .catch((error) => {
