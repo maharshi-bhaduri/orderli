@@ -1,5 +1,5 @@
 import GraphicButton from "../components/GraphicButton";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Loader from "../components/Loader";
 import AddTableModal from "../components/AddTableModal";
 import EditTableModal from "../components/EditTableModal";
@@ -9,19 +9,9 @@ export default function ProviderTables() {
   const [isAddOpen, setIsAddOpen] = useState();
   const [isEditOpen, setIsEditOpen] = useState();
   const [currentTable, setCurrentTable] = useState();
-  const [refreshTables, setRefreshTables] = useState();
+
   const partnerId = localStorage.getItem("partnerId");
-  // Fetch tables, the 'refreshTables' will trigger the re-fetch when updated
-
-  const {
-    data: tables,
-    isLoading,
-    isError,
-  } = getTables(partnerId, refreshTables);
-
-  useEffect(() => {
-    if (refreshTables) setRefreshTables(false); // Reset the refresh flag after the re-fetch
-  }, [refreshTables]);
+  const { data: tables, isLoading, isError } = getTables(partnerId);
 
   const handleEditClick = (table) => {
     setIsEditOpen(true);
@@ -42,6 +32,7 @@ export default function ProviderTables() {
             text="Add"
             buttonStyle=""
             onClick={() => setIsAddOpen(true)}
+            disabled={isLoading}
           >
             <span className="material-symbols-outlined">add</span>
           </GraphicButton>
@@ -70,7 +61,7 @@ export default function ProviderTables() {
                   open={isEditOpen}
                   onClose={() => setIsEditOpen(false)}
                   table={currentTable}
-                  onTableEdited={() => setRefreshTables(true)}
+                  partnerId={partnerId}
                 />
               )}
             </div>

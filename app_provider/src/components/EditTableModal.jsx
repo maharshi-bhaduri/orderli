@@ -1,13 +1,9 @@
 import React, { useState } from "react";
 
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { postService } from "../utils/APIService";
-export default function EditTableModal({
-  open,
-  onClose,
-  table,
-  onTableEdited,
-}) {
+export default function EditTableModal({ open, onClose, table, partnerId }) {
+  const queryClient = useQueryClient();
   const [status, setStatus] = useState(table.status);
   const [loading, setLoading] = useState(false);
   const { mutate: updateTableStatus } = useMutation(
@@ -16,10 +12,9 @@ export default function EditTableModal({
     },
     {
       onSuccess: () => {
-        if (onTableEdited) {
-          onTableEdited();
-        } // call onTableEdited from child, which will call the setRefreshTables in ProviderTables and set it to true
         setLoading(false);
+        queryClient.invalidateQueries(["tables", partnerId]);
+        console.log("invalidate get tables");
       },
       onError: (err) => {
         setLoading(false);
