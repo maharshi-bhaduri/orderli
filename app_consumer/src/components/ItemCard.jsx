@@ -9,7 +9,10 @@ export default function ItemCard(props) {
   const quantity = cart.cartItems[props.menuId]?.quantity || 0;
 
   const addToCart = () => {
-    dispatch({ type: "ADD_ITEM", payload: { menuId: props.menuId, item: props } });
+    dispatch({
+      type: "ADD_ITEM",
+      payload: { menuId: props.menuId, item: props },
+    });
   };
 
   const removeFromCart = () => {
@@ -22,7 +25,11 @@ export default function ItemCard(props) {
         <div className="p-4 mb-4 flex justify-between items-center">
           <div>
             <div className="flex items-center mb-2">
-              <img className="h-5 w-5 mr-1" src={dietCategory} alt="Diet Icon" />
+              <img
+                className="h-5 w-5 mr-1"
+                src={dietCategory}
+                alt="Diet Icon"
+              />
               <h3 className="text-sm font-semibold">{props.itemName}</h3>
             </div>
             <p className="text-gray-800 mb-2 text-sm">{props.description}</p>
@@ -52,7 +59,7 @@ export default function ItemCard(props) {
                 onClick={addToCart}
                 className="mt-2 px-4 py-1 bg-green-500 text-white text-xs rounded shadow hover:bg-green-600 focus:outline-none"
               >
-                Order Now
+                +
               </button>
             )}
           </div>
