@@ -59,7 +59,7 @@ export default function ItemCard(props) {
                 onClick={addToCart}
                 className="mt-2 px-4 py-1 bg-green-500 text-white text-xs rounded shadow hover:bg-green-600 focus:outline-none"
               >
-                ADD
+                +
               </button>
             )}
           </div>
