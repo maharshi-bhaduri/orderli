@@ -7,7 +7,7 @@ export default function TableSquare({ table, onClick }) {
   return (
     <div
       className={`w-16 h-8 flex flex-col items-center justify-center 
-                    rounded-md text-white font-medium ${bgColor}`}
+                    rounded-md text-white font-medium ${bgColor} cursor-pointer`}
       onClick={onClick}
     >
       <div>{tableId}</div>
