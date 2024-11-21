@@ -49,12 +49,16 @@ export default function PartnerOrders() {
           } else if (payload.eventType === "UPDATE") {
             setOrders((prev) =>
               prev.map((order) =>
-                order.orderItemId === payload.new.orderItemId ? payload.new : order
+                order.orderItemId === payload.new.orderItemId
+                  ? payload.new
+                  : order
               )
             );
           } else if (payload.eventType === "DELETE") {
             setOrders((prev) =>
-              prev.filter((order) => order.orderItemId !== payload.old.orderItemId)
+              prev.filter(
+                (order) => order.orderItemId !== payload.old.orderItemId
+              )
             );
           }
         }
@@ -74,27 +78,41 @@ export default function PartnerOrders() {
         <table className="table-auto w-full border-collapse border border-gray-200">
           <thead>
             <tr className="bg-gray-100">
-              <th className="border border-gray-200 px-4 py-2">Order Item ID</th>
+              <th className="border border-gray-200 px-4 py-2">
+                Order Item ID
+              </th>
               <th className="border border-gray-200 px-4 py-2">Item Name</th>
               <th className="border border-gray-200 px-4 py-2">Quantity</th>
               <th className="border border-gray-200 px-4 py-2">Item Price</th>
               <th className="border border-gray-200 px-4 py-2">Item Status</th>
               <th className="border border-gray-200 px-4 py-2">Created At</th>
+              <th className="border border-gray-200 px-4 py-2">Table Id</th>
             </tr>
           </thead>
           <tbody>
             {orders.length > 0 ? (
               orders.map((order) => (
                 <tr key={order.orderItemId} className="hover:bg-gray-50">
-                  <td className="border border-gray-200 px-4 py-2">{order.orderItemId}</td>
-                  <td className="border border-gray-200 px-4 py-2">{order.itemName}</td>
-                  <td className="border border-gray-200 px-4 py-2">{order.quantity}</td>
-                  <td className="border border-gray-200 px-4 py-2">${order.itemPrice.toFixed(2)}</td>
+                  <td className="border border-gray-200 px-4 py-2">
+                    {order.orderItemId}
+                  </td>
+                  <td className="border border-gray-200 px-4 py-2">
+                    {order.itemName}
+                  </td>
+                  <td className="border border-gray-200 px-4 py-2">
+                    {order.quantity}
+                  </td>
+                  <td className="border border-gray-200 px-4 py-2">
+                    ${order.itemPrice.toFixed(2)}
+                  </td>
                   <td className="border border-gray-200 px-4 py-2">
                     {order.itemStatus === 1 ? "In Progress" : "Completed"}
                   </td>
                   <td className="border border-gray-200 px-4 py-2">
                     {new Date(order.createdAt).toLocaleString()}
+                  </td>
+                  <td className="border border-gray-200 px-4 py-2">
+                    {order.tableId}
                   </td>
                 </tr>
               ))

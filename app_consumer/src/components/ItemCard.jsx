@@ -34,34 +34,38 @@ export default function ItemCard(props) {
             </div>
             <p className="text-gray-800 mb-2 text-sm">{props.description}</p>
           </div>
-          <div className="flex flex-col justify-start items-end">
+          <div className="flex flex-col justify-start items-center">
             <p className="text-gray-800 font-semibold text-sm">
               ${props.price.toFixed(2)}
             </p>
-            {quantity > 0 ? (
-              <div className="flex items-center mt-2">
-                <button
-                  onClick={removeFromCart}
-                  className="px-2 py-1 bg-red-500 text-white rounded-l text-xs"
-                >
-                  -
-                </button>
-                <div className="px-3 py-1 bg-gray-200 text-xs">{quantity}</div>
+            <div className="w-16">
+              {quantity > 0 ? (
+                <div className="flex items-center mt-2">
+                  <button
+                    onClick={removeFromCart}
+                    className="px-2 py-1 bg-red-500 text-white rounded-l text-xs"
+                  >
+                    -
+                  </button>
+                  <div className="px-3 py-1 bg-gray-200 text-xs">
+                    {quantity}
+                  </div>
+                  <button
+                    onClick={addToCart}
+                    className="px-2 py-1 bg-green-500 text-white rounded-r text-xs"
+                  >
+                    +
+                  </button>
+                </div>
+              ) : (
                 <button
                   onClick={addToCart}
-                  className="px-2 py-1 bg-green-500 text-white rounded-r text-xs"
+                  className="mt-2 px-4 py-1 bg-green-500 text-white text-xs rounded shadow hover:bg-green-600 focus:outline-none"
                 >
-                  +
+                  ADD
                 </button>
-              </div>
-            ) : (
-              <button
-                onClick={addToCart}
-                className="mt-2 px-4 py-1 bg-green-500 text-white text-xs rounded shadow hover:bg-green-600 focus:outline-none"
-              >
-                +
-              </button>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>
