@@ -138,6 +138,8 @@ export default function ProviderMenu() {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["menu", partnerHandle]);
+        setAddingNewItem(false);
+        setEditedMenuItem(null);
       },
     }
   );
@@ -259,42 +261,48 @@ export default function ProviderMenu() {
   return (
     <div className="w-full rounded-lg">
       {/* Category section below*/}
-      <div className="w-full flex">
+      <div className="w-full flex items-center">
         {addCategory ? (
-          <div className="h-full flex items-center bg-gray-300 rounded-lg sticky left-0">
+          <div className="h-full flex items-center m-2">
             <input
               type="text"
-              className="border border-gray-300 w-28 px-2 ml-4 mr-2 py-1 rounded"
+              className="text-lg border border-blue-700 w-28 px-2 py-1 rounded-l-lg focus:border-blue-700 focus:outline-none focus:outline-8"
               autoFocus
               onChange={(e) => {
                 setNewCategory(e.target.value);
               }}
             ></input>
             <div
-              className="rounded-lg border border-gray-200 my-2 p-2 transition ease-in-out cursor-pointer select-none 
-                        bg-blue-500 hover:bg-blue-700 sticky left-2"
+              className="border border-blue-700 transition ease-in-out cursor-pointer select-none 
+                        bg-blue-500 hover:bg-blue-700 flex items-center py-1 px-2 text-white"
               onClick={() => {
                 setCategories([...categories, newCategory]);
                 setAddCategory(false);
               }}
             >
-              <h1 className="text-sm text-white whitespace-nowrap">Add</h1>
+              <span className="material-symbols-outlined text-lg">
+                check
+              </span>
             </div>
             <div
-              className="rounded-lg border border-gray-200 m-2 p-2 transition ease-in-out cursor-pointer select-none 
-                        bg-gray-500 hover:bg-gray-700 sticky left-2"
+              className="rounded-r-lg border border-gray-700 transition ease-in-out cursor-pointer select-none 
+                        bg-gray-500 hover:bg-gray-700 flex items-center text-white py-1 px-2"
               onClick={() => setAddCategory(false)}
             >
-              <h1 className="text-sm text-white whitespace-nowrap">Cancel</h1>
+              <span className="material-symbols-outlined text-lg">
+                close
+              </span>
             </div>
           </div>
         ) : (
-          <div
-            className="rounded-lg border border-gray-200 m-2 p-2 cursor-pointer select-none 
+          <div className="h-full flex justify-end sticky top-0 right-0">
+            <div
+              className="rounded-lg border border-gray-200 m-2 p-2 cursor-pointer select-none 
                         bg-blue-500 hover:bg-blue-700"
-            onClick={() => setAddCategory(true)}
-          >
-            <h1 className="text-sm text-white whitespace-nowrap">+ Category</h1>
+              onClick={() => setAddCategory(true)}
+            >
+              <h1 className="text-sm text-white whitespace-nowrap">+ Category</h1>
+            </div>
           </div>
         )}
         <div className="w-0 border-r-2 border-gray-300 mx-1 my-3 rounded-full">
@@ -325,7 +333,7 @@ export default function ProviderMenu() {
               >
                 Syncing
                 <span className="ml-2 relative flex justify-center items-center w-full h-full">
-                  <span className="w-3/ h-3/4 border-[8px] border-solid border-transparent border-t-blue-500 border-b-blue-500 rounded-full animate-spin"></span>
+                  <span className="w-3/ h-3/4 border-8 border-solid border-transparent border-t-blue-500 border-b-blue-500 rounded-full animate-spin"></span>
                 </span>
               </GraphicButton>
             ) : pendingChanges ? (
@@ -379,7 +387,7 @@ export default function ProviderMenu() {
                         }}
                       >
                         <h1 className="text-sm text-white whitespace-nowrap">
-                          + New
+                          + Item
                         </h1>
                       </div>
                     </div>
@@ -415,59 +423,59 @@ export default function ProviderMenu() {
                     )}
                     {addingNewItem
                       ? newMenuItem && (
-                          <div className="relative h-[calc(100vh-132px)] overflow-y-scroll mt-4">
-                            <BorderedPallete title="Add New Item">
-                              <div className="absolute top-0 right-0">
-                                <GraphicButton
-                                  text="Delete"
-                                  buttonStyle="red"
-                                  onClick={() =>
-                                    handleDeleteMenuItem({
-                                      ...newMenuItem,
-                                      operation: "add",
-                                    })
-                                  }
-                                  disabled={isMenuLoading}
-                                />
-                              </div>
-                              <MenuItemGrid
-                                item={newMenuItem}
-                                categories={categories}
-                                type="update"
-                                onChange={(e) => {
-                                  setNewMenuItem(e);
-                                  setCategory(e.category);
-                                  handleAddMenuItem(e);
-                                }}
+                        <div className="relative h-[calc(100vh-132px)] overflow-y-scroll mt-4">
+                          <BorderedPallete title="Add New Item">
+                            <div className="absolute top-0 right-0">
+                              <GraphicButton
+                                text="Delete"
+                                buttonStyle="red"
+                                onClick={() =>
+                                  handleDeleteMenuItem({
+                                    ...newMenuItem,
+                                    operation: "add",
+                                  })
+                                }
+                                disabled={isMenuLoading}
                               />
-                            </BorderedPallete>
-                          </div>
-                        )
+                            </div>
+                            <MenuItemGrid
+                              item={newMenuItem}
+                              categories={categories}
+                              type="update"
+                              onChange={(e) => {
+                                setNewMenuItem(e);
+                                setCategory(e.category);
+                                handleAddMenuItem(e);
+                              }}
+                            />
+                          </BorderedPallete>
+                        </div>
+                      )
                       : editedMenuItem && (
-                          <div className="relative h-[calc(100vh-132px)] overflow-y-scroll mt-4">
-                            <BorderedPallete title="Edit Menu Item">
-                              <div className="absolute top-0 right-0">
-                                <GraphicButton
-                                  text="Delete"
-                                  buttonStyle="red"
-                                  onClick={() =>
-                                    handleDeleteMenuItem(editedMenuItem)
-                                  }
-                                />
-                              </div>
-                              <MenuItemGrid
-                                item={editedMenuItem}
-                                categories={categories}
-                                type="update"
-                                onChange={(e) => {
-                                  setEditedMenuItem(e);
-                                  setCategory(e.category);
-                                  handleUpdateMenuItem(e);
-                                }}
+                        <div className="relative h-[calc(100vh-132px)] overflow-y-scroll mt-4">
+                          <BorderedPallete title="Edit Menu Item">
+                            <div className="absolute top-0 right-0">
+                              <GraphicButton
+                                text="Delete"
+                                buttonStyle="red"
+                                onClick={() =>
+                                  handleDeleteMenuItem(editedMenuItem)
+                                }
                               />
-                            </BorderedPallete>
-                          </div>
-                        )}
+                            </div>
+                            <MenuItemGrid
+                              item={editedMenuItem}
+                              categories={categories}
+                              type="update"
+                              onChange={(e) => {
+                                setEditedMenuItem(e);
+                                setCategory(e.category);
+                                handleUpdateMenuItem(e);
+                              }}
+                            />
+                          </BorderedPallete>
+                        </div>
+                      )}
                   </div>
                   <div className="grid grid-cols-6 col-span-1"></div>
                 </div>
