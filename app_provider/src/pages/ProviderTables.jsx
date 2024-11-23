@@ -19,22 +19,21 @@ export default function ProviderTables() {
   };
 
   return (
-    <div className="w-full px-8 flex flex-col items-center">
-      <div className="w-full my-6">
-        <header className="text-2xl font-medium">Table Management</header>
+    <div className="w-full flex flex-col items-center">
+      <div className="w-full">
       </div>
       <div className={"rounded-lg bg-white " + "w-full  flex flex-col  "}>
         <div
           className=" flex items-center justify-between border
-        rounded-lg w-full bg-orange-300"
+        rounded-t-lg w-full"
         >
           <GraphicButton
             text="Add"
-            buttonStyle=""
+            buttonStyle="bluefill"
             onClick={() => setIsAddOpen(true)}
             disabled={isLoading}
           >
-            <span className="material-symbols-outlined">add</span>
+            <span className="material-symbols-outlined text-sm">add</span>
           </GraphicButton>
         </div>
         {isAddOpen && (

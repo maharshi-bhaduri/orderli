@@ -1,9 +1,7 @@
 import React from "react";
 
+
 export default function SidebarButton(props) {
-
-  // import icon from { `../images/` + props.icon };
-
   return (
     <div
       className={"rounded-lg w-full p-2 transition ease-in-out cursor-pointer select-none" +
