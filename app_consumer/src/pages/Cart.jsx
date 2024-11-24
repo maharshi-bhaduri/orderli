@@ -8,6 +8,7 @@ import axios from "axios";
 export default function Cart() {
   let { partnerHandle } = useParams();
   const [view, setView] = useState("cart");
+  const [orders, setOrders] = useState([]);
   const { cart, dispatch } = useCart();
   const cartItems = Object.values(cart.cartItems);
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ export default function Cart() {
     {
       onSuccess: () => {
         // Clear the cart only on success
+        setOrders(Object.values(cart.cartItems));
         dispatch({ type: "CLEAR_CART" });
         localStorage.removeItem("cart");
         console.log("Order placed successfully");
@@ -43,7 +45,9 @@ export default function Cart() {
 
   const handlePlaceOrder = () => {
     // Construct the payload as a list of objects with partnerId and menuId
-
+    console.log("cart", cart);
+    console.log("cartItems", cart.cartItems);
+    console.log("cartItems object values", Object.values(cart.cartItems));
     const payload = Object.values(cart.cartItems).map((cartItem) => ({
       partnerId: cartItem.itemDetails.partnerId,
       menuId: cartItem.itemDetails.menuId,
@@ -192,7 +196,7 @@ export default function Cart() {
             </div>
           </div>
         ) : (
-          <Orders />
+          <Orders items={orders} />
         )}
       </div>
     </div>
