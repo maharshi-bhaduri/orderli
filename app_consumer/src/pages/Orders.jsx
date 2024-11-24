@@ -1,36 +1,74 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
-import { useIsFetching } from "react-query";
 const supabaseUrl = import.meta.env.VITE_APP_SUPABASE_URL;
 const anonKey = import.meta.env.VITE_APP_SUPABASE_ANON_KEY;
+
 const supabase = createClient(supabaseUrl, anonKey);
-
-export default function Orders({ items }) {
+export default function Orders() {
+  const [orders, setOrders] = useState();
   const tableId = 1;
-
   useEffect(() => {
+    if (!tableId) {
+      console.log("Table Id is missing");
+      return;
+    }
+    const fetchOrders = async () => {
+      const { data, error } = await supabase
+        .from("order_items_live")
+        .select("*")
+        .eq("tableId", tableId)
+        .order("createdAt", { ascending: false });
+
+      if (error) {
+        console.log("Error fetching order", error.message);
+      } else {
+        setOrders(data);
+      }
+    };
+
+    fetchOrders();
+
     const subscription = supabase
-      .channel("order_update")
+      .channel(`orders-tableId-${tableId}`)
       .on(
         "postgres_changes",
         {
-          event: "broadcast",
+          event: "*",
           schema: "public",
-          channel: "order_update",
+          table: "order_items_live",
+          filter: `tableId-eq.${tableId}`,
         },
         (payload) => {
-          console.log("Order update received:", payload);
-          // Example: Display a notification to the customer
-          alert(
-            `Order ${payload.orderItemId} status updated to ${payload.status}`
-          );
+          console.log("Real-time payload", payload);
+          if (payload.eventType === "INSERT") {
+            setOrders((prev) => [payload.new, ...prev]);
+          } else if (payload.eventType === "UPDATE") {
+            setOrders((prev) => {
+              return prev.map((order) => {
+                return order.orderItemId === payload.new.orderItemId
+                  ? payload.new
+                  : order;
+              });
+            });
+            alert(
+              `Order ${payload.new.orderItemId} status has been updated: ${payload.new.status}`
+            );
+          } else if (payload.eventType === "DELETE") {
+            setOrders((prev) => {
+              return prev.filter((order) => {
+                return order.orderItemId !== payload.old.orderItemId;
+              });
+            });
+          }
         }
       )
       .subscribe();
 
-    return () => supabase.removeChannel(subscription);
-  }, []);
+    return () => {
+      supabase.removeChannel(subscription);
+    };
+  }, [tableId]);
 
   return (
     <div className="text-black w-full flex flex-col items-center justify-center">
@@ -43,24 +81,28 @@ export default function Orders({ items }) {
           <table className="table-auto w-full border-collapse border border-gray-200">
             <thead>
               <tr className="bg-gray-100">
-                <th className="border border-gray-200 px-4 py-2">Sl no</th>
+                <th className="border border-gray-200 px-4 py-2">Item ID</th>
                 <th className="border border-gray-200 px-4 py-2">Name</th>
                 <th className="border border-gray-200 px-4 py-2">Qty</th>
                 <th className="border border-gray-200 px-4 py-2">Status</th>
               </tr>
             </thead>
             <tbody>
-              {items && items.length > 0 ? (
-                items.map((item, i) => (
-                  <tr key={i} className="hover:bg-gray-50">
-                    <td className="border border-gray-200 px-4 py-2">{i}</td>
+              {orders && orders.length > 0 ? (
+                orders.map((order) => (
+                  <tr key={order.orderItemId} className="hover:bg-gray-50">
                     <td className="border border-gray-200 px-4 py-2">
-                      {item.itemDetails.itemName}
+                      {order.orderItemId}
                     </td>
                     <td className="border border-gray-200 px-4 py-2">
-                      {item.quantity}
+                      {order.itemName}
                     </td>
-                    <td className="border border-gray-200 px-4 py-2">{""}</td>
+                    <td className="border border-gray-200 px-4 py-2">
+                      {order.quantity}
+                    </td>
+                    <td className="border border-gray-200 px-4 py-2">
+                      {order.itemStatus == 1 ? "In Progress" : "Completed"}
+                    </td>
                   </tr>
                 ))
               ) : (
