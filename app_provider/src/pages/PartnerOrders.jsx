@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
-
+import GraphicButton from "../components/GraphicButton";
+import { useMutation } from "@tanstack/react-query";
+import { postService } from "../utils/APIService";
 const supabaseUrl = import.meta.env.VITE_APP_SUPABASE_URL;
 const anonKey = import.meta.env.VITE_APP_SUPABASE_ANON_KEY;
 
@@ -9,7 +11,30 @@ const supabase = createClient(supabaseUrl, anonKey);
 export default function PartnerOrders() {
   const partnerId = localStorage.getItem("partnerId");
   const [orders, setOrders] = useState([]);
-
+  const { mutate: updateOrder } = useMutation(
+    ({ orderId, newStatus }) => {
+      return postService(import.meta.env.VITE_APP_UPDATE_ORDER_PARTNER, {
+        orderId,
+        newStatus,
+      });
+    },
+    {
+      onSuccess: (data, variables) => {
+        console.log("Order status updated successfully:", data);
+        const { orderId, newStatus } = variables;
+        setOrders((prev) =>
+          prev.map((o) =>
+            o.orderItemId === orderId ? { ...o, itemStatus: newStatus } : o
+          )
+        );
+      },
+    },
+    {
+      onError: (error) => {
+        console.error("Failed to update order status:", error);
+      },
+    }
+  );
   useEffect(() => {
     if (!partnerId) {
       console.error("Partner ID is missing.");
@@ -71,6 +96,12 @@ export default function PartnerOrders() {
     };
   }, [partnerId]);
 
+  const toggleOrderStatus = async (orderId, currentStatus) => {
+    const newStatus = currentStatus === 1 ? 0 : 1; // Toggle status
+
+    updateOrder({ orderId, newStatus });
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-lg font-bold mb-4">Partner Orders</h1>
@@ -87,6 +118,7 @@ export default function PartnerOrders() {
               <th className="border border-gray-200 px-4 py-2">Item Status</th>
               <th className="border border-gray-200 px-4 py-2">Created At</th>
               <th className="border border-gray-200 px-4 py-2">Table Id</th>
+              <th className="border border-gray-200 px-4 py-2">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -113,6 +145,14 @@ export default function PartnerOrders() {
                   </td>
                   <td className="border border-gray-200 px-4 py-2">
                     {order.tableId}
+                  </td>
+                  <td className="border border-gray-200 px-4 py-2">
+                    <GraphicButton
+                      onClick={() =>
+                        toggleOrderStatus(order.orderItemId, order.itemStatus)
+                      }
+                      text="Change Status"
+                    />
                   </td>
                 </tr>
               ))

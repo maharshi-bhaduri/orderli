@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import SidebarButton from "./SidebarButton";
 import snaqrBrandBold from "../images/snaqr_brand_b.png";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function Sidebar(props) {
   const queryClient = useQueryClient();

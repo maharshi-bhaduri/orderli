@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { postService } from "../utils/APIService";
 export default function AddTableModal({ open, onClose }) {
   const partnerId = localStorage.getItem("partnerId");
