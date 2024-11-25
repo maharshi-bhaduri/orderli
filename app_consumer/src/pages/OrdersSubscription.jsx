@@ -3,77 +3,72 @@ import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 const supabaseUrl = import.meta.env.VITE_APP_SUPABASE_URL;
 const anonKey = import.meta.env.VITE_APP_SUPABASE_ANON_KEY;
+
 const supabase = createClient(supabaseUrl, anonKey);
-
 export default function Orders() {
+  const [orders, setOrders] = useState();
   const tableId = 1;
-  const [orders, setOrders] = useState([]);
   useEffect(() => {
-    // const fetchOrders = async () => {
-    //   const { data, error } = await supabase
-    //     .from("order_items_live")
-    //     .select("*")
-    //     .eq("orderItemId", 141);
-    //   if (error) {
-    //     console.error("Error fetching orders:", error.message);
-    //   } else {
-    //     console.log("data", data);
-    //     setOrders(data);
-    //   }
-    // };
+    if (!tableId) {
+      console.log("Table Id is missing");
+      return;
+    }
+    const fetchOrders = async () => {
+      const { data, error } = await supabase
+        .from("order_items_live")
+        .select("*")
+        .eq("tableId", tableId)
+        .order("createdAt", { ascending: false });
 
-    // fetchOrders();
+      if (error) {
+        console.log("Error fetching order", error.message);
+      } else {
+        setOrders(data);
+      }
+    };
+
+    fetchOrders();
 
     const subscription = supabase
-      .channel("order_update")
+      .channel(`orders-tableId-${tableId}`)
       .on(
         "postgres_changes",
         {
-          event: "UPDATE",
+          event: "*",
           schema: "public",
+          table: "order_items_live",
+          filter: `tableId-eq.${tableId}`,
         },
-        async (payload) => {
-          console.log("Order update received:", payload);
-          const { orderItemId } = payload.new;
-
-          try {
-            const { data, error } = await supabase
-              .from("order_items_live")
-              .select("*")
-              .eq("orderItemId", orderItemId)
-              .single();
-            if (error) {
-              console.log("Error fetching row", error);
-              return;
-            }
-
-            setOrders((oldOrders) => {
-              const existingOrderIndex = oldOrders.findIndex(
-                (order) => order.orderItemId === orderItemId
-              );
-              if (existingOrderIndex !== -1) {
-                const updatedOrders = [...oldOrders];
-                updatedOrders[existingOrderIndex] = { ...data };
-                return updatedOrders;
-              } else {
-                return [...oldOrders, data];
-              }
+        (payload) => {
+          console.log("Real-time payload", payload);
+          if (payload.eventType === "INSERT") {
+            setOrders((prev) => [payload.new, ...prev]);
+          } else if (payload.eventType === "UPDATE") {
+            setOrders((prev) => {
+              return prev.map((order) => {
+                return order.orderItemId === payload.new.orderItemId
+                  ? payload.new
+                  : order;
+              });
             });
-          } catch (err) {
-            console.error("Error processing update", err);
+            alert(
+              `Order ${payload.new.orderItemId} status has been updated: ${payload.new.status}`
+            );
+          } else if (payload.eventType === "DELETE") {
+            setOrders((prev) => {
+              return prev.filter((order) => {
+                return order.orderItemId !== payload.old.orderItemId;
+              });
+            });
           }
         }
       )
-      .subscribe()
-      .on("subscribed", () => {
-        console.log("Successfully subscribed to order_update channel");
-      })
-      .on("error", (error) => {
-        console.error("Subscription error:", error);
-      });
+      .subscribe();
 
-    return () => supabase.removeChannel(subscription);
-  }, []);
+    return () => {
+      supabase.removeChannel(subscription);
+    };
+  }, [tableId]);
 
   return (
     <div className="text-black w-full flex flex-col items-center justify-center">
@@ -86,7 +81,7 @@ export default function Orders() {
           <table className="table-auto w-full border-collapse border border-gray-200">
             <thead>
               <tr className="bg-gray-100">
-                <th className="border border-gray-200 px-4 py-2">Sl no</th>
+                <th className="border border-gray-200 px-4 py-2">Item ID</th>
                 <th className="border border-gray-200 px-4 py-2">Name</th>
                 <th className="border border-gray-200 px-4 py-2">Qty</th>
                 <th className="border border-gray-200 px-4 py-2">Status</th>
@@ -94,10 +89,10 @@ export default function Orders() {
             </thead>
             <tbody>
               {orders && orders.length > 0 ? (
-                orders.map((order, i) => (
-                  <tr key={i} className="hover:bg-gray-50">
+                orders.map((order) => (
+                  <tr key={order.orderItemId} className="hover:bg-gray-50">
                     <td className="border border-gray-200 px-4 py-2">
-                      {i + 1}
+                      {order.orderItemId}
                     </td>
                     <td className="border border-gray-200 px-4 py-2">
                       {order.itemName}
@@ -106,7 +101,7 @@ export default function Orders() {
                       {order.quantity}
                     </td>
                     <td className="border border-gray-200 px-4 py-2">
-                      {order.itemStatus}
+                      {order.itemStatus == 1 ? "In Progress" : "Completed"}
                     </td>
                   </tr>
                 ))

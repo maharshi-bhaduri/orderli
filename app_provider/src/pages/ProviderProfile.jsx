@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { postService } from "../utils/APIService";
 import { getProfile } from "../utils/queryService";
@@ -10,46 +10,50 @@ import Loader from "../components/Loader";
 
 export default function PartnerProfile() {
   const { partnerHandle } = useParams();
-  const { data: partnerDetails, isLoading: isProfileLoading, isError: isProfileError } = getProfile(partnerHandle)
+  const {
+    data: partnerDetails,
+    isLoading: isProfileLoading,
+    isError: isProfileError,
+  } = getProfile(partnerHandle);
   const [editable, setEditable] = useState(true);
-  const [updating, setUpdating] = useState(false)
+  const [updating, setUpdating] = useState(false);
   const queryClient = useQueryClient();
   const [partnerDetailsReplica, setPartnerDetailsReplica] = useState(null);
 
   useEffect(() => {
     setPartnerDetailsReplica(partnerDetails);
-  }, [partnerDetails])
+  }, [partnerDetails]);
 
   let businessInfolist = [
     {
       label: "Name",
       value: partnerDetailsReplica?.partnerName,
-      key: "partnerName"
+      key: "partnerName",
     },
     {
       label: "Handle",
       value: partnerDetailsReplica?.partnerHandle,
-      key: "partnerHandle"
+      key: "partnerHandle",
     },
     {
       label: "Type",
       value: partnerDetailsReplica?.partnerType,
-      key: "partnerType"
+      key: "partnerType",
     },
     {
       label: "About",
       value: partnerDetailsReplica?.about,
-      key: "about"
+      key: "about",
     },
     {
       label: "Website",
       value: partnerDetailsReplica?.website,
-      key: "website"
+      key: "website",
     },
     {
       label: "Contact",
       value: partnerDetailsReplica?.contactNo,
-      key: "contactNo"
+      key: "contactNo",
     },
   ];
 
@@ -57,69 +61,71 @@ export default function PartnerProfile() {
     {
       label: "Address",
       value: partnerDetailsReplica?.address,
-      key: "address"
+      key: "address",
     },
     {
       label: "State",
       value: partnerDetailsReplica?.state,
-      key: "state"
+      key: "state",
     },
     {
       label: "City",
       value: partnerDetailsReplica?.city,
-      key: "city"
+      key: "city",
     },
     {
       label: "Zip Code",
       value: partnerDetailsReplica?.postalCode,
-      key: "postalCode"
+      key: "postalCode",
     },
     {
       label: "Country",
       value: partnerDetailsReplica?.country,
-      key: "country"
+      key: "country",
     },
-  ]
+  ];
 
   const socialInfolist = [
     {
       label: "Social Account 1",
       value: partnerDetailsReplica?.social1,
-      key: "social1"
+      key: "social1",
     },
     {
       label: "Social Account 2",
       value: partnerDetailsReplica?.social2,
-      key: "social2"
+      key: "social2",
     },
     {
       label: "Social Account 3",
       value: partnerDetailsReplica?.social3,
-      key: "social3"
+      key: "social3",
     },
-  ]
+  ];
 
   const { mutate: updatePartnerDetails } = useMutation(
     (updatedPartnerDetails) =>
-      postService(import.meta.env.VITE_APP_UPDATE_PROVIDER_DETAILS, updatedPartnerDetails),
+      postService(
+        import.meta.env.VITE_APP_UPDATE_PROVIDER_DETAILS,
+        updatedPartnerDetails
+      ),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['partner', partnerHandle]);
+        queryClient.invalidateQueries(["partner", partnerHandle]);
         console.log("Partner details updated successfully");
       },
       onError: (error) => {
         console.error("Failed to update partner details:", error);
-      }
+      },
     }
   );
 
   const updateDetails = async () => {
     if (hasDifference(partnerDetails, partnerDetailsReplica)) {
       setUpdating(true);
-      updatePartnerDetails(partnerDetailsReplica)
+      updatePartnerDetails(partnerDetailsReplica);
     }
   };
-
 
   return (
     <div className="w-full flex flex-col items-center">
@@ -127,22 +133,21 @@ export default function PartnerProfile() {
         className="p-5 h-[calc(100vh-30px)] overflow-y-auto
           w-full flex flex-col items-center"
       >
-        {isProfileLoading ?
+        {isProfileLoading ? (
           <div className="w-full h-full flex items-center justify-center">
             <Loader></Loader>
           </div>
-          :
+        ) : (
           <>
-            <BorderedPallete
-              title='Business Details'>
+            <BorderedPallete title="Business Details">
               <div className="flex flex-col items-center">
-                <img src={partnerDetails?.qrData}
+                <img
+                  src={partnerDetails?.qrData}
                   alt="QR Code"
                   className="transition-transform hover:scale-110 cursor-pointer"
                 />
               </div>
-              <div className="m-4 border h-3/4">
-              </div>
+              <div className="m-4 border h-3/4"></div>
               <InfoGrid
                 cols={2}
                 infoList={businessInfolist}
@@ -154,8 +159,7 @@ export default function PartnerProfile() {
               />
             </BorderedPallete>
 
-            <BorderedPallete
-              title='Location Details'>
+            <BorderedPallete title="Location Details">
               <InfoGrid
                 cols={2}
                 infoList={locationInfolist}
@@ -166,8 +170,7 @@ export default function PartnerProfile() {
                 onUpdate={updateDetails}
               />
             </BorderedPallete>
-            <BorderedPallete
-              title='Social Media'>
+            <BorderedPallete title="Social Media">
               <InfoGrid
                 cols={2}
                 infoList={socialInfolist}
@@ -179,7 +182,7 @@ export default function PartnerProfile() {
               />
             </BorderedPallete>
           </>
-        }
+        )}
       </div>
     </div>
   );

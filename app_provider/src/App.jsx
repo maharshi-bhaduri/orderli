@@ -6,7 +6,7 @@ import AccountHome from "./pages/AccountHome";
 import AddProvider from "./pages/AddProvider";
 import Provider from "./pages/Provider";
 import { AuthProvider } from "./utils/AuthContextProvider";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { initializeLocalForage } from "./utils/localforageUtils";
 import Visuals from "./pages/Visuals";
 
