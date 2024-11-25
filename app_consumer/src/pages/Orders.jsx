@@ -9,21 +9,21 @@ export default function Orders() {
   const tableId = 1;
   const [orders, setOrders] = useState([]);
   useEffect(() => {
-    // const fetchOrders = async () => {
-    //   const { data, error } = await supabase
-    //     .from("order_items_live")
-    //     .select("*")
-    //     .eq("orderItemId", 141);
-    //   if (error) {
-    //     console.error("Error fetching orders:", error.message);
-    //   } else {
-    //     console.log("data", data);
-    //     setOrders(data);
-    //   }
-    // };
+    //function to fetch initial data
+    const fetchOrders = async () => {
+      const { data, error } = await supabase
+        .from("order_items_live")
+        .select("*")
+        .eq("tableId", tableId);
 
-    // fetchOrders();
-
+      if (error) {
+        console.error("Error fetching orders:", error.message);
+      } else {
+        console.log("Initial orders fetched:", data);
+        setOrders(data); // Set initial state
+      }
+    };
+    fetchOrders();
     const subscription = supabase
       .channel("order_update")
       .on(
@@ -31,37 +31,25 @@ export default function Orders() {
         {
           event: "UPDATE",
           schema: "public",
+          table: "order_items_live",
+          filter: `tableId=eq.${tableId}`,
         },
-        async (payload) => {
-          console.log("Order update received:", payload);
-          const { orderItemId } = payload.new;
+        (payload) => {
+          console.log("Order update received:", payload.new);
+          const updatedOrder = payload.new;
 
-          try {
-            const { data, error } = await supabase
-              .from("order_items_live")
-              .select("*")
-              .eq("orderItemId", orderItemId)
-              .single();
-            if (error) {
-              console.log("Error fetching row", error);
-              return;
+          setOrders((oldOrders) => {
+            const existingOrderIndex = oldOrders.findIndex(
+              (order) => order.orderItemId === updatedOrder.orderItemId
+            );
+            if (existingOrderIndex !== -1) {
+              const updatedOrders = [...oldOrders];
+              updatedOrders[existingOrderIndex] = updatedOrder;
+              return updatedOrders;
+            } else {
+              return [...oldOrders, updatedOrder];
             }
-
-            setOrders((oldOrders) => {
-              const existingOrderIndex = oldOrders.findIndex(
-                (order) => order.orderItemId === orderItemId
-              );
-              if (existingOrderIndex !== -1) {
-                const updatedOrders = [...oldOrders];
-                updatedOrders[existingOrderIndex] = { ...data };
-                return updatedOrders;
-              } else {
-                return [...oldOrders, data];
-              }
-            });
-          } catch (err) {
-            console.error("Error processing update", err);
-          }
+          });
         }
       )
       .subscribe()
@@ -73,7 +61,7 @@ export default function Orders() {
       });
 
     return () => supabase.removeChannel(subscription);
-  }, []);
+  }, [tableId]);
 
   return (
     <div className="text-black w-full flex flex-col items-center justify-center">
@@ -106,7 +94,7 @@ export default function Orders() {
                       {order.quantity}
                     </td>
                     <td className="border border-gray-200 px-4 py-2">
-                      {order.itemStatus}
+                      {order.itemStatus === 1 ? "In Progress" : "Completed"}
                     </td>
                   </tr>
                 ))
