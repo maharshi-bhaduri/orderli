@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postService } from "../utils/APIService";
 export default function EditTableModal({ open, onClose, table, partnerId }) {
   const queryClient = useQueryClient();
