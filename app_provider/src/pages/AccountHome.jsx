@@ -14,7 +14,7 @@ export default function AccountHome() {
     isLoading,
     isError,
   } = useQuery(
-    "partners",
+    ["partners"],
     () =>
       getService(import.meta.env.VITE_APP_GET_PROVIDERS).then(
         (response) => response.data

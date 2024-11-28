@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 const CartContext = createContext();
 
 const initialCartState = {
@@ -50,9 +50,8 @@ function cartReducer(state, action) {
 // Cart Provider component
 export function CartProvider({ children }) {
   const [cart, dispatch] = useReducer(cartReducer, initialCartState);
-  const location = useLocation();
-  const currentPartnerHandle = location.pathname.split("/")[1];
-  console.log(currentPartnerHandle);
+  // const { currentPartnerHandle } = useParams();
+  // console.log(currentPartnerHandle);
   // Load cart from localStorage on app initialization
   useEffect(() => {
     const savedCart = JSON.parse(localStorage.getItem("cart")) || {};
@@ -61,12 +60,12 @@ export function CartProvider({ children }) {
   }, []);
 
   //detect change in partner handle
-  useEffect(() => {
-    //clear cart when the restaurant handle changes
-    dispatch({ type: "CLEAR_CART" });
-    localStorage.removeItem("cart");
-    console.log("Partner handle changed, cart cleared");
-  }, [currentPartnerHandle]);
+  // useEffect(() => {
+  //   //clear cart when the restaurant handle changes
+  //   dispatch({ type: "CLEAR_CART" });
+  //   localStorage.removeItem("cart");
+  //   console.log("Partner handle changed, cart cleared");
+  // }, [currentPartnerHandle]);
   // Save cart to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart.cartItems));
