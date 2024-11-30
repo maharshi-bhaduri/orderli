@@ -12,7 +12,11 @@ export default function Home() {
 
   // Fetch menu data and partner details using React Query hooks
   const { data: menuData } = getMenu(partnerHandle);
-  const { data: partnerDetails, isLoading } = getPartnerDetails(partnerHandle);
+  const { data: apiResponse, isLoading } = getPartnerDetails(partnerHandle);
+
+  // Destructure data from the API response
+  const partnerDetails = apiResponse?.partnerDetails || {};
+  const tableDetails = apiResponse?.tableDetails || {};
 
   function goToMenu() {
     navigate(`/${partnerHandle}/menu`);
@@ -24,7 +28,7 @@ export default function Home() {
 
   // Identify social media links and corresponding images
   const getSocialMediaLinks = () => {
-    if (!partnerDetails || !partnerDetails.socialLinks) return [];
+    if (!partnerDetails.socialLinks) return [];
     const socialLinks = [];
     const { facebook, instagram } = partnerDetails.socialLinks;
 
@@ -37,35 +41,52 @@ export default function Home() {
   const socialMediaLinks = getSocialMediaLinks();
 
   return (
-    <>
-      {isLoading ? <Loader /> :
+    <div className="bg-orange-300 select-none">
+      {isLoading ? <Loader /> : (
         <>
-          <div className="fixed -z-10 bg-stone-600 opacity-50 blur-sm w-full">
-            <img src={bg} className="object-cover h-screen w-full" />
-          </div>
+          {/*
+            <div className="fixed -z-10 bg-stone-600 opacity-50 blur-sm w-full">
+              <img src={bg} className="object-cover h-screen w-full" />
+            </div> 
+          */}
           <div className="flex flex-col h-screen justify-center items-center mx-4">
             <div className="mb-5 flex flex-col justify-center items-center">
+              {/* Display cafe name */}
               <h1 className="text-4xl mb-5">
-                {isLoading ? "Loading..." : partnerDetails?.name || "Cafe Name"}
+                {partnerDetails.name || "Cafe Name"}
               </h1>
+              {/* Display cafe description */}
               <p className="text-center mb-4">
-                {isLoading ? "Loading description..." : partnerDetails?.about || "Cafe description"}
+                {partnerDetails.about || "Cafe description"}
               </p>
             </div>
-            <button
-              onClick={goToMenu}
-              className="mt-10 order-btn bg-black hover:bg-warmGray-800 text-white
-          font-bold py-5 px-10 rounded-full shadow-lg transition-all duration-300 ease-in-out"
+            <div
+              className="rounded-lg bg-white p-2 m-2 flex flex-col border
+                            justify-center items-center shadow-md"
             >
-              Menu
-            </button>
-            <button
-              onClick={goToReviews}
-              className="mt-10 order-btn bg-black hover:bg-warmGray-800 text-white
-          font-bold py-5 px-10 rounded-full shadow-lg transition-all duration-300 ease-in-out"
-            >
-              Reviews
-            </button>
+              {/* Display table message */}
+              {tableDetails.tableId && (
+                <p className="mb-2 flex justify-center items-center rounded-lg bg-white border border-orange-300 p-2 w-full">
+                  Table:<span className=" ml-2">{tableDetails.tableId}</span>
+                </p>
+              )}
+              <div className="w-full flex text-sm h-10 justify-center">
+                <button
+                  className="px-2 first:mr-2 border border-gray-300 text-gray-500 flex-grow
+               rounded-lg bg-white hover:bg-gray-300 transition ease-in-out relative"
+                  onClick={goToReviews}
+                >
+                  Reviews
+                </button>
+                <button
+                  className="px-2 first:mr-2 border border-orange-400 text-gray-500 flex-grow
+                    rounded-lg bg-orange-200 hover:bg-gray-300 transition ease-in-out"
+                  onClick={goToMenu}
+                >
+                  Menu
+                </button>
+              </div>
+            </div>
             {/* Conditionally render social media links */}
             {socialMediaLinks.length > 0 && (
               <div className="fixed bottom-10">
@@ -74,7 +95,7 @@ export default function Home() {
                     <a key={index} href={link.url} target="_blank" rel="noopener noreferrer">
                       <p
                         className="text-sm 
-                              transition-all ease-in-out duration-300 p-2 flex items-center opacity-70 hover:opacity-100"
+                          transition-all ease-in-out duration-300 p-2 flex items-center opacity-70 hover:opacity-100"
                       >
                         <img src={link.image} alt="social icon" className="w-[35px] h-[35px]" />
                       </p>
@@ -85,7 +106,7 @@ export default function Home() {
             )}
           </div>
         </>
-      }
-    </>
+      )}
+    </div>
   );
 }
