@@ -78,26 +78,23 @@ export default function Cart() {
 
             {/* Slider to Toggle Between Cart and Orders */}
             <div className="flex items-center justify-center w-full my-4">
-              <div className="relative w-40 h-12 bg-orange-300 rounded-full flex items-center">
+              <div className="relative w-[166px] h-12 bg-gray-100 border border-gray-300 rounded-lg flex items-center">
                 {/* Slider Button */}
                 <div
-                  className={`absolute w-20 h-10 bg-orange-900 bg-opacity-70 rounded-full shadow-md transition-transform transform ${
-                    view === "cart" ? "translate-x-1" : "translate-x-20"
-                  }`}
+                  className={`absolute w-20 h-10 bg-orange-200 bg-opacity-50 border border-orange-400 rounded-lg transition-transform transform ${view === "cart" ? "translate-x-1" : "translate-x-20"
+                    }`}
                 ></div>
                 {/* Labels */}
                 <button
-                  className={`flex-1 text-center font-semibold ${
-                    view === "cart" ? "text-black" : "text-white"
-                  }`}
+                  className={`h-full flex-1 text-center text-black transition-all duration-100 ${view === "cart" ? "text-black" : "text-gray-500"
+                    }`}
                   onClick={() => setView("cart")}
                 >
                   Cart
                 </button>
                 <button
-                  className={`flex-1 text-center font-semibold ${
-                    view === "orders" ? "text-black" : "text-white"
-                  }`}
+                  className={`h-full flex-1 text-center transition-all duration-100 ${view === "orders" ? "text-black" : "text-gray-500"
+                    }`}
                   onClick={() => setView("orders")}
                 >
                   Orders
@@ -180,11 +177,10 @@ export default function Cart() {
                   </h2>
                 </div>
                 <button
-                  className={`px-4 py-2 bg-green-500 text-white font-semibold rounded-lg ${
-                    cart.cartItems && Object.keys(cart.cartItems).length === 0
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "hover:bg-green-600"
-                  }`}
+                  className={`px-4 py-2 bg-green-500 text-white font-semibold rounded-lg ${cart.cartItems && Object.keys(cart.cartItems).length === 0
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "hover:bg-green-600"
+                    }`}
                   onClick={handlePlaceOrder}
                   disabled={
                     cart.cartItems && Object.keys(cart.cartItems).length === 0
