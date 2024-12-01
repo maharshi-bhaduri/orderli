@@ -102,7 +102,7 @@ export default function Menu() {
                   {totalCartItems > 0 && (
                     <span
                       className="absolute top-0 right-0 -mt-2 -mr-2 bg-orange-500
-                 text-white text-xs rounded-full px-2 py-1"
+                       text-white text-xs rounded-full px-2 py-1"
                     >
                       {totalCartItems}
                     </span>
