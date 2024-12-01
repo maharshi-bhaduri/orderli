@@ -77,11 +77,11 @@ export default function Cart() {
             </button>
 
             {/* Slider to Toggle Between Cart and Orders */}
-            <div className="flex items-center justify-center w-full my-4">
-              <div className="relative w-[166px] h-12 bg-gray-100 border border-gray-300 rounded-lg flex items-center">
+            <div className="flex items-center justify-center w-full h-full">
+              <div className="relative w-40 h-full bg-gray-100 border border-gray-300 rounded-lg flex items-center">
                 {/* Slider Button */}
                 <div
-                  className={`absolute w-20 h-10 bg-orange-200 bg-opacity-50 border border-orange-400 rounded-lg transition-transform transform ${view === "cart" ? "translate-x-1" : "translate-x-20"
+                  className={`absolute w-20 h-full py-2 bg-orange-200 bg-opacity-50 border border-orange-400 rounded-lg transition-transform transform ${view === "cart" ? "translate-x-0" : "translate-x-20"
                     }`}
                 ></div>
                 {/* Labels */}
