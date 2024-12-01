@@ -70,7 +70,7 @@ export default function Menu() {
   return (
     <>
       <div className="bg-orange-300 bg-cover bg-center h-screen overflow-y-hidden">
-        <div className="text-black w-full flex justify-center items-center">
+        <div className="text-black rounded-lg w-full flex justify-center items-center">
           <div
             className="rounded-b-lg border bg-white p-2 flex flex-col
                             items-center shadow-md w-full max-w-2xl"
@@ -118,8 +118,8 @@ export default function Menu() {
         {isLoading ? (
           <Loader />
         ) : (
-          <div className="overflow-hidden flex justify-center w-full pl-2">
-            <div className="pt-2 w-full max-w-2xl h-[calc(100vh-96px)] overflow-y-scroll"
+          <div className="overflow-hidden flex justify-center w-full px-2">
+            <div className="pt-2 pl-2 w-full max-w-2xl h-[calc(100vh-96px)] overflow-y-scroll"
               style={{ scrollbarGutter: "stable" }}
             >
               {Object.keys(groupedItems).map((category) => (

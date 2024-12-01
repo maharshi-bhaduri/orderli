@@ -82,8 +82,8 @@ export default function Home() {
                   Reviews
                 </button>
                 <button
-                  className="px-2 first:mr-2 border border-orange-400 text-gray-500 flex-grow
-                    rounded-lg bg-orange-200 hover:bg-gray-300 transition ease-in-out"
+                  className="px-2 first:mr-2 border border-orange-400 text-white flex-grow
+                    rounded-lg bg-orange-300 hover:bg-gray-300 transition ease-in-out"
                   onClick={goToMenu}
                 >
                   Menu
@@ -119,6 +119,6 @@ export default function Home() {
           </div>
         </>
       )}
-   </div>
+    </div>
   );
 }
