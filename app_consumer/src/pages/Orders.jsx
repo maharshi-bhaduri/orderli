@@ -15,18 +15,19 @@ const ProgressBar = ({ totalSteps, activeStep }) => {
         return (
           <React.Fragment key={index}>
             <div
-              className={`h-3 w-3 flex items-center justify-center rounded-full ${isCompleted
-                ? "bg-green-500"
-                : isActive
+              className={`h-3 w-3 flex items-center justify-center rounded-full ${
+                isCompleted
+                  ? "bg-green-500"
+                  : isActive
                   ? "bg-green-400 animate-pulse"
                   : "bg-gray-300"
-                }`}
-            >
-            </div>
+              }`}
+            ></div>
             {index < totalSteps - 1 && (
               <div
-                className={`h-1 w-3 ${isCompleted ? "bg-green-500" : "bg-gray-300"
-                  }`}
+                className={`h-1 w-3 ${
+                  isCompleted ? "bg-green-500" : "bg-gray-300"
+                }`}
               ></div>
             )}
           </React.Fragment>
@@ -37,13 +38,13 @@ const ProgressBar = ({ totalSteps, activeStep }) => {
 };
 
 export default function Orders() {
-  const tableId = 1;
+  const tableId = localStorage.getItem("tableId");
   const [orders, setOrders] = useState([]);
   const orderMap = {
-    1: 'Received',
-    2: 'Preparing',
-    3: 'On it\'s way'
-  }
+    1: "Received",
+    2: "Preparing",
+    3: "On it's way",
+  };
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -121,7 +122,15 @@ export default function Orders() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
                     <div className="p-2 rounded-lg bg-gray-200 text-gray-500 text-xs">
-                      {orderMap[order.itemStatus > 3 ? 3 : order.itemStatus < 1 ? 1 : order.itemStatus]}
+                      {
+                        orderMap[
+                          order.itemStatus > 3
+                            ? 3
+                            : order.itemStatus < 1
+                            ? 1
+                            : order.itemStatus
+                        ]
+                      }
                     </div>
                   </div>
                   <div className="text-right font-semibold">
@@ -135,8 +144,10 @@ export default function Orders() {
                     totalSteps={3}
                     activeStep={order.itemStatus || 1}
                   />
-                  <div className="px-3 py-1 ml-2 rounded-lg bg-gray-200 text-md w-10
-                  text-xs text-gray-500 flex justify-center">
+                  <div
+                    className="px-3 py-1 ml-2 rounded-lg bg-gray-200 text-md w-10
+                  text-xs text-gray-500 flex justify-center"
+                  >
                     ×<span className="ml-2">{order.quantity}</span>
                   </div>
                 </div>
