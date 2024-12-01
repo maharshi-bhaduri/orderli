@@ -45,8 +45,8 @@ export default function Menu() {
   }
 
   if (!isLoading) {
-    filteredItems = Array.isArray(foodItems)
-      ? foodItems.filter((item) => {
+    filteredItems = Array.isArray(foodItems.menu)
+      ? foodItems.menu.filter((item) => {
         if (consumerChoice.all) return true;
         if (consumerChoice.veg) return item.dietCategory === 2;
         if (consumerChoice.nonveg) return item.dietCategory === 1 || item.dietCategory === 3;
@@ -92,21 +92,23 @@ export default function Menu() {
                 onChange={handleChange}
                 className="border border-gray-300 px-2 py-2 rounded-lg text-black w-full"
               />
-              <button
-                className="ml-2 px-2 border border-gray-300 text-gray-500
+              {!isLoading && foodItems?.orderFlag && (
+                <button
+                  className="ml-2 px-2 border border-gray-300 text-gray-500
                rounded-lg bg-white hover:bg-gray-300 transition ease-in-out relative"
-                onClick={() => navigate(`/${partnerHandle}/cart`)}
-              >
-                Cart
-                {totalCartItems > 0 && (
-                  <span
-                    className="absolute top-0 right-0 -mt-2 -mr-2 bg-orange-500
+                  onClick={() => navigate(`/${partnerHandle}/cart`)}
+                >
+                  Cart
+                  {totalCartItems > 0 && (
+                    <span
+                      className="absolute top-0 right-0 -mt-2 -mr-2 bg-orange-500
                  text-white text-xs rounded-full px-2 py-1"
-                  >
-                    {totalCartItems}
-                  </span>
-                )}
-              </button>
+                    >
+                      {totalCartItems}
+                    </span>
+                  )}
+                </button>
+              )}
             </div>
             <div className="flex w-full">
               <TabGroup tabMap={tabMap} onSelect={handleCategorySelect} />
@@ -117,11 +119,12 @@ export default function Menu() {
           <Loader />
         ) : (
           <div className="mt-28">
-            {Object.keys(groupedItems).map((category, index) => (
+            {Object.keys(groupedItems).map((category) => (
               <CategoryCard
                 key={category}
                 categoryName={category}
                 itemList={groupedItems[category]}
+                orderFlag={foodItems.orderFlag}
               />
             ))}
           </div>

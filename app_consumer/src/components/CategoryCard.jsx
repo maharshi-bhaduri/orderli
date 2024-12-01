@@ -2,7 +2,8 @@ import React from "react";
 import expandMore from "../assets/expandmore.svg";
 import expandLess from "../assets/expandless.svg";
 import ItemCard from "../components/ItemCard";
-export default function CategoryCard({ categoryName, itemList }) {
+
+export default function CategoryCard({ categoryName, itemList, orderFlag }) {
   const [expand, setExpand] = React.useState(true);
   function handleExpansion(params) {
     setExpand(!expand);
@@ -37,6 +38,7 @@ export default function CategoryCard({ categoryName, itemList }) {
               dietCategory={item.dietCategory}
               partnerId={item.partnerId}
               menuId={item.menuId}
+              orderFlag={orderFlag}
             />
           ))}
         </div>

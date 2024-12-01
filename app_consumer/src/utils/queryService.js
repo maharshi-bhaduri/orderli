@@ -23,34 +23,52 @@ export const getPartnerDetails = (partnerHandle) =>
         partnerHandle,
       })
         .then((response) => {
-          const { partnerId, partnerName, about, social1, social2, social3 } = response.data.data;
+          const { partnerDetails, tableDetails } = response.data.data;
+
+          // Save tableId to local storage if tableDetails is present
+          if (tableDetails && tableDetails.tableId) {
+            localStorage.setItem("tableId", tableDetails.tableId);
+          }
+
+          // Extract social links for icons
+          const socialLinks = {
+            facebook:
+              partnerDetails.social1.includes("facebook")
+                ? partnerDetails.social1
+                : partnerDetails.social2.includes("facebook")
+                  ? partnerDetails.social2
+                  : partnerDetails.social3.includes("facebook")
+                    ? partnerDetails.social3
+                    : null,
+            instagram:
+              partnerDetails.social1.includes("instagram")
+                ? partnerDetails.social1
+                : partnerDetails.social2.includes("instagram")
+                  ? partnerDetails.social2
+                  : partnerDetails.social3.includes("instagram")
+                    ? partnerDetails.social3
+                    : null,
+          };
+
+          // Return the structured data
           return {
-            id: partnerId,
-            name: partnerName,
-            about,
-            socialLinks: {
-              facebook: social1.includes("facebook")
-                ? social1
-                : social3.includes("facebook")
-                  ? social3
-                  : null, // Changed from social2 to social3 based on the provided API response
-              instagram: social1.includes("instagram")
-                ? social1
-                : social3.includes("instagram")
-                  ? social3
-                  : null, // Changed from social2 to social3 based on the provided API response
+            partnerDetails: {
+              id: partnerDetails.partnerId,
+              name: partnerDetails.partnerName,
+              about: partnerDetails.about,
+              socialLinks
             },
+            tableDetails
           };
         })
         .catch((err) => {
           console.error("Error fetching partner details:", err);
-          throw err; // It's better to throw the error to let react-query handle it
+          throw err; // Let react-query handle the error
         }),
     {
-      staleTime: 1000 * 60 * 5,
+      staleTime: 1000 * 60 * 5, // Cache validity period
     }
   );
-
 
 export const getFeedback = (partnerHandle) =>
   useQuery(
