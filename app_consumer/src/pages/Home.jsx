@@ -9,7 +9,6 @@ import Loader from "../components/Loader";
 export default function Home() {
   const navigate = useNavigate();
   const { partnerHandle } = useParams();
-  if (partnerHandle) localStorage.setItem("partnerHandle", partnerHandle);
 
   // Fetch menu data and partner details using React Query hooks
   const { data: menuData } = getMenu(partnerHandle);
@@ -43,7 +42,9 @@ export default function Home() {
 
   return (
     <div className="bg-orange-300 select-none">
-      {isLoading ? <Loader /> : (
+      {isLoading ? (
+        <Loader />
+      ) : (
         <>
           {/*
             <div className="fixed -z-10 bg-stone-600 opacity-50 blur-sm w-full">

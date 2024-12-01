@@ -20,8 +20,7 @@ export default function ProviderTables() {
 
   return (
     <div className="w-full flex flex-col items-center">
-      <div className="w-full">
-      </div>
+      <div className="w-full"></div>
       <div className={"rounded-lg bg-white " + "w-full  flex flex-col  "}>
         <div
           className=" flex items-center justify-between border
@@ -39,6 +38,7 @@ export default function ProviderTables() {
         {isAddOpen && (
           <AddTableModal open={isAddOpen} onClose={() => setIsAddOpen(false)} />
         )}
+
         {/* Render Table Squares */}
         {isLoading ? (
           <div className="flex justify-center">

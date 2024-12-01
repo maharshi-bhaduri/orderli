@@ -6,16 +6,11 @@ export default function EditTableModal({ open, onClose, table, partnerId }) {
   const queryClient = useQueryClient();
   const [status, setStatus] = useState(table.status);
   const [loading, setLoading] = useState(false);
-  const { mutate: updateTableStatus } = useMutation(
+  const { mutateAsync: updateTableStatus } = useMutation(
     (updatedTable) => {
       return postService(import.meta.env.VITE_APP_UPDATE_TABLE, updatedTable);
     },
     {
-      onSuccess: () => {
-        setLoading(false);
-        queryClient.invalidateQueries(["tables", partnerId]);
-        console.log("invalidate get tables");
-      },
       onError: (err) => {
         setLoading(false);
         console.error("Error updating status:", err);
@@ -23,12 +18,20 @@ export default function EditTableModal({ open, onClose, table, partnerId }) {
     }
   );
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setLoading(true);
-    const updatedTable = { ...table, status }; // Update table data
-    updateTableStatus(updatedTable); // call mutate to set the updated table data
 
-    onClose(); // Close the modal after successful update
+    try {
+      const updatedTable = { ...table, status }; // Update table data
+      await updateTableStatus(updatedTable); // call mutate to set the updated table data
+      await queryClient.invalidateQueries(["tables", partnerId]); //
+      //await queryClient.refetchQueries(["tables", partnerId]);
+      onClose(); // Close the modal after successful update
+    } catch (err) {
+      console.error("Error saving table status", err);
+    } finally {
+      setLoading(false);
+    }
   };
   const handleStatusChange = (event) => {
     setStatus(event.target.value);
