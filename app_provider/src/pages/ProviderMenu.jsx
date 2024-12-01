@@ -389,7 +389,9 @@ export default function ProviderMenu() {
                         </h1>
                       </div>
                     </div>
-                    <div className="pb-4 overflow-y-scroll max-h-[calc(100vh-146px)] bg-gray-100 border border-x-gray-200 border-t-0 pl-2 rounded-b-lg">
+                    <div className="pb-4 overflow-y-scroll max-h-[calc(100vh-146px)] bg-gray-100 border border-x-gray-200 border-t-0 pl-2 rounded-b-lg"
+                      style={{ scrollbarGutter: "stable" }}
+                    >
                       {!isMenuLoading && updatedMenu?.length == 0 ? (
                         <div className="flex w-3/4 my-4 justify-center rounded-lg border border-gray-300 bg-gray-100 p-5">
                           <h1>Ready to Set the Table? Add an Item!</h1>
@@ -421,59 +423,59 @@ export default function ProviderMenu() {
                     )}
                     {addingNewItem
                       ? newMenuItem && (
-                          <div className="relative h-[calc(100vh-132px)] overflow-y-scroll mt-4">
-                            <BorderedPallete title="Add New Item">
-                              <div className="absolute top-0 right-0">
-                                <GraphicButton
-                                  text="Delete"
-                                  buttonStyle="red"
-                                  onClick={() =>
-                                    handleDeleteMenuItem({
-                                      ...newMenuItem,
-                                      operation: "add",
-                                    })
-                                  }
-                                  disabled={isMenuLoading}
-                                />
-                              </div>
-                              <MenuItemGrid
-                                item={newMenuItem}
-                                categories={categories}
-                                type="update"
-                                onChange={(e) => {
-                                  setNewMenuItem(e);
-                                  setCategory(e.category);
-                                  handleAddMenuItem(e);
-                                }}
+                        <div className="relative h-[calc(100vh-132px)] overflow-y-scroll mt-4">
+                          <BorderedPallete title="Add New Item">
+                            <div className="absolute top-0 right-0">
+                              <GraphicButton
+                                text="Delete"
+                                buttonStyle="red"
+                                onClick={() =>
+                                  handleDeleteMenuItem({
+                                    ...newMenuItem,
+                                    operation: "add",
+                                  })
+                                }
+                                disabled={isMenuLoading}
                               />
-                            </BorderedPallete>
-                          </div>
-                        )
+                            </div>
+                            <MenuItemGrid
+                              item={newMenuItem}
+                              categories={categories}
+                              type="update"
+                              onChange={(e) => {
+                                setNewMenuItem(e);
+                                setCategory(e.category);
+                                handleAddMenuItem(e);
+                              }}
+                            />
+                          </BorderedPallete>
+                        </div>
+                      )
                       : editedMenuItem && (
-                          <div className="relative h-[calc(100vh-132px)] overflow-y-scroll mt-4">
-                            <BorderedPallete title="Edit Menu Item">
-                              <div className="absolute top-0 right-0">
-                                <GraphicButton
-                                  text="Delete"
-                                  buttonStyle="red"
-                                  onClick={() =>
-                                    handleDeleteMenuItem(editedMenuItem)
-                                  }
-                                />
-                              </div>
-                              <MenuItemGrid
-                                item={editedMenuItem}
-                                categories={categories}
-                                type="update"
-                                onChange={(e) => {
-                                  setEditedMenuItem(e);
-                                  setCategory(e.category);
-                                  handleUpdateMenuItem(e);
-                                }}
+                        <div className="relative h-[calc(100vh-132px)] overflow-y-scroll mt-4">
+                          <BorderedPallete title="Edit Menu Item">
+                            <div className="absolute top-0 right-0">
+                              <GraphicButton
+                                text="Delete"
+                                buttonStyle="red"
+                                onClick={() =>
+                                  handleDeleteMenuItem(editedMenuItem)
+                                }
                               />
-                            </BorderedPallete>
-                          </div>
-                        )}
+                            </div>
+                            <MenuItemGrid
+                              item={editedMenuItem}
+                              categories={categories}
+                              type="update"
+                              onChange={(e) => {
+                                setEditedMenuItem(e);
+                                setCategory(e.category);
+                                handleUpdateMenuItem(e);
+                              }}
+                            />
+                          </BorderedPallete>
+                        </div>
+                      )}
                   </div>
                   <div className="grid grid-cols-6 col-span-1"></div>
                 </div>

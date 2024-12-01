@@ -27,7 +27,7 @@ export default function CategoryCard({ categoryName, itemList, orderFlag }) {
       </div>
 
       {expand && (
-        <div className="py-4">
+        <div className="pb-4">
           {itemList.map((item) => (
             <ItemCard
               key={item.menuId}
