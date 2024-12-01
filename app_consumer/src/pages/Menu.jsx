@@ -69,11 +69,11 @@ export default function Menu() {
 
   return (
     <>
-      <div className="bg-orange-300 bg-cover bg-center pt-2 px-2 h-screen overflow-y-scroll">
-        <div className="text-black w-full flex items-center justify-center">
+      <div className="bg-orange-300 bg-cover bg-center h-screen overflow-y-hidden">
+        <div className="text-black w-full flex justify-center items-center">
           <div
-            className="rounded-b-lg bg-white p-2 mx-2 flex flex-col fixed top-0
-                            justify-center items-center shadow-md w-full max-w-2xl"
+            className="rounded-b-lg border bg-white p-2 flex flex-col
+                            items-center shadow-md w-full max-w-2xl"
           >
             <div className="w-full flex mb-2 text-sm h-10">
               <button
@@ -118,15 +118,19 @@ export default function Menu() {
         {isLoading ? (
           <Loader />
         ) : (
-          <div className="mt-28">
-            {Object.keys(groupedItems).map((category) => (
-              <CategoryCard
-                key={category}
-                categoryName={category}
-                itemList={groupedItems[category]}
-                orderFlag={foodItems.orderFlag}
-              />
-            ))}
+          <div className="overflow-hidden flex justify-center w-full pl-2">
+            <div className="pt-2 w-full max-w-2xl h-[calc(100vh-96px)] overflow-y-scroll"
+              style={{ scrollbarGutter: "stable" }}
+            >
+              {Object.keys(groupedItems).map((category) => (
+                <CategoryCard
+                  key={category}
+                  categoryName={category}
+                  itemList={groupedItems[category]}
+                  orderFlag={foodItems.orderFlag}
+                />
+              ))}
+            </div>
           </div>
         )}
       </div>

@@ -34,11 +34,11 @@ export default function Feedback() {
 
   return (
     <>
-      <div className="bg-gray-300 flex justify-center pt-2 px-2 h-screen overflow-y-scroll">
+      <div className="bg-orange-300 flex justify-center pt-2 px-2 h-screen overflow-y-scroll">
         <div className="text-black max-w-2xl w-full">
           <div className="text-black fixed left-1/2 -translate-x-1/2 max-w-2xl w-full">
             <div
-              className="rounded-lg bg-white p-2 mx-2 mb-2 flex flex-col
+              className="rounded-lg border bg-white p-2 mx-2 mb-2 flex flex-col
                             justify-center items-center shadow-md"
             >
               <div className="w-full flex text-sm">
