@@ -124,7 +124,7 @@ export default function Orders() {
                       {orderMap[order.itemStatus > 3 ? 3 : order.itemStatus < 1 ? 1 : order.itemStatus]}
                     </div>
                   </div>
-                  <div className="text-right font-semibold">
+                  <div className="text-right">
                     ${order.itemPrice?.toFixed(2) || "N/A"}
                   </div>
                 </div>
