@@ -72,12 +72,12 @@ export default function Menu() {
       <div className="bg-orange-300 bg-cover bg-center h-screen overflow-y-hidden">
         <div className="text-black rounded-lg w-full flex justify-center items-center">
           <div
-            className="rounded-b-lg border bg-white p-2 flex flex-col
+            className="rounded-b-lg border border-gray-300 border-t-0 bg-white p-2 flex flex-col
                             items-center shadow-md w-full max-w-2xl"
           >
             <div className="w-full flex mb-2 text-sm h-10">
               <button
-                className="mr-2 px-2 border border-gray-300 text-gray-500
+                className="mr-2 px-2 border text-gray-500
                     rounded-lg bg-white hover:bg-gray-300 transition ease-in-out"
                 onClick={goHome}
               >
