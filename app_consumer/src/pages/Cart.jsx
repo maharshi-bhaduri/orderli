@@ -64,7 +64,7 @@ export default function Cart() {
     <div className="bg-orange-300 bg-cover bg-center pt-2 px-2 h-screen">
       <div className="text-black w-full flex flex-col items-center justify-center">
         <div
-          className="rounded-b-lg bg-white p-2 mx-2 flex flex-col fixed top-0
+          className="rounded-b-lg bg-white border border-gray-300 border-t-0 p-2 mx-2 flex flex-col fixed top-0
                       justify-center items-center shadow-md w-full max-w-2xl"
         >
           <div className="w-full flex text-sm justify-between h-10">
@@ -78,7 +78,7 @@ export default function Cart() {
 
             {/* Slider to Toggle Between Cart and Orders */}
             <div className="flex items-center justify-center w-full h-full">
-              <div className="relative w-40 h-full bg-gray-100 border border-gray-300 rounded-lg flex items-center">
+              <div className="relative w-40 h-full bg-gray-100 shadow-inner rounded-lg flex items-center">
                 {/* Slider Button */}
                 <div
                   className={`absolute w-20 h-full py-2 bg-orange-200 bg-opacity-50 border border-orange-400 rounded-lg transition-transform transform ${view === "cart" ? "translate-x-0" : "translate-x-20"
