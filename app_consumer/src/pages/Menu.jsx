@@ -119,7 +119,7 @@ export default function Menu() {
           <Loader />
         ) : (
           <div className="overflow-hidden flex justify-center w-full px-2">
-            <div className="pt-2 pl-2 w-full max-w-2xl h-[calc(100vh-96px)] overflow-y-scroll"
+            <div className="pt-2 pl-2 w-full max-w-2xl h-[calc(100vh-100px)] overflow-y-scroll"
               style={{ scrollbarGutter: "stable" }}
             >
               {Object.keys(groupedItems).map((category) => (
