@@ -11,7 +11,10 @@ export default function ItemCard(props) {
   const addToCart = () => {
     dispatch({
       type: "ADD_ITEM",
-      payload: { menuId: props.menuId, item: props },
+      payload: {
+        menuId: props.menuId,
+        item: props,
+      },
     });
   };
   console.log('orderFlag', props.orderFlag)

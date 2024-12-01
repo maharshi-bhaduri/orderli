@@ -9,6 +9,7 @@ import Loader from "../components/Loader";
 export default function Home() {
   const navigate = useNavigate();
   const { partnerHandle } = useParams();
+  if (partnerHandle) localStorage.setItem("partnerHandle", partnerHandle);
 
   // Fetch menu data and partner details using React Query hooks
   const { data: menuData } = getMenu(partnerHandle);
@@ -57,7 +58,9 @@ export default function Home() {
               </h1>
               {/* Display cafe description */}
               <p className="text-center mb-4">
-                {partnerDetails.about || "Cafe description"}
+                {isLoading
+                  ? "Loading description..."
+                  : partnerDetails?.about || "Cafe description"}
               </p>
             </div>
             <div
@@ -92,12 +95,21 @@ export default function Home() {
               <div className="fixed bottom-10">
                 <div className="rounded-full bg-white/20 flex">
                   {socialMediaLinks.map((link, index) => (
-                    <a key={index} href={link.url} target="_blank" rel="noopener noreferrer">
+                    <a
+                      key={index}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <p
                         className="text-sm 
                           transition-all ease-in-out duration-300 p-2 flex items-center opacity-70 hover:opacity-100"
                       >
-                        <img src={link.image} alt="social icon" className="w-[35px] h-[35px]" />
+                        <img
+                          src={link.image}
+                          alt="social icon"
+                          className="w-[35px] h-[35px]"
+                        />
                       </p>
                     </a>
                   ))}
@@ -107,6 +119,6 @@ export default function Home() {
           </div>
         </>
       )}
-    </div>
+   </div>
   );
 }
