@@ -34,6 +34,20 @@ export default function ProviderTables() {
           >
             <span className="material-symbols-outlined text-sm">add</span>
           </GraphicButton>
+          <div className="flex items-center gap-4 ml-4 border rounded-md p-2">
+            <div className="flex items-center gap-2">
+              <span className="w-4 h-4 bg-green-300 rounded-full"></span>
+              <span className="text-sm">Available</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-4 h-4 bg-yellow-300 rounded-full"></span>
+              <span className="text-sm">Reserved</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-4 h-4 bg-red-300 rounded-full"></span>
+              <span className="text-sm">Occupied</span>
+            </div>
+          </div>
         </div>
         {isAddOpen && (
           <AddTableModal open={isAddOpen} onClose={() => setIsAddOpen(false)} />
