@@ -6,34 +6,55 @@ import { getAuth, onAuthStateChanged, onIdTokenChanged } from "firebase/auth";
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const [user, setUser] = useState(null);
-    const allowedPaths = ['/'];
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const allowedPaths = ["/"];
 
-    useEffect(() => {
-        const auth = getAuth();
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                localStorage.setItem('displayName', user.displayName);
-                setUser(user);
-                user.getIdToken().then(
-                    (token) => {
-                        Cookies.set('token', token)
-                    }
-                )
-            }
-            else {
-                if (!allowedPaths.includes(location.pathname)) {
-                    navigate('/login');
-                }
-            }
-        });
+  useEffect(() => {
+    const auth = getAuth();
 
-        return () => unsubscribe(); // Unsubscribe from the auth state changes when component unmounts
-    }, []);
+    // Listen for auth state changes
+    const unsubscribeAuthState = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+        storeUserToken(user);
+      } else {
+        if (!allowedPaths.includes(location.pathname)) {
+          navigate("/login");
+        }
+        setUser(null);
+        Cookies.remove("token");
+      }
+    });
 
-    return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;
+    // Listen for token refresh or changes
+    const unsubscribeTokenChange = onIdTokenChanged(auth, (user) => {
+      if (user) {
+        storeUserToken(user);
+      }
+    });
+
+    return () => {
+      unsubscribeAuthState(); // Cleanup auth state listener
+      unsubscribeTokenChange(); // Cleanup token change listener
+    };
+  }, []);
+
+  // Function to store token and user details
+  const storeUserToken = (user) => {
+    localStorage.setItem("displayName", user.displayName);
+    user
+      .getIdToken(true)
+      .then((token) => {
+        Cookies.set("token", token, { secure: true }); // Secure cookies for production
+      })
+      .catch((error) => {
+        console.error("Error fetching token:", error);
+      });
+  };
+
+  return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;
 };
 
 export { AuthContext, AuthProvider };
