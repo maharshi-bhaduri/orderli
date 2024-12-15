@@ -51,7 +51,7 @@ export async function postService(api, data, headers) {
     })
     .catch((error) => {
       // Handle error
-      if (error.response.status == 401) {
+      if (error.response?.status == 401) {
         getIdToken(true);
       }
       return error;
