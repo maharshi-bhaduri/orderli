@@ -1,7 +1,7 @@
 import { useState } from "react";
 import React from "react";
-import { ratingColors } from "../utils/OptionMap.js";
 import formatDate from "../utils/formatDate.js";
+import star from "../images/star.png";
 export default function FeedbackCard({
   rating,
   desc,
@@ -11,61 +11,73 @@ export default function FeedbackCard({
   phone,
 }) {
   const [expanded, setExpanded] = useState(false);
-  const toggleExpansion = function () {
-    setExpanded(!expanded);
-  };
-  const charLimit = 100,
-    lineLimit = 1;
-  let shortDesc =
-    desc.length > charLimit
-      ? desc.substring(0, charLimit)
-      : desc.split(/\r?\n|\r|\n/g).length > lineLimit
-      ? desc
-          .split(/\r?\n|\r|\n/g)
-          .slice(0, lineLimit)
-          .join("\n")
-      : desc;
-  const dynamicColorClass = ratingColors[rating];
-  console.log(createdAt);
+
+  const toggleExpansion = () => setExpanded(!expanded);
+
+  const charLimit = 150;
+  const shortDesc =
+    desc.length > charLimit ? desc.substring(0, charLimit) + "..." : desc;
+
+  // Extract the first letter of the name for the avatar
+  const initial = by.charAt(0).toUpperCase();
   const formattedDate = formatDate(createdAt);
 
+  const renderStars = (rating) => {
+    let stars = [];
+    for (let i = 0; i < rating; i++) {
+      stars.push(<img key={i} src={star} alt="" height={20} width={20} />);
+    }
+    return <div className="flex">{stars}</div>;
+  };
   return (
-    <div className="mx-auto mt-4 max-h-fit bg-gray-100 rounded-lg p-4 space-x-4">
-      <div className="flex flex-row items-center ">
-        <div
-          className={`flex justify-center items-center flex-shrink-0  h-10 w-10 rounded-lg ${dynamicColorClass}`}
-        >
-          <span className="text-lg font-semibold  text-white">{rating}</span>
+    <div className="mx-auto mt-4 bg-gray-100 rounded-lg p-4">
+      {/* Header section with avatar, name, and date */}
+      <div className="flex items-center justify-between">
+        <div className="flex">
+          {/* Circle avatar with initial */}
+          <div className="flex justify-center items-center h-10 w-10 rounded-full bg-blue-500">
+            <span className="text-lg font-semibold text-white">{initial}</span>
+          </div>
+          {/* Name and date */}
+          <div className="flex items-start">
+            <div className="flex flex-col ml-4">
+              <p className="text-gray-700 font-semibold text-sm">{by}</p>
+              <span className="text-gray-700 text-xs">{formattedDate}</span>
+            </div>
+          </div>
         </div>
-        <div className="flex ">
-          <div className="flex-grow ml-8 mr-2">
-            <p className="text-gray-700 font-semibold">{by}</p>
-          </div>
-          <div className="mr-2">
-            <h3>&#x2022;</h3>
-          </div>
-          <div className="flex-shrink-0">
-            <span className="text-gray-700">{formattedDate}</span>
-          </div>
+        {/* rating */}
+        <div className="ml-4">
+          <span>{renderStars(rating)}</span>
         </div>
       </div>
-      {!expanded && (
-        <div className="flex  pl-14">
-          <div className="text-gray-700">
-            {shortDesc}{" "}
-            {shortDesc !== desc && (
-              <div className="text-sm cursor-pointer" onClick={toggleExpansion}>
-                ... Read more
-              </div>
+
+      {/* Review section */}
+      <div className="mt-3 text-gray-700 pl-2">
+        {expanded ? (
+          <>
+            <p>{desc}</p>
+            <button
+              className="text-sm text-blue-500 hover:underline mt-2"
+              onClick={toggleExpansion}
+            >
+              See less
+            </button>
+          </>
+        ) : (
+          <>
+            <p>{shortDesc}</p>
+            {desc.length > charLimit && (
+              <button
+                className="text-sm text-blue-500 hover:underline mt-2"
+                onClick={toggleExpansion}
+              >
+                See more
+              </button>
             )}
-          </div>
-        </div>
-      )}
-      {expanded && (
-        <div className="flex pl-14">
-          <p className="text-gray-700">{desc}</p>
-        </div>
-      )}
+          </>
+        )}
+      </div>
     </div>
   );
 }
