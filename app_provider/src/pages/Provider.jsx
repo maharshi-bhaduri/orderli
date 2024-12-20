@@ -18,15 +18,12 @@ import ProviderTables from "./ProviderTables";
 import PartnerOrders from "./PartnerOrders";
 
 export default function Provider() {
-  const location = useLocation();
   const { partnerHandle } = useParams();
-  const partnerId = localStorage.getItem("partnerId");
 
   getProfile(partnerHandle);
   getMenu(partnerHandle);
   getFeedback(partnerHandle);
-  getTables(partnerId);
-
+  getTables(partnerHandle);
   return (
     <div className="flex h-screen overflow-hidden bg-gray-200">
       <Sidebar optionMap={optionMap} partnerHandle={partnerHandle} />

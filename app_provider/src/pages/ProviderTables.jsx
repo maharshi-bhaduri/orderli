@@ -6,6 +6,7 @@ import { getTables } from "../utils/queryService";
 import Modal from "../components/Modal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postService } from "../utils/APIService";
+import { useParams } from "react-router-dom";
 
 export default function ProviderTables() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,9 +19,8 @@ export default function ProviderTables() {
   });
 
   const queryClient = useQueryClient();
-  const partnerId = localStorage.getItem("partnerId");
-
-  const { data: tables, isLoading, isError } = getTables(partnerId);
+  const { partnerHandle } = useParams();
+  const { data: tables, isLoading, isError } = getTables(partnerHandle);
 
   // Mutation for add/edit table
   const { mutateAsync: saveTableData, isLoading: isSaving } = useMutation(
@@ -33,7 +33,7 @@ export default function ProviderTables() {
       ),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["tables", partnerId]);
+        queryClient.invalidateQueries(["tables", partnerHandle]);
         setIsModalOpen(false);
         setFormData({ noOfTables: "", seatingCapacity: "", status: "" });
       },
@@ -61,8 +61,7 @@ export default function ProviderTables() {
   };
 
   const handleSave = async () => {
-    const payload =
-      modalMode === "add" ? { ...formData, partnerId } : { ...formData };
+    const payload = { ...formData, partnerHandle };
     console.log(formData);
     await saveTableData(payload);
   };

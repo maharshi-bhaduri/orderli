@@ -55,6 +55,7 @@ export const getFeedback = (partnerHandle) => {
   );
 };
 
+/* changing the api of getTables to use partnerHandle
 export const getTables = (partnerId) =>
   useQuery(
     ["tables", partnerId],
@@ -72,3 +73,23 @@ export const getTables = (partnerId) =>
       refetchOnWindowFocus: false, // Optional: Prevent refetching on window focus
     }
   );
+
+  */
+export const getTables = function (partnerHandle) {
+  return useQuery(
+    ["tables", partnerHandle],
+    () =>
+      getService(import.meta.env.VITE_APP_GET_TABLES, { partnerHandle })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((err) => {
+          throw err;
+        }),
+    {
+      staleTime: 1000 * 60 * 5,
+      enabled: !!partnerHandle, // Only run if partnerId exists and refreshTables is true
+      refetchOnWindowFocus: false, // Optional: Prevent refetching on window focus
+    }
+  );
+};
