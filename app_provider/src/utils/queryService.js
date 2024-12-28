@@ -81,7 +81,7 @@ export const getTables = function (partnerHandle) {
     () =>
       getService(import.meta.env.VITE_APP_GET_TABLES, { partnerHandle })
         .then((response) => {
-          return response.data;
+          return response.data.data;
         })
         .catch((err) => {
           throw err;
