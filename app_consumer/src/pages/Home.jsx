@@ -9,6 +9,7 @@ import Loader from "../components/Loader";
 export default function Home() {
   const navigate = useNavigate();
   const { partnerHandle } = useParams();
+  console.log("partnerhandle", partnerHandle);
 
   // Fetch menu data and partner details using React Query hooks
   const { data: menuData } = getMenu(partnerHandle);

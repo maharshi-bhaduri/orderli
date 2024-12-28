@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import AddReviews from "./pages/AddReviews";
 import Home from "./pages/Home";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -21,14 +20,13 @@ export default function App() {
           <Routes>
             <Route path="/" element={<SnaqrHome />}></Route>
             <Route path="/:partnerHandle" element={<Home />}></Route>
-            <Route path="/:partnerHandle/reviews" element={<Feedback />}></Route>
+            <Route
+              path="/:partnerHandle/reviews"
+              element={<Feedback />}
+            ></Route>
             <Route path="/:partnerHandle/menu" element={<Menu />}></Route>
             <Route path="/:partnerHandle/cart" element={<Cart />}></Route>
             <Route path="/menubackup" element={<MenuBackup />}></Route>
-            <Route
-              path="/:partnerHandle/addReview"
-              element={<AddReviews />}
-            ></Route>
           </Routes>
         </div>
       </CartProvider>
