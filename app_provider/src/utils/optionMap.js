@@ -24,11 +24,11 @@ export const optionMap = [
     page: "orders",
     icon: "checklist",
   },
-  {
-    name: "Promotions",
-    page: "promotions",
-    icon: "celebration", //celebration, star
-  },
+  // {
+  //   name: "Promotions",
+  //   page: "promotions",
+  //   icon: "celebration", //celebration, star
+  // },
   {
     name: "Feedback",
     page: "feedback",
