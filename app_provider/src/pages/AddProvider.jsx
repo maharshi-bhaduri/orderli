@@ -13,7 +13,7 @@ export default function AddPartner() {
     partnerType: "cafe",
     about: "",
   });
-  const [alert, setAlert] = React.useState('');
+  const [alert, setAlert] = React.useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault(); // Prevent form submission
@@ -25,8 +25,8 @@ export default function AddPartner() {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: Cookies.get('token'),
-            uid: Cookies.get('uid')
+            Authorization: Cookies.get("token"),
+            uid: Cookies.get("uid"),
           },
         }
       )
@@ -37,7 +37,7 @@ export default function AddPartner() {
       .catch((error) => {
         // Handle error
         console.error(error);
-        setAlert(error.response.data.operationStatus.message)
+        setAlert(error.response.data.operationStatus.message);
       });
   };
 
@@ -74,9 +74,9 @@ export default function AddPartner() {
             onChange={handleChange}
           />
           <TextInput
-            labelName="This will be your handle at orderlee."
+            labelName="This will be your handle at snaqr."
             name="partnerHandle"
-            prependText="orderlee.in/"
+            prependText="snaqr.com/"
             inputHint="yourawesomeplace"
             value={partnerFormData.partnerHandle}
             multiLine={false}
