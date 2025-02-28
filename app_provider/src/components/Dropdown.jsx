@@ -32,8 +32,7 @@ export default function Dropdown(props) {
         )}
       </div>
       {showOptions && (
-        <div className="absolute p-2 m-1 bg-white border border-gray-300 w-50 rounded"
-        >
+        <div className="absolute p-2 m-1 bg-white border border-gray-300 w-50 rounded">
           {props.options.map((option, index) => (
             <div
               key={index}
@@ -41,10 +40,11 @@ export default function Dropdown(props) {
                 props.handleSelectChange(option);
                 setShowOptions(false);
               }}
-              className={`px-4 py-2 cursor-pointer ${option === props.selectedOption
-                ? "bg-orange-300 text-white rounded "
-                : "hover:bg-orange-100 rounded"
-                }`}
+              className={`px-4 py-2 cursor-pointer ${
+                option === props.selectedOption
+                  ? "bg-orange-300 text-white rounded "
+                  : "hover:bg-orange-100 rounded"
+              }`}
             >
               {option}
             </div>

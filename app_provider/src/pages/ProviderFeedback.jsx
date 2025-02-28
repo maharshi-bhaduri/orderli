@@ -176,7 +176,7 @@ export default function ProviderFeedback() {
 
       <div className="rounded-lg bg-white w-full transition ease-in-out flex flex-col items-center">
         {/* Rating dropdown */}
-        <div className="w-full mb-4">
+        <div className="w-full mb-4 z-50">
           <Dropdown
             selectedOption={selectedOption}
             handleSelectChange={(value) => setSelectedOption(value)}
