@@ -4,6 +4,7 @@ import { getFeedback } from "../utils/queryService";
 
 import FeedbackCard from "../components/FeedbackCard";
 import SearchService from "../utils/SearchService";
+// import Modal from "../../../src/components/Modal";
 import Modal from "../components/Modal";
 import { useMutation } from "@tanstack/react-query";
 import Loader from "../components/Loader";
@@ -12,51 +13,10 @@ export default function Feedback() {
   const navigate = useNavigate();
   const { partnerHandle } = useParams();
   const { data: feedback, isLoading, isError } = getFeedback(partnerHandle);
-  const [searchText, setSearchText] = React.useState("");
+  const [searchText, setSearchText] = useState("");
+  const [disableSubmit, setDisableSubmit] = useState(true);
+
   let filteredItems = [];
-
-  const initialReviewState = {
-    partnerHandle,
-    consumerName: "",
-    consumerEmail: "",
-    consumerPhone: "",
-    rating: "",
-    feedbackComments: "",
-  };
-
-  const initialErrorState = useState({
-    consumerName: "",
-    consumerEmail: "",
-    consumerPhone: "",
-    rating: "",
-    feedbackComments: "",
-  });
-
-  const [review, setReview] = useState(initialReviewState);
-  const [errors, setErrors] = useState(initialErrorState);
-  const handleReviewChange = (e) => {
-    const { name, value } = e.target;
-    setReview((oldReview) => ({ ...oldReview, [name]: value }));
-
-    let error = "";
-    if (name === "consumerName" && value.trim() === "") {
-      error = "Name is required";
-    } else if (
-      name === "consumerEmail" &&
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-    ) {
-      error = "Enter a valid email address.";
-    } else if (name === "consumerPhone" && !/^\d{10}$/.test(value)) {
-      error = "Phone number must be 10 digits.";
-    } else if (name === "rating" && value === "") {
-      error = "Please select a rating.";
-    } else if (name === "feedbackComments" && value.trim().length < 10) {
-      error = "Comments must be at least 10 characters long.";
-    }
-    setErrors((prevErrors) => {
-      return { ...prevErrors, [name]: error };
-    });
-  };
 
   const { mutate: postReview } = useMutation(
     (review) =>
@@ -73,35 +33,73 @@ export default function Feedback() {
     }
   );
 
-  const handleReviewSubmit = async function () {
-    const newErrors = {};
-    if (review.consumerName.trim() === "")
-      newErrors.consumerName = "Name is required.";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(review.consumerEmail))
-      newErrors.consumerEmail = "Enter a valid email address.";
-    if (!/^\d{10}$/.test(review.consumerPhone))
-      newErrors.consumerPhone = "Phone number must be 10 digits.";
-    if (review.rating === "") newErrors.rating = "Please select a rating.";
-    if (review.feedbackComments.trim().length < 10)
-      newErrors.feedbackComments =
-        "Comments must be at least 10 characters long.";
+  const initialReviewState = {
+    partnerHandle,
+    consumerName: "",
+    consumerEmail: "",
+    consumerPhone: "",
+    rating: "",
+    feedbackComments: "",
+  };
 
-    setErrors(newErrors);
-    showAlert(newErrors);
-    if (Object.keys(newErrors).length === 0) {
+  const initialErrorState = {
+    consumerName: "",
+    consumerEmail: "",
+    consumerPhone: "",
+    rating: "",
+    feedbackComments: "",
+  };
+
+  const [review, setReview] = useState(initialReviewState);
+  const [errors, setErrors] = useState(initialErrorState);
+  const handleReviewChange = (e) => {
+    const { name, value } = e.target;
+    setReview((oldReview) => ({ ...oldReview, [name]: value }));
+  };
+
+  const showErrorsWithReviewChanges = (e) => {
+    let { name, value } = e.target;
+    let error = "";
+    if (name === "consumerName" && value.trim() === "") {
+      error = "Name is required";
+    } else if (
+      name === "consumerEmail" &&
+      (value.trim() === "" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+    ) {
+      error = "Enter a valid email address.";
+    } else if (name === "consumerPhone" && !/^\d{10}$/.test(value)) {
+      error = "Phone number must be 10 digits.";
+    } else if (name === "rating" && value === "") {
+      error = "Please select a rating.";
+    } else if (name === "feedbackComments" && value.trim().length < 10) {
+      error = "Comments must be at least 10 characters long.";
+    }
+    setErrors((prevErrors) => {
+      return { ...prevErrors, [name]: error };
+    });
+  };
+
+  useEffect(() => {
+    console.log("errors object from use effect", errors); // Log the updated state here
+    const hasErrors = Object.values(errors).some((val) => val !== "");
+
+    const isFormIncomplete = Object.values(review).some((val) => val === "");
+    console.log("has errors", hasErrors);
+    console.log("isform incomplete", isFormIncomplete);
+    setDisableSubmit(hasErrors || isFormIncomplete);
+  }, [errors, review]); //
+
+  const handleReviewSubmit = async function (e) {
+    e.preventDefault();
+
+    if (!disableSubmit) {
+      console.log("posting review");
       postReview(review);
-      setReview([]);
+      setReview(initialReviewState); // Reset the form
+      setIsOpen(false);
     }
   };
 
-  const showAlert = (errorObject) => {
-    //takes in a object parameters and prints it
-    let errorString = "";
-    Object.entries(errorObject).forEach(([key, value]) => {
-      errorString = errorString + `${key}:${value}` + "\n";
-    });
-    window.alert(errorString);
-  };
   const handleReviewClose = () => {
     setIsOpen(false);
     setReview(initialReviewState);
@@ -166,6 +164,7 @@ export default function Feedback() {
               open={isOpen}
               onClose={handleReviewClose}
               onSubmit={handleReviewSubmit}
+              disableSubmit={disableSubmit}
             >
               <div className="mb-4">
                 <label
@@ -181,6 +180,7 @@ export default function Feedback() {
                   value={review.consumerName}
                   className="mt-1 p-2 w-full border rounded-md"
                   onChange={handleReviewChange}
+                  onBlur={showErrorsWithReviewChanges}
                 />
                 {errors.consumerName && (
                   <p className="text-red-500 text-sm">{errors.consumerName}</p>
@@ -200,6 +200,7 @@ export default function Feedback() {
                   value={review.consumerEmail}
                   className="mt-1 p-2 w-full border rounded-md"
                   onChange={handleReviewChange}
+                  onBlur={showErrorsWithReviewChanges}
                 />
                 {errors.consumerEmail && (
                   <p className="text-red-500 text-sm">{errors.consumerEmail}</p>
@@ -219,6 +220,7 @@ export default function Feedback() {
                   value={review.consumerPhone}
                   className="mt-1 p-2 w-full border rounded-md"
                   onChange={handleReviewChange}
+                  onBlur={showErrorsWithReviewChanges}
                 />
                 {errors.consumerPhone && (
                   <p className="text-red-500 text-sm">{errors.consumerPhone}</p>
@@ -237,6 +239,7 @@ export default function Feedback() {
                   className="mt-1 p-2 w-full border rounded-md"
                   value={review.rating}
                   onChange={handleReviewChange}
+                  onBlur={showErrorsWithReviewChanges}
                 >
                   <option value="">Choose</option>
                   <option value="5">5 Stars</option>
@@ -263,6 +266,7 @@ export default function Feedback() {
                   value={review.feedbackComments}
                   className="mt-1 p-2 w-full border rounded-md"
                   onChange={handleReviewChange}
+                  onBlur={showErrorsWithReviewChanges}
                 ></textarea>
                 {errors.feedbackComments && (
                   <p className="text-red-500 text-sm">

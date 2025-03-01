@@ -1,15 +1,20 @@
 import React, { useEffect } from "react";
-
-export default function Modal({ open, onClose, children, onSubmit }) {
+import GraphicButton from "./GraphicButton";
+export default function Modal({
+  open,
+  onClose,
+  children,
+  onSubmit,
+  disableSubmit,
+}) {
   // Function to handle modal submit
-  const submitModal = () => {
+  const submitModal = async (e) => {
     if (onSubmit) {
-      onSubmit(); // Call the placeholder function passed as a prop
+      await onSubmit(e); // Call the placeholder function passed as a prop
     }
     onClose();
   };
-
-  //close modal if esc key is pressed
+  //console.log("disable submit value from modal is", disableSubmit);
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
@@ -54,20 +59,14 @@ export default function Modal({ open, onClose, children, onSubmit }) {
 
         {/* Footer with Close and Submit buttons */}
         <div className="flex justify-between ">
-          <button
-            type="button"
-            className="px-4 py-2 bg-red-500 text-white hover:bg-red-600"
-            onClick={onClose}
-          >
-            Close
-          </button>
-          <button
-            type="button"
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          <GraphicButton text="Close" buttonStyle="default" onClick={onClose} />
+
+          <GraphicButton
+            text="Submit"
+            buttonStyle="default"
             onClick={submitModal}
-          >
-            Submit
-          </button>
+            disabled={disableSubmit}
+          />
         </div>
       </div>
     </div>
