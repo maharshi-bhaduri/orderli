@@ -1,4 +1,5 @@
 import GraphicButton from "../components/GraphicButton";
+import QRCode from "react-qr-code";
 import { useEffect, useState } from "react";
 import Loader from "../components/Loader";
 import TableSquare from "../components/TableSquare";
@@ -17,7 +18,7 @@ export default function ProviderTables() {
     seatingCapacity: "",
     status: "",
   });
-
+  let url = "";
   const queryClient = useQueryClient();
   const { partnerHandle } = useParams();
   const { data: tables, isLoading, isError } = getTables(partnerHandle);
@@ -48,6 +49,7 @@ export default function ProviderTables() {
   };
 
   const handleEditClick = (table) => {
+    url = `www.snaqr.com/~${table.suffix}`;
     setModalMode("edit");
     setFormData({ ...table });
     console.log(formData);
@@ -194,6 +196,16 @@ export default function ProviderTables() {
                   <option value="Reserved">Reserved</option>
                   <option value="Occupied">Occupied</option>
                 </select>
+                <div className="mt-4 flex justify-center">
+                  <div className="w-36 h-36">
+                    <QRCode
+                      size={256}
+                      style={{ height: "100%", width: "100%" }}
+                      value={url}
+                      viewBox={`0 0 256 256`}
+                    />
+                  </div>
+                </div>
               </div>
             )}
           </form>

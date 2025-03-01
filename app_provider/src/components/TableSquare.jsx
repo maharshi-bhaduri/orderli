@@ -1,6 +1,5 @@
 export default function TableSquare({ table, onClick, startTableIndex }) {
   const { tableId, seatingCapacity, status, suffix } = table;
-  const url = `www.snaqr.com/~${suffix}`;
 
   // Determine color based on status
   const bgColor =
