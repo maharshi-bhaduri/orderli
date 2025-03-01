@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import GraphicButton from "./GraphicButton";
+
 export default function Modal({
   open,
   onClose,
@@ -59,14 +59,21 @@ export default function Modal({
 
         {/* Footer with Close and Submit buttons */}
         <div className="flex justify-between ">
-          <GraphicButton text="Close" buttonStyle="default" onClick={onClose} />
-
-          <GraphicButton
-            text="Submit"
-            buttonStyle="default"
+          <button
+            type="button"
+            className="px-4 py-2 bg-red-500 text-white hover:bg-red-600"
+            onClick={onClose}
+          >
+            Close
+          </button>
+          <button
+            type="button"
+            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
             onClick={submitModal}
             disabled={disableSubmit}
-          />
+          >
+            Submit
+          </button>
         </div>
       </div>
     </div>
