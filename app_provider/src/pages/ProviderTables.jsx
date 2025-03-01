@@ -112,6 +112,7 @@ export default function ProviderTables() {
                     key={table.tableId}
                     table={table}
                     onClick={() => handleEditClick(table)}
+                    startTableIndex={tables[0]?.tableId}
                   />
                 ))}
             </div>
