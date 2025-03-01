@@ -18,7 +18,8 @@ export default function ProviderTables() {
     seatingCapacity: "",
     status: "",
   });
-  let url = "";
+  const [qrUrl, setQrUrl] = useState("");
+
   const queryClient = useQueryClient();
   const { partnerHandle } = useParams();
   const { data: tables, isLoading, isError } = getTables(partnerHandle);
@@ -49,7 +50,9 @@ export default function ProviderTables() {
   };
 
   const handleEditClick = (table) => {
-    url = `www.snaqr.com/~${table.suffix}`;
+    const generatedUrl = `www.snaqr.com/~${table.suffix}`;
+    setQrUrl(generatedUrl); // Store the generated URL in state
+
     setModalMode("edit");
     setFormData({ ...table });
     console.log(formData);
@@ -196,12 +199,13 @@ export default function ProviderTables() {
                   <option value="Reserved">Reserved</option>
                   <option value="Occupied">Occupied</option>
                 </select>
+
                 <div className="mt-4 flex justify-center">
                   <div className="w-36 h-36">
                     <QRCode
                       size={256}
                       style={{ height: "100%", width: "100%" }}
-                      value={url}
+                      value={qrUrl}
                       viewBox={`0 0 256 256`}
                     />
                   </div>
