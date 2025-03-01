@@ -32,13 +32,11 @@ export default function TableSquare({ table, onClick, startTableIndex }) {
           <span className="material-symbols-outlined text-sm">group</span>
           <span className="pl-2 text-sm">{seatingCapacity}</span>
         </div>
-      </div>
-
-      {/* URL at the bottom */}
-      <div className="absolute bottom-1 left-1/2 -translate-x-1/2 text-black text-xs px-2 py-1 ">
-        <a href={`https://${url}`} target="_blank" rel="noopener noreferrer">
-          {url}
-        </a>
+        <div>
+          <span className={`text-xs ${textColor} font-semibold`}>
+            Id {suffix}
+          </span>
+        </div>
       </div>
     </div>
   );
