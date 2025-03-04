@@ -97,7 +97,7 @@ export default function PartnerOrders() {
   }, [partnerId]);
 
   const toggleOrderStatus = async (orderId, currentStatus) => {
-    const newStatus = currentStatus === 1 ? 0 : 1; // Toggle status
+    const newStatus = currentStatus === 1 ? 2 : 1; // Toggle status
 
     updateOrder({ orderId, newStatus });
   };
