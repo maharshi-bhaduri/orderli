@@ -9,7 +9,6 @@ export default function Modal({
 }) {
   // Function to handle modal submit
   const submitModal = async (e) => {
-    console.log("evet object in modal dialog", e);
     if (onSubmit) {
       await onSubmit(e); // Call the placeholder function passed as a prop
     }
