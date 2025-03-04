@@ -80,7 +80,7 @@ export default function Feedback() {
   };
 
   useEffect(() => {
-    console.log("errors object from use effect", errors); // Log the updated state here
+    //console.log("errors object from use effect", errors); // Log the updated state here
     const hasErrors = Object.values(errors).some((val) => val !== "");
 
     const isFormIncomplete = Object.values(review).some((val) => val === "");
@@ -89,9 +89,8 @@ export default function Feedback() {
     setDisableSubmit(hasErrors || isFormIncomplete);
   }, [errors, review]); //
 
-  const handleReviewSubmit = async function (e) {
+  const handleReviewSubmit = function (e) {
     e.preventDefault();
-
     if (!disableSubmit) {
       console.log("posting review");
       postReview(review);
