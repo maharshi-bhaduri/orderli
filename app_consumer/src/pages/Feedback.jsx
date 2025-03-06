@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getFeedback } from "../utils/queryService";
+import Rating from "../components/Rating";
 
 import FeedbackCard from "../components/FeedbackCard";
 import SearchService from "../utils/SearchService";
@@ -71,19 +72,21 @@ export default function Feedback() {
       error = "Phone number must be 10 digits.";
     } else if (name === "rating" && value === "") {
       error = "Please select a rating.";
-    } else if (name === "feedbackComments" && value.trim().length < 10) {
-      error = "Comments must be at least 10 characters long.";
     }
+    // else if (name === "feedbackComments" && value.trim().length < 10) {
+    //   error = "Comments must be at least 10 characters long.";
+    // }
     setErrors((prevErrors) => {
       return { ...prevErrors, [name]: error };
     });
   };
 
   useEffect(() => {
-    //console.log("errors object from use effect", errors); // Log the updated state here
     const hasErrors = Object.values(errors).some((val) => val !== "");
 
-    const isFormIncomplete = Object.values(review).some((val) => val === "");
+    const isFormIncomplete = Object.keys(review)
+      .filter((key) => key !== "feedbackComments")
+      .some((key) => review[key] === "");
     console.log("has errors", hasErrors);
     console.log("isform incomplete", isFormIncomplete);
     setDisableSubmit(hasErrors || isFormIncomplete);
@@ -95,12 +98,14 @@ export default function Feedback() {
       console.log("posting review");
       postReview(review);
       setReview(initialReviewState); // Reset the form
+
       setIsOpen(false);
     }
   };
 
   const handleReviewClose = () => {
     setIsOpen(false);
+
     setReview(initialReviewState);
     setErrors(initialErrorState);
   };
@@ -138,6 +143,7 @@ export default function Feedback() {
                 >
                   Home
                 </button>
+
                 <input
                   type="text"
                   value={searchText}
@@ -225,7 +231,7 @@ export default function Feedback() {
                   <p className="text-red-500 text-sm">{errors.consumerPhone}</p>
                 )}
               </div>
-              <div className="mb-4">
+              {/* <div className="mb-4">
                 <label
                   htmlFor="rating"
                   className="block text-sm font-medium text-gray-700"
@@ -250,7 +256,17 @@ export default function Feedback() {
                 {errors.rating && (
                   <p className="text-red-500 text-sm">{errors.rating}</p>
                 )}
-              </div>
+              </div> */}
+              <Rating
+                value={review.rating}
+                onChange={(rating) =>
+                  setReview((oldReview) => ({
+                    ...oldReview,
+                    rating: rating.toString(),
+                  }))
+                }
+                onBlur={showErrorsWithReviewChanges}
+              ></Rating>
               <div className="mb-4">
                 <label
                   htmlFor="comments"
@@ -280,8 +296,12 @@ export default function Feedback() {
           <div className="mt-16 rounded-lg bg-white p-4 items-center shadow-md">
             {isLoading ? (
               <Loader />
+            ) : filteredItems.length === 0 ? (
+              <div className="flex items-center justify-center">
+                There are no reviews
+              </div>
             ) : (
-              filteredItems &&
+              filteredItems.length > 0 &&
               filteredItems.map((feedbackitem, index) => (
                 <div key={feedbackitem.feedbackId} className="w-full">
                   <FeedbackCard
