@@ -59,12 +59,11 @@ export default function Modal({
 
         {/* Footer with Close and Submit buttons */}
         <div className="flex justify-between ">
-          <GraphicButton text="Close" buttonStyle="default" onClick={onClose} />
-
+          <GraphicButton text="Close" buttonStyle="red" onClick={onClose} />
           <GraphicButton
             text="Submit"
-            buttonStyle="default"
-            onClick={submitModal}
+            buttonStyle="bluefill"
+            onClick={(e) => submitModal(e)}
             disabled={disableSubmit}
           />
         </div>

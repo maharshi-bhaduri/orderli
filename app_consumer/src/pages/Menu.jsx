@@ -1,6 +1,6 @@
 import React from "react";
 import { getMenu } from "../utils/queryService";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import TabGroup from "../components/TabGroup";
 import { tabMap } from "../utils/OptionMap.js";
 import CategoryCard from "../components/CategoryCard";
@@ -10,6 +10,8 @@ import { useCart } from "../utils/CartContext.jsx";
 
 export default function Menu() {
   let { partnerHandle } = useParams();
+  const location = useLocation();
+  const currency = location.state.currency || "INR";
   const navigate = useNavigate();
   let filteredItems = [];
   const groupedItems = {};
@@ -47,11 +49,12 @@ export default function Menu() {
   if (!isLoading) {
     filteredItems = Array.isArray(foodItems.menu)
       ? foodItems.menu.filter((item) => {
-        if (consumerChoice.all) return true;
-        if (consumerChoice.veg) return item.dietCategory === 2;
-        if (consumerChoice.nonveg) return item.dietCategory === 1 || item.dietCategory === 3;
-        return false;
-      })
+          if (consumerChoice.all) return true;
+          if (consumerChoice.veg) return item.dietCategory === 2;
+          if (consumerChoice.nonveg)
+            return item.dietCategory === 1 || item.dietCategory === 3;
+          return false;
+        })
       : [];
     filteredItems = SearchService(consumerChoice.searchText, filteredItems, [
       "itemName",
@@ -119,9 +122,11 @@ export default function Menu() {
           <Loader />
         ) : (
           <div className="overflow-hidden flex justify-center w-full px-2">
-            <div className="pt-2 pl-2 w-full max-w-2xl h-[calc(100vh-100px)] overflow-y-scroll"
+            <div
+              className="pt-2 pl-2 w-full max-w-2xl h-[calc(100vh-100px)] overflow-y-scroll"
               style={{ scrollbarGutter: "stable" }}
             >
+              <div>The currency for the menu items is {currency}</div>
               {Object.keys(groupedItems).map((category) => (
                 <CategoryCard
                   key={category}

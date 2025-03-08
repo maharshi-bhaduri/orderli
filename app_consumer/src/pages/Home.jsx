@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getMenu, getPartnerDetails } from "../utils/queryService";
+import { getMenu, getPartnerDetails, getFeedback } from "../utils/queryService";
 import bg from "../images/cafe_bg.jpg";
 import instagramIcon from "../images/instagram.png";
 import facebookIcon from "../images/facebook.png";
@@ -14,13 +14,17 @@ export default function Home() {
   // Fetch menu data and partner details using React Query hooks
   const { data: menuData } = getMenu(partnerHandle);
   const { data: apiResponse, isLoading } = getPartnerDetails(partnerHandle);
+  const { data: feedback } = getFeedback(partnerHandle);
 
   // Destructure data from the API response
   const partnerDetails = apiResponse?.partnerDetails || {};
   const tableDetails = apiResponse?.tableDetails || {};
 
   function goToMenu() {
-    navigate(`/${partnerHandle}/menu`);
+    //console.log("partnerdetails currency", partnerDetails.currency);
+    navigate(`/${partnerHandle}/menu`, {
+      state: { currency: partnerDetails.currency },
+    });
   }
 
   function goToReviews() {
