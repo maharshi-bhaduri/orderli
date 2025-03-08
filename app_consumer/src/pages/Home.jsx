@@ -21,7 +21,7 @@ export default function Home() {
   const tableDetails = apiResponse?.tableDetails || {};
 
   function goToMenu() {
-    console.log("partnerdetails currency", partnerDetails.currency);
+    //console.log("partnerdetails currency", partnerDetails.currency);
     navigate(`/${partnerHandle}/menu`, {
       state: { currency: partnerDetails.currency },
     });
