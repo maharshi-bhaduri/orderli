@@ -151,55 +151,36 @@ export default function ProviderTables() {
                   onChange={handleFormChange}
                   className="mt-1 p-2 w-full border rounded-md"
                 />
+                <div className="mb-4">
+                  <label
+                    htmlFor="seatingCapacity"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Seat Capacity
+                  </label>
+                  <input
+                    type="number"
+                    id="seatingCapacity"
+                    name="seatingCapacity"
+                    value={formData.seatingCapacity}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value, 10);
+                      if (!isNaN(value) && value > 0 && value <= 16) {
+                        handleFormChange(e);
+                      } else if (value > 16) {
+                        alert(`Seating capacity cannot exceed 16`);
+                      }
+                    }}
+                    min="1"
+                    max="16"
+                    className="mt-1 p-2 w-full border rounded-md"
+                  />
+                </div>
               </div>
             )}
 
-            <div className="mb-4">
-              <label
-                htmlFor="seatingCapacity"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Seat Capacity
-              </label>
-              <input
-                type="number"
-                id="seatingCapacity"
-                name="seatingCapacity"
-                value={formData.seatingCapacity}
-                onChange={(e) => {
-                  const value = parseInt(e.target.value, 10);
-                  if (!isNaN(value) && value > 0 && value <= 16) {
-                    handleFormChange(e);
-                  } else if (value > 16) {
-                    alert(`Seating capacity cannot exceed 16`);
-                  }
-                }}
-                min="1"
-                max="16"
-                className="mt-1 p-2 w-full border rounded-md"
-              />
-            </div>
-
             {modalMode === "edit" && (
-              <div className="mb-4">
-                <label
-                  htmlFor="status"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Status
-                </label>
-                <select
-                  id="status"
-                  name="status"
-                  value={formData.status}
-                  onChange={handleFormChange}
-                  className="mt-1 p-2 w-full border rounded-md"
-                >
-                  <option value="Available">Available</option>
-                  <option value="Reserved">Reserved</option>
-                  <option value="Occupied">Occupied</option>
-                </select>
-
+              <div className="mb-4 flex justify-evenly">
                 <div className="mt-4 flex justify-center">
                   <div className="w-36 h-36">
                     <QRCode
@@ -208,6 +189,52 @@ export default function ProviderTables() {
                       value={qrUrl}
                       viewBox={`0 0 256 256`}
                     />
+                  </div>
+                </div>
+                <div className="mx-2">
+                  <div className="mb-4">
+                    <label
+                      htmlFor="seatingCapacity"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Seat Capacity
+                    </label>
+                    <input
+                      type="number"
+                      id="seatingCapacity"
+                      name="seatingCapacity"
+                      value={formData.seatingCapacity}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value, 10);
+                        if (!isNaN(value) && value > 0 && value <= 16) {
+                          handleFormChange(e);
+                        } else if (value > 16) {
+                          alert(`Seating capacity cannot exceed 16`);
+                        }
+                      }}
+                      min="1"
+                      max="16"
+                      className="mt-1 p-2 w-full border rounded-md"
+                    />
+                  </div>
+                  <label
+                    htmlFor="status"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Status
+                  </label>
+                  <div>
+                    <select
+                      id="status"
+                      name="status"
+                      value={formData.status}
+                      onChange={handleFormChange}
+                      className="mt-1 p-2 w-full border rounded-md"
+                    >
+                      <option value="Available">Available</option>
+                      <option value="Reserved">Reserved</option>
+                      <option value="Occupied">Occupied</option>
+                    </select>
                   </div>
                 </div>
               </div>
