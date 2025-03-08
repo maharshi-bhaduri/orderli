@@ -11,7 +11,10 @@ import { useCart } from "../utils/CartContext.jsx";
 export default function Menu() {
   let { partnerHandle } = useParams();
   const location = useLocation();
-  const currency = location.state.currency || "INR";
+  const currency = location.state?.currency || localStorage.getItem("currency");
+  if (currency) {
+    localStorage.setItem("currency", currency);
+  }
   const navigate = useNavigate();
   let filteredItems = [];
   const groupedItems = {};
