@@ -8,7 +8,7 @@ export const getMenu = (partnerHandle) =>
       getService(import.meta.env.VITE_APP_GET_MENU, {
         partnerHandle,
       }).then((response) => {
-        return response.data.data
+        return response.data.data;
       }),
     {
       staleTime: 1000 * 60 * 5,
@@ -32,22 +32,20 @@ export const getPartnerDetails = (partnerHandle) =>
 
           // Extract social links for icons
           const socialLinks = {
-            facebook:
-              partnerDetails.social1.includes("facebook")
-                ? partnerDetails.social1
-                : partnerDetails.social2.includes("facebook")
-                  ? partnerDetails.social2
-                  : partnerDetails.social3.includes("facebook")
-                    ? partnerDetails.social3
-                    : null,
-            instagram:
-              partnerDetails.social1.includes("instagram")
-                ? partnerDetails.social1
-                : partnerDetails.social2.includes("instagram")
-                  ? partnerDetails.social2
-                  : partnerDetails.social3.includes("instagram")
-                    ? partnerDetails.social3
-                    : null,
+            facebook: partnerDetails.social1.includes("facebook")
+              ? partnerDetails.social1
+              : partnerDetails.social2.includes("facebook")
+              ? partnerDetails.social2
+              : partnerDetails.social3.includes("facebook")
+              ? partnerDetails.social3
+              : null,
+            instagram: partnerDetails.social1.includes("instagram")
+              ? partnerDetails.social1
+              : partnerDetails.social2.includes("instagram")
+              ? partnerDetails.social2
+              : partnerDetails.social3.includes("instagram")
+              ? partnerDetails.social3
+              : null,
           };
 
           // Return the structured data
@@ -56,9 +54,10 @@ export const getPartnerDetails = (partnerHandle) =>
               id: partnerDetails.partnerId,
               name: partnerDetails.partnerName,
               about: partnerDetails.about,
-              socialLinks
+              socialLinks,
+              currency: partnerDetails.currency,
             },
-            tableDetails
+            tableDetails,
           };
         })
         .catch((err) => {

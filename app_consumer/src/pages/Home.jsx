@@ -21,7 +21,10 @@ export default function Home() {
   const tableDetails = apiResponse?.tableDetails || {};
 
   function goToMenu() {
-    navigate(`/${partnerHandle}/menu`);
+    console.log("partnerdetails currency", partnerDetails.currency);
+    navigate(`/${partnerHandle}/menu`, {
+      state: { currency: partnerDetails.currency },
+    });
   }
 
   function goToReviews() {

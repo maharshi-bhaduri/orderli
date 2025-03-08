@@ -17,7 +17,7 @@ export default function ItemCard(props) {
       },
     });
   };
-  console.log('orderFlag', props.orderFlag)
+  //console.log("orderFlag", props.orderFlag);
 
   const removeFromCart = () => {
     dispatch({ type: "REMOVE_ITEM", payload: { menuId: props.menuId } });
@@ -40,10 +40,9 @@ export default function ItemCard(props) {
           </div>
           <div className="flex flex-col justify-start items-center">
             <p className="text-gray-800 font-semibold text-sm">
-              ${props.price.toFixed(2)}
+              {props.price.toFixed(2)}
             </p>
-            {
-              props.orderFlag &&
+            {props.orderFlag && (
               <div className="w-16">
                 {quantity > 0 ? (
                   <div className="flex items-center mt-2">
@@ -72,7 +71,7 @@ export default function ItemCard(props) {
                   </button>
                 )}
               </div>
-            }
+            )}
           </div>
         </div>
       </div>
