@@ -87,8 +87,8 @@ export default function Feedback() {
     const isFormIncomplete = Object.keys(review)
       .filter((key) => key !== "feedbackComments")
       .some((key) => review[key] === "");
-    console.log("has errors", hasErrors);
-    console.log("isform incomplete", isFormIncomplete);
+    // console.log("has errors", hasErrors);
+    // console.log("isform incomplete", isFormIncomplete);
     setDisableSubmit(hasErrors || isFormIncomplete);
   }, [errors, review]); //
 
