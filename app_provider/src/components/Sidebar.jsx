@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import SidebarButton from "./SidebarButton";
 import snaqrBrandBold from "../images/snaqr_brand_b.png";
 import { useQueryClient } from "@tanstack/react-query";
-
+import Logout from "./Logout";
 export default function Sidebar(props) {
   const queryClient = useQueryClient();
 
@@ -39,7 +39,9 @@ export default function Sidebar(props) {
           </NavLink>
         ))}
       </div>
-      <div className="flex-grow mx-2 p-2 rounded-lg bg-white shadow-md"></div>
+      <div className="flex-grow mx-2 p-2 rounded-lg bg-white shadow-md">
+        <Logout />
+      </div>
     </div>
   );
 }

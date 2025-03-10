@@ -10,6 +10,7 @@ const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const allowedPaths = ["/"];
+  const [isLoggedOut, setIsLoggedOut] = useState(false); // Add logout flag
 
   useEffect(() => {
     const auth = getAuth();
@@ -17,11 +18,15 @@ const AuthProvider = ({ children }) => {
     // Listen for auth state changes
     const unsubscribeAuthState = onAuthStateChanged(auth, (user) => {
       if (user) {
+        if (!isLoggedOut) {
+          // Only store token if not logged out
+          storeUserToken(user);
+        }
+        setIsLoggedOut(false);
         setUser(user);
-        storeUserToken(user);
       } else {
         if (!allowedPaths.includes(location.pathname)) {
-          navigate("/login");
+          navigate("/");
         }
         setUser(null);
         Cookies.remove("token");
@@ -31,7 +36,14 @@ const AuthProvider = ({ children }) => {
     // Listen for token refresh or changes
     const unsubscribeTokenChange = onIdTokenChanged(auth, (user) => {
       if (user) {
-        storeUserToken(user);
+        if (!isLoggedOut) {
+          console.log(
+            "inside ubsub on token change and !isloggedout is",
+            !isLoggedOut
+          );
+          // Only store token if not logged out
+          storeUserToken(user);
+        }
       }
     });
 
@@ -39,7 +51,7 @@ const AuthProvider = ({ children }) => {
       unsubscribeAuthState(); // Cleanup auth state listener
       unsubscribeTokenChange(); // Cleanup token change listener
     };
-  }, []);
+  }, [isLoggedOut]);
 
   // Function to store token and user details
   const storeUserToken = (user) => {
@@ -53,8 +65,17 @@ const AuthProvider = ({ children }) => {
         console.error("Error fetching token:", error);
       });
   };
-
-  return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;
+  const handleLogout = () => {
+    setIsLoggedOut(true); // Set logout flag
+    Cookies.remove("token");
+    localStorage.removeItem("displayName"); // Clear local storage
+    setUser(null); // Clear user state
+  };
+  return (
+    <AuthContext.Provider value={{ user, handleLogout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export { AuthContext, AuthProvider };

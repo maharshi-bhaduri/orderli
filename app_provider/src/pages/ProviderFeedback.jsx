@@ -28,12 +28,12 @@ export default function ProviderFeedback() {
 
   const { data: feedback, isLoading, isError } = getFeedback(partnerHandle);
   useEffect(() => {
-    console.log(
-      "running fetch feedback and isLoading is",
-      isLoading,
-      " feedback is ",
-      feedback
-    );
+    // console.log(
+    //   "running fetch feedback and isLoading is",
+    //   isLoading,
+    //   " feedback is ",
+    //   feedback
+    // );
     if (!isLoading && feedback) {
       const approved = feedback.filter((item) => item.isApproved == 1);
       const requested = feedback.filter((item) => item.isApproved == 0);
@@ -45,9 +45,9 @@ export default function ProviderFeedback() {
 
   useEffect(() => {
     const isChanged = approveList.length > 0 || deleteList.length > 0;
-    console.log("approve list length", approveList.length);
-    console.log("deletelist length", deleteList.length);
-    console.log("is changed", isChanged);
+    // console.log("approve list length", approveList.length);
+    // console.log("deletelist length", deleteList.length);
+    // console.log("is changed", isChanged);
     setSyncState(isChanged ? "sync" : "synced");
   }, [feedbackApproved, feedbackRequested]);
 
@@ -56,7 +56,7 @@ export default function ProviderFeedback() {
       postService(import.meta.env.VITE_APP_UPDATE_FEEDBACK_PARTNER, data),
     {
       onSuccess: () => {
-        console.log("Feedback successfully updated");
+        // console.log("Feedback successfully updated");
         queryClient.invalidateQueries(["feedback", partnerHandle]);
         setSyncState("synced");
         setDeleteList([]);

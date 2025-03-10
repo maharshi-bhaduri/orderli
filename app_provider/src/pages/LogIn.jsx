@@ -1,21 +1,19 @@
 import { signInWithGoogle, signOutNow } from "../utils/Firebase";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@material-tailwind/react";
-import googleLogo from "../icons/google.png"
+import googleLogo from "../icons/google.png";
 
 export default function LogIn() {
-
   let navigate = useNavigate();
   const handleSignIn = async () => {
     try {
-      signInWithGoogle().then(
-        (user) => {
-          navigate('/account')
-        })
+      signInWithGoogle().then((user) => {
+        navigate("/account");
+      });
     } catch (error) {
       console.log("Error signing in with Google:", error);
     }
-  }
+  };
 
   return (
     <div className="signup">

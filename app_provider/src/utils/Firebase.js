@@ -4,9 +4,9 @@ import {
   getIdToken,
   GoogleAuthProvider,
   signInWithPopup,
-  signOut
+  signOut,
 } from "firebase/auth";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_APP_APIKEY,
@@ -22,31 +22,30 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-
 export function signInWithGoogle() {
   return signInWithPopup(auth, provider)
     .then((res) => {
-      Cookies.set('token', res._tokenResponse.idToken);
-      Cookies.set('uid', res.user.uid);
-      localStorage.setItem('user', res.user)
-      return res.user
+      // Cookies.set("token", res._tokenResponse.idToken);
+      Cookies.set("uid", res.user.uid);
+      // localStorage.setItem("user", res.user);
+      return res.user;
     })
     .catch((error) => {
       console.error(error);
     });
-};
-
+}
 
 export function signOutNow() {
   signOut(auth)
     .then(() => {
       localStorage.clear();
+      Cookies.remove("token");
+      Cookies.remove("uid");
     })
     .catch((err) => {
       console.error(err);
     });
-};
-
+}
 
 export async function getAuthToken() {
   const auth = getAuth();
