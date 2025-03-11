@@ -21,7 +21,7 @@ const AuthProvider = ({ children }) => {
         storeUserToken(user);
       } else {
         if (!allowedPaths.includes(location.pathname)) {
-          navigate("/login");
+          navigate("/");
         }
         setUser(null);
         Cookies.remove("token");
