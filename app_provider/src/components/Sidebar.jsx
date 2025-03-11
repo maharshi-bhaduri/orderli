@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import SidebarButton from "./SidebarButton";
 import snaqrBrandBold from "../images/snaqr_brand_b.png";
 import { useQueryClient } from "@tanstack/react-query";
-
+import Logout from "./Logout";
 export default function Sidebar(props) {
   const queryClient = useQueryClient();
 
@@ -10,10 +10,14 @@ export default function Sidebar(props) {
   // and the partnerId is rightly setup
   const clearPartnerId = () => {
     localStorage.removeItem("partnerId");
-    queryClient.invalidateQueries(["partner", props.partnerHandle], {
-      refetchActive: false,
-      refetchInactive: false,
-    });
+    // queryClient.invalidateQueries(["partner", props.partnerHandle], {
+    //   refetchActive: false,
+    //   refetchInactive: false,
+    // });
+    queryClient.removeQueries(["partner", props.partnerHandle]);
+    queryClient.removeQueries(["feedback", props.partnerHandle]);
+    queryClient.removeQueries(["tables", props.partnerHandle]);
+    queryClient.removeQueries(["menu", props.partnerHandle]);
   };
   return (
     <div className="w-60 flex flex-col my-2">
@@ -39,7 +43,9 @@ export default function Sidebar(props) {
           </NavLink>
         ))}
       </div>
-      <div className="flex-grow mx-2 p-2 rounded-lg bg-white shadow-md"></div>
+      <div className="flex-grow mx-2 p-2 rounded-lg bg-white shadow-md">
+        <Logout />
+      </div>
     </div>
   );
 }
