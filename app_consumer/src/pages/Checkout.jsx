@@ -2,9 +2,12 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { postService } from "../utils/APIService";
 import { useMutation } from "@tanstack/react-query";
+
+
 export default function Checkout() {
   const navigate = useNavigate();
   const location = useLocation();
+  const tableId = localStorage.getItem("tableId");
 
   const { orders = [] } = location.state || { orders: [] };
   const uniqueOrders = [
@@ -14,14 +17,12 @@ export default function Checkout() {
   const [notes, setNotes] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [userInfo, setUserInfo] = useState({ name: "", phone: "", email: "" });
-  //   console.log(feedback);
-  //   console.log(uniqueOrders);
   const handleFeedback = (menuId, value) => {
     setFeedback((prev) => ({ ...prev, [menuId]: value }));
   };
-  const { mutate: postReview } = useMutation(
-    (review) =>
-      postService(import.meta.env.VITE_APP_ADD_FEEDBACK_CONSUMERS, review),
+  const { mutate: requestBill } = useMutation(
+    (payload) =>
+      postService(import.meta.env.VITE_APP_REQUEST_BILL, payload),
     {
       onSuccess: () => {
         console.log("Review posted successfully");
@@ -29,7 +30,7 @@ export default function Checkout() {
     },
     {
       onError: (error) => {
-        console.error(`${error} while posting review`);
+        console.error(`${error} while submitting data`);
       },
     }
   );
@@ -53,11 +54,10 @@ export default function Checkout() {
                 <span>{order.itemName}</span>
                 <div className="flex gap-2">
                   <button
-                    className={`p-2 rounded-full ${
-                      feedback[order.menuId] === 1
-                        ? "bg-green-500 text-white"
-                        : "bg-gray-200"
-                    }`}
+                    className={`p-2 rounded-full ${feedback[order.menuId] === 1
+                      ? "bg-green-500 text-white"
+                      : "bg-gray-200"
+                      }`}
                     onClick={() => handleFeedback(order.menuId, 1)}
                   >
                     <span className="material-symbols-outlined text-lg">
@@ -65,11 +65,10 @@ export default function Checkout() {
                     </span>
                   </button>
                   <button
-                    className={`p-2 rounded-full ${
-                      feedback[order.menuId] === 0
-                        ? "bg-red-500 text-white"
-                        : "bg-gray-200"
-                    }`}
+                    className={`p-2 rounded-full ${feedback[order.menuId] === 0
+                      ? "bg-red-500 text-white"
+                      : "bg-gray-200"
+                      }`}
                     onClick={() => handleFeedback(order.menuId, 0)}
                   >
                     <span className="material-symbols-outlined text-lg">
@@ -149,10 +148,10 @@ export default function Checkout() {
               <button
                 className="bg-blue-500 text-white px-4 py-2 rounded"
                 onClick={() => {
-                  const review = { feedback, notes, userInfo };
-
-                  //postReview(review);
-                  console.log("Feedback Submitted:", review);
+                  const payload = { feedback, notes, userInfo, tableId };
+                  console.log(payload)
+                  requestBill(payload);
+                  console.log("Feedback Submitted:", payload);
                   setShowModal(false);
                   navigate("/thank-you");
                 }}
