@@ -45,7 +45,7 @@ export default function Orders() {
   const orderMap = {
     0: "Received",
     1: "Preparing",
-    2: "On its way",
+    2: "Done",
   };
 
   useEffect(() => {

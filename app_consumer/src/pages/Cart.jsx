@@ -4,7 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import Orders from "./Orders";
 import axios from "axios";
-import GraphicButton from "../components/GraphicButton";
+
+
 export default function Cart() {
   let { partnerHandle } = useParams();
   const [view, setView] = useState("cart");
@@ -12,7 +13,7 @@ export default function Cart() {
   const { cart, dispatch } = useCart();
   const cartItems = Object.values(cart.cartItems);
   const navigate = useNavigate();
-  const [OrderState, setOrderState] = useState(0); // - order -1, ordering-2, ordered-3  for order button
+  const [OrderState, setOrderState] = useState(1); // - order -1, ordering-2, ordered-3  for order button
   // Calculate total amount
   const totalAmount = cartItems.reduce(
     (total, { itemDetails, quantity }) => total + itemDetails.price * quantity,
@@ -36,7 +37,7 @@ export default function Cart() {
         dispatch({ type: "CLEAR_CART" });
         localStorage.removeItem("cart");
         console.log("Order placed successfully");
-        setOrderState(0);
+        setOrderState(3);
       },
       onError: (error) => {
         console.error("Error placing order:", error);
@@ -45,7 +46,7 @@ export default function Cart() {
   );
 
   const handlePlaceOrder = () => {
-    setOrderState(0);
+    setOrderState(2);
     // Construct the payload as a list of objects with partnerId and menuId
     const tableId = localStorage.getItem("tableId");
     console.log("cart", cart);

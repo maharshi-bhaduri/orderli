@@ -52,12 +52,10 @@ export function CartProvider({ children }) {
   const [cart, dispatch] = useReducer(cartReducer, initialCartState);
   const location = useLocation();
   const partnerHandle = location.pathname.split("/")[1];
-  console.log(partnerHandle);
   // Load cart from localStorage on app initialization
   useEffect(() => {
     const savedCart =
       JSON.parse(localStorage.getItem(`${partnerHandle}_cart`)) || {};
-    console.log("Loaded saved cart:", savedCart);
     dispatch({ type: "SET_CART", payload: { cartItems: savedCart } });
   }, []);
 
