@@ -129,7 +129,7 @@ export default function Menu() {
               className="pt-2 pl-2 w-full max-w-2xl h-[calc(100vh-100px)] overflow-y-scroll"
               style={{ scrollbarGutter: "stable" }}
             >
-              <div>The currency for the menu items is {currency}</div>
+              {/* <div>The currency for the menu items is {currency}</div> */}
               {Object.keys(groupedItems).map((category) => (
                 <CategoryCard
                   key={category}

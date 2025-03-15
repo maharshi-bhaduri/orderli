@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
-
+import { useNavigate, useParams } from "react-router-dom";
 const supabaseUrl = import.meta.env.VITE_APP_SUPABASE_URL;
 const anonKey = import.meta.env.VITE_APP_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, anonKey);
@@ -38,6 +38,8 @@ const ProgressBar = ({ totalSteps, activeStep }) => {
 };
 
 export default function Orders() {
+  const navigate = useNavigate();
+  let { partnerHandle } = useParams();
   const tableId = localStorage.getItem("tableId");
   const [orders, setOrders] = useState([]);
   const orderMap = {
@@ -154,6 +156,22 @@ export default function Orders() {
               </div>
             ))
           )}
+        </div>
+        <div
+          className="rounded-t-lg bg-white p-4 mx-2 flex flex-col fixed bottom-0
+                      shadow-md w-full max-w-2xl"
+        >
+          <div className="flex justify-end items-center w-full">
+            <button
+              className="bg-green-500 px-4 py-2 rounded-lg text-white"
+              onClick={() =>
+                navigate(`/${partnerHandle}/checkout`, { state: { orders } })
+              }
+              disabled={!orders.every((order) => order.itemStatus === 2)}
+            >
+              Checkout
+            </button>
+          </div>
         </div>
       </div>
     </div>
