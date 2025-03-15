@@ -12,7 +12,7 @@ export default function Cart() {
   const { cart, dispatch } = useCart();
   const cartItems = Object.values(cart.cartItems);
   const navigate = useNavigate();
-  const [OrderState, setOrderState] = useState(1); // - order -1, ordering-2, ordered-3  for order button
+  const [OrderState, setOrderState] = useState(0); // - order -1, ordering-2, ordered-3  for order button
   // Calculate total amount
   const totalAmount = cartItems.reduce(
     (total, { itemDetails, quantity }) => total + itemDetails.price * quantity,
@@ -36,7 +36,7 @@ export default function Cart() {
         dispatch({ type: "CLEAR_CART" });
         localStorage.removeItem("cart");
         console.log("Order placed successfully");
-        setOrderState(3);
+        setOrderState(0);
       },
       onError: (error) => {
         console.error("Error placing order:", error);
@@ -45,7 +45,7 @@ export default function Cart() {
   );
 
   const handlePlaceOrder = () => {
-    setOrderState(2);
+    setOrderState(0);
     // Construct the payload as a list of objects with partnerId and menuId
     const tableId = localStorage.getItem("tableId");
     console.log("cart", cart);
@@ -84,23 +84,20 @@ export default function Cart() {
               <div className="relative w-40 h-full bg-gray-100 shadow-inner rounded-lg flex items-center">
                 {/* Slider Button */}
                 <div
-                  className={`absolute w-20 h-full py-2 bg-orange-200 bg-opacity-50 border border-orange-400 rounded-lg transition-transform transform ${
-                    view === "cart" ? "translate-x-0" : "translate-x-20"
-                  }`}
+                  className={`absolute w-20 h-full py-2 bg-orange-200 bg-opacity-50 border border-orange-400 rounded-lg transition-transform transform ${view === "cart" ? "translate-x-0" : "translate-x-20"
+                    }`}
                 ></div>
                 {/* Labels */}
                 <button
-                  className={`h-full flex-1 text-center text-black transition-all duration-100 ${
-                    view === "cart" ? "text-black" : "text-gray-500"
-                  }`}
+                  className={`h-full flex-1 text-center text-black transition-all duration-100 ${view === "cart" ? "text-black" : "text-gray-500"
+                    }`}
                   onClick={() => setView("cart")}
                 >
                   Cart
                 </button>
                 <button
-                  className={`h-full flex-1 text-center transition-all duration-100 ${
-                    view === "orders" ? "text-black" : "text-gray-500"
-                  }`}
+                  className={`h-full flex-1 text-center transition-all duration-100 ${view === "orders" ? "text-black" : "text-gray-500"
+                    }`}
                   onClick={() => setView("orders")}
                 >
                   Orders
@@ -184,13 +181,12 @@ export default function Cart() {
                   <h2 className="text-xl mr-2">{totalAmount.toFixed(2)}</h2>
                 </div>
                 <button
-                  className={`px-4 py-2 bg-green-500 text-white rounded-lg ${
-                    (cart.cartItems &&
-                      Object.keys(cart.cartItems).length === 0) ||
+                  className={`px-4 py-2 bg-green-500 text-white rounded-lg ${(cart.cartItems &&
+                    Object.keys(cart.cartItems).length === 0) ||
                     OrderState === 2
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "hover:bg-green-600"
-                  }`}
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "hover:bg-green-600"
+                    }`}
                   onClick={handlePlaceOrder}
                   disabled={
                     (cart.cartItems &&
