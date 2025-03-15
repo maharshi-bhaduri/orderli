@@ -8,6 +8,8 @@ import Feedback from "./pages/Feedback";
 import MenuBackup from "./pages/MenuBackup";
 import { CartProvider } from "./utils/CartContext";
 import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import ThankYouPage from "./pages/ThankYouPage";
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -19,6 +21,7 @@ export default function App() {
 
           <Routes>
             <Route path="/" element={<SnaqrHome />}></Route>
+            <Route path="/thank-you" element={<ThankYouPage />}></Route>
             <Route path="/:partnerHandle" element={<Home />}></Route>
             <Route
               path="/:partnerHandle/reviews"
@@ -26,7 +29,11 @@ export default function App() {
             ></Route>
             <Route path="/:partnerHandle/menu" element={<Menu />}></Route>
             <Route path="/:partnerHandle/cart" element={<Cart />}></Route>
-            <Route path="/menubackup" element={<MenuBackup />}></Route>
+            <Route
+              path="/:partnerHandle/checkout"
+              element={<Checkout />}
+            ></Route>
+            {/* <Route path="/menubackup" element={<MenuBackup />}></Route> */}
           </Routes>
         </div>
       </CartProvider>

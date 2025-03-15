@@ -157,6 +157,7 @@ export default function Feedback() {
                   className="ml-2 px-2 border border-gray-300 text-gray-500
                     rounded-lg bg-white hover:bg-gray-300 transition ease-in-out"
                   onClick={() => setIsOpen(true)}
+                  disabled={true}
                 >
                   Add
                 </button>
