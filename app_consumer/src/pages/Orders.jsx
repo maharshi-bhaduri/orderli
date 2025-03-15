@@ -167,6 +167,7 @@ export default function Orders() {
               onClick={() =>
                 navigate(`/${partnerHandle}/checkout`, { state: { orders } })
               }
+              disabled={!orders.every((order) => order.itemStatus === 2)}
             >
               Checkout
             </button>
