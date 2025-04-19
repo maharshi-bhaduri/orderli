@@ -23,7 +23,48 @@ export default function ProviderTables() {
   const queryClient = useQueryClient();
   const { partnerHandle } = useParams();
   const { data: tables, isLoading, isError } = getTables(partnerHandle);
+  const partnerId = localStorage.getItem("partnerId");
 
+  //OTP FLOW
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [otpStatus, setOtpStatus] = useState("");
+
+  const {
+    mutate: sendOtp,
+    isLoading: isSendingOTP,
+    data: otpResponse,
+    error: otpError,
+    reset: resetOtp,
+  } = useMutation(
+    async ({ phoneNumber, partnerId, tableId }) => {
+      return await postService(import.meta.env.VITE_APP_SEND_OTP, {
+        phoneNumber,
+        partnerId,
+        tableId,
+      });
+    },
+    {
+      onSuccess: (res) => {
+        if (res?.operationStatus?.status === 200) {
+          setOtpStatus(res.operationStatus.message || "OTP sent successfully");
+        } else {
+          setOtpStatus("Failed to send OTP");
+        }
+      },
+      onError: () => {
+        setOtpStatus("Error sending OTP");
+      },
+    }
+  );
+
+  const handleSendOtp = async () => {
+    if (!phoneNumber || !currentTable) return;
+
+    setOtpStatus("");
+
+    sendOtp({ phoneNumber, partnerId, tableId: currentTable.tableId });
+  };
+  //OTP FLOW
   // Mutation for add/edit table
   const { mutateAsync: saveTableData, isLoading: isSaving } = useMutation(
     (data) =>
@@ -57,6 +98,10 @@ export default function ProviderTables() {
     setFormData({ ...table });
     console.log(formData);
     setCurrentTable(table);
+
+    setPhoneNumber("");
+    setOtpStatus("");
+
     setIsModalOpen(true);
   };
 
@@ -236,6 +281,32 @@ export default function ProviderTables() {
                       <option value="Occupied">Occupied</option>
                     </select>
                   </div>
+                  {/* ✅ OTP Flow Start: Phone input + Send button */}
+                  <div className="mt-8 mb-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Customer Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      name="phoneNumber"
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                      placeholder="Enter phone number"
+                      className="mt-1 p-2 w-full border rounded-md"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleSendOtp}
+                      disabled={isSendingOTP || !phoneNumber}
+                      className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md disabled:opacity-50"
+                    >
+                      {isSendingOTP ? "Sending..." : "Send OTP"}
+                    </button>
+                    {otpStatus && (
+                      <p className="mt-2 text-sm text-gray-600">{otpStatus}</p>
+                    )}
+                  </div>
+                  {/* ✅ OTP Flow End */}
                 </div>
               </div>
             )}

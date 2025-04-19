@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getMenu, getPartnerDetails, getFeedback } from "../utils/queryService";
 import bg from "../images/cafe_bg.jpg";
@@ -73,7 +73,6 @@ export default function Home() {
               className="rounded-lg bg-white p-2 m-2 flex flex-col border
                             justify-center items-center shadow-md"
             >
-              {/* Display table message */}
               {tableDetails.tableId && (
                 <p className="mb-2 flex justify-center items-center rounded-lg bg-white border border-orange-300 p-2 w-full">
                   Table:<span className=" ml-2">{tableDetails.tableId}</span>
