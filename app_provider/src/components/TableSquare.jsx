@@ -1,4 +1,4 @@
-export default function TableSquare({ table, onClick, startTableIndex }) {
+export default function TableSquare({ table, onClick, startTableIndex, alerts }) {
   const { tableId, seatingCapacity, status, suffix } = table;
 
   // Determine color based on status
@@ -6,15 +6,15 @@ export default function TableSquare({ table, onClick, startTableIndex }) {
     status === "Available"
       ? "bg-green-300"
       : status === "Reserved"
-      ? "bg-yellow-300"
-      : "bg-red-300"; // Occupied
+        ? "bg-yellow-300"
+        : "bg-red-300"; // Occupied
 
   const textColor =
     status === "Available"
       ? "text-green-800"
       : status === "Reserved"
-      ? "text-yellow-800"
-      : "text-red-800"; // Occupied
+        ? "text-yellow-800"
+        : "text-red-800"; // Occupied
 
   return (
     <div
@@ -37,6 +37,13 @@ export default function TableSquare({ table, onClick, startTableIndex }) {
           </span>
         </div>
       </div>
+
+      {/* Alert Badge */}
+      {alerts?.bill_requested && (
+        <div className="absolute bottom-1 right-1 bg-orange-400 border border-orderlee-primary-100 text-white text-xs px-2 py-1 rounded-lg shadow-md animate-pulse-border">
+          bill
+        </div>
+      )}
     </div>
   );
 }

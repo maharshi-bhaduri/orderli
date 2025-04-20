@@ -8,11 +8,18 @@ import Modal from "../components/Modal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postService } from "../utils/APIService";
 import { useParams } from "react-router-dom";
+import { createClient } from "@supabase/supabase-js";
+
+
+const supabaseUrl = import.meta.env.VITE_APP_SUPABASE_URL;
+const serviceKey = import.meta.env.VITE_APP_SUPABASE_SERVICE_ROLE_KEY;
+const supabase = createClient(supabaseUrl, serviceKey);
 
 export default function ProviderTables() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState(""); // "add" or "edit"
   const [currentTable, setCurrentTable] = useState();
+  const [tableAlerts, setTableAlerts] = useState({});
   const [formData, setFormData] = useState({
     noOfTables: "",
     seatingCapacity: "",
@@ -23,6 +30,29 @@ export default function ProviderTables() {
   const queryClient = useQueryClient();
   const { partnerHandle } = useParams();
   const { data: tables, isLoading, isError } = getTables(partnerHandle);
+
+  useEffect(() => {
+    const fetchAlerts = async () => {
+      const { data, error } = await supabase
+        .from("table_alerts_live")
+        .select("tableId, alertType");
+
+      if (error) {
+        console.error("Error fetching alerts:", error);
+        return;
+      }
+
+      const groupedAlerts = data.reduce((acc, { tableId, alertType }) => {
+        if (!acc[tableId]) acc[tableId] = {};
+        acc[tableId][alertType] = true;
+        return acc;
+      }, {});
+
+      setTableAlerts(groupedAlerts);
+    };
+
+    fetchAlerts();
+  }, []);
 
   // Mutation for add/edit table
   const { mutateAsync: saveTableData, isLoading: isSaving } = useMutation(
@@ -118,6 +148,7 @@ export default function ProviderTables() {
                     table={table}
                     onClick={() => handleEditClick(table)}
                     startTableIndex={tables[0]?.tableId}
+                    alerts={tableAlerts[table.tableId] || {}}
                   />
                 ))}
             </div>
