@@ -21,7 +21,7 @@ export default function App() {
 
           <Routes>
             <Route path="/" element={<SnaqrHome />}></Route>
-            <Route path="/thank-you" element={<ThankYouPage />}></Route>
+            <Route path="/:partnerHandle/thank-you" element={<ThankYouPage />}></Route>
             <Route path="/:partnerHandle" element={<Home />}></Route>
             <Route
               path="/:partnerHandle/reviews"
