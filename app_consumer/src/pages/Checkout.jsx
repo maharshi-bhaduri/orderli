@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { postService } from "../utils/APIService";
 import { useMutation } from "@tanstack/react-query";
 
@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 export default function Checkout() {
   const navigate = useNavigate();
   const location = useLocation();
+  let { partnerHandle } = useParams();
   const tableId = localStorage.getItem("tableId");
 
   const { orders = [] } = location.state || { orders: [] };
@@ -153,7 +154,7 @@ export default function Checkout() {
                   requestBill(payload);
                   console.log("Feedback Submitted:", payload);
                   setShowModal(false);
-                  navigate("/thank-you");
+                  navigate(`/${partnerHandle}/thank-you`);
                 }}
               >
                 Continue
