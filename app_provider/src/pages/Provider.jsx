@@ -1,4 +1,3 @@
-import { useLocation } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import ProviderProfile from "./ProviderProfile";
 import ProviderDefault from "./ProviderDefault";
@@ -16,6 +15,7 @@ import ProviderFeedback from "./ProviderFeedback";
 import ProviderSettings from "./ProviderSettings";
 import ProviderTables from "./ProviderTables";
 import PartnerOrders from "./PartnerOrders";
+import PartnerBilling from "./PartnerBilling";
 
 export default function Provider() {
   const { partnerHandle } = useParams();
@@ -36,6 +36,7 @@ export default function Provider() {
           <Route path={`/settings`} element={<ProviderSettings />} />
           <Route path={`/tables`} element={<ProviderTables />} />
           <Route path={`/orders`} element={<PartnerOrders />} />
+          <Route path={`/billing`} element={<PartnerBilling />} />
         </Routes>
       </div>
     </div>
