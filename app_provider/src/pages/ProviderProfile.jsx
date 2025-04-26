@@ -130,7 +130,7 @@ export default function PartnerProfile() {
   return (
     <div className="w-full flex flex-col items-center">
       <div
-        className="p-5 h-[calc(100vh-30px)] overflow-y-auto
+        className="p-5 h-[calc(100vh-20px)] overflow-y-auto
           w-full flex flex-col items-center"
       >
         {isProfileLoading ? (
