@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { getService, postService } from "./APIService";
 
 export const getMenu = (partnerHandle) =>
@@ -14,6 +14,14 @@ export const getMenu = (partnerHandle) =>
       staleTime: 1000 * 60 * 5,
     }
   );
+
+export const useVerifyCodeMutation = () =>
+  useMutation(({ partnerHandle, code }) => {
+    return getService(import.meta.env.VITE_APP_GET_VERIFYCHECKINCODE, {
+      partnerHandle,
+      code,
+    });
+  });
 
 export const getPartnerDetails = (partnerHandle) =>
   useQuery(

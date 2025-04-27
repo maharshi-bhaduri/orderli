@@ -10,7 +10,6 @@ import { postService } from "../utils/APIService";
 import { useParams } from "react-router-dom";
 import { createClient } from "@supabase/supabase-js";
 
-
 const supabaseUrl = import.meta.env.VITE_APP_SUPABASE_URL;
 const serviceKey = import.meta.env.VITE_APP_SUPABASE_SERVICE_ROLE_KEY;
 const supabase = createClient(supabaseUrl, serviceKey);
@@ -221,6 +220,10 @@ export default function ProviderTables() {
                       viewBox={`0 0 256 256`}
                     />
                   </div>
+                </div>
+                <div className="flex-col">
+                  <h1 className="">Your code is</h1>
+                  <h3 className="font-semibold">{formData.checkinCode}</h3>
                 </div>
                 <div className="mx-2">
                   <div className="mb-4">
