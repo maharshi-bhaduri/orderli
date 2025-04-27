@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { postService } from "../utils/APIService";
 import { useMutation } from "@tanstack/react-query";
+import Loader from "../components/Loader";
 
 
 export default function Checkout() {
@@ -21,12 +22,17 @@ export default function Checkout() {
   const handleFeedback = (menuId, value) => {
     setFeedback((prev) => ({ ...prev, [menuId]: value }));
   };
-  const { mutate: requestBill } = useMutation(
+  const { mutate: requestBill, isLoading: isRequestingBill } = useMutation(
     (payload) =>
       postService(import.meta.env.VITE_APP_REQUEST_BILL, payload),
     {
-      onSuccess: () => {
+      onSuccess: (result) => {
         console.log("Review posted successfully");
+        console.log("Feedback Submitted!");
+        console.log("result bill", result?.operationStatus?.message?.bill)
+        localStorage.setItem("bill", JSON.stringify(result?.operationStatus?.message?.bill))
+        setShowModal(false);
+        navigate(`/${partnerHandle}/thank-you`);
       },
     },
     {
@@ -107,59 +113,67 @@ export default function Checkout() {
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h3 className="text-lg font-semibold mb-4">
-              Your Details (Optional)
-            </h3>
+            {
+              isRequestingBill ?
+                <div className="flex justify-center items-center">
+                  <h3 className="text-lg font-semibold">
+                    Requesting bill...
+                  </h3>
+                </div>
+                :
+                <>
+                  <h3 className="text-lg font-semibold mb-4">
+                    Your Details (Optional)
+                  </h3>
 
-            <input
-              type="text"
-              placeholder="Name"
-              className="w-full p-2 border rounded mb-2"
-              value={userInfo.name}
-              onChange={(e) =>
-                setUserInfo({ ...userInfo, name: e.target.value })
-              }
-            />
-            <input
-              type="text"
-              placeholder="Phone"
-              className="w-full p-2 border rounded mb-2"
-              value={userInfo.phone}
-              onChange={(e) =>
-                setUserInfo({ ...userInfo, phone: e.target.value })
-              }
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              className="w-full p-2 border rounded mb-2"
-              value={userInfo.email}
-              onChange={(e) =>
-                setUserInfo({ ...userInfo, email: e.target.value })
-              }
-            />
+                  <input
+                    type="text"
+                    placeholder="Name"
+                    className="w-full p-2 border rounded mb-2"
+                    value={userInfo.name}
+                    onChange={(e) =>
+                      setUserInfo({ ...userInfo, name: e.target.value })
+                    }
+                  />
+                  <input
+                    type="text"
+                    placeholder="Phone"
+                    className="w-full p-2 border rounded mb-2"
+                    value={userInfo.phone}
+                    onChange={(e) =>
+                      setUserInfo({ ...userInfo, phone: e.target.value })
+                    }
+                  />
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    className="w-full p-2 border rounded mb-2"
+                    value={userInfo.email}
+                    onChange={(e) =>
+                      setUserInfo({ ...userInfo, email: e.target.value })
+                    }
+                  />
 
-            <div className="flex justify-end gap-2 mt-4">
-              <button
-                className="bg-gray-300 px-4 py-2 rounded"
-                onClick={() => setShowModal(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded"
-                onClick={() => {
-                  const payload = { feedback, notes, userInfo, tableId };
-                  console.log(payload)
-                  requestBill(payload);
-                  console.log("Feedback Submitted:", payload);
-                  setShowModal(false);
-                  navigate(`/${partnerHandle}/thank-you`);
-                }}
-              >
-                Continue
-              </button>
-            </div>
+                  <div className="flex justify-end gap-2 mt-4">
+                    <button
+                      className="bg-gray-300 px-4 py-2 rounded"
+                      onClick={() => setShowModal(false)}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="bg-blue-500 text-white px-4 py-2 rounded"
+                      onClick={() => {
+                        const payload = { feedback, notes, userInfo, tableId };
+                        console.log(payload)
+                        requestBill(payload);
+                      }}
+                    >
+                      Continue
+                    </button>
+                  </div>
+                </>
+            }
           </div>
         </div>
       )}
