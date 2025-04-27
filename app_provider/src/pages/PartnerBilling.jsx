@@ -1,32 +1,45 @@
 import React, { useState, useEffect } from "react";
 import { getProfile } from "../utils/queryService";
 import { useParams } from "react-router-dom";
+import { postService, getService } from "../utils/APIService"; // ⬅️ Added getService
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"; // ⬅️ Added useQuery
+import Cookies from "js-cookie";
 import Loader from "../components/Loader";
 
-
 export default function PartnerBilling() {
+  const queryClient = useQueryClient();
   const { partnerHandle } = useParams();
+
   const [charges, setCharges] = useState([]);
   const [discounts, setDiscounts] = useState([]);
   const [invoiceSettings, setInvoiceSettings] = useState({
-    restaurantName: "",
     gstin: "",
-    address: "",
     footerMessage: "",
+    upiId: "",
+    currency: "",
   });
+
+  const [newCharge, setNewCharge] = useState({ label: "", value: "", type: "%", optional: false });
+  const [newDiscount, setNewDiscount] = useState({ label: "", value: "", type: "%" });
+
+  // 🔥 Fetch partner profile
   const {
     data: partnerDetails,
     isLoading: isProfileLoading,
     isError: isProfileError,
   } = getProfile(partnerHandle);
 
-  console.log("data ", partnerDetails)
+  // 🔥 Fetch billing configuration
+  const {
+    data: billingConfig,
+    isLoading: isBillingConfigLoading,
+    isError: isBillingConfigError,
+  } = useQuery(["billing-config", partnerHandle], async () => {
+    const res = await getService(`${import.meta.env.VITE_APP_GET_BILL_CONFIG}?partnerHandle=${encodeURIComponent(partnerHandle)}`);
+    return res?.data?.data; // Assuming your API returns { data: {...} }
+  });
 
-
-  const [newCharge, setNewCharge] = useState({ label: "", value: "", type: "%", optional: false });
-  const [newDiscount, setNewDiscount] = useState({ label: "", value: "", type: "%" });
-
-  // 🔥 Prefill Invoice Settings when partnerDetails is available
+  // 🔥 When partnerDetails comes, set invoice basic info
   useEffect(() => {
     if (partnerDetails) {
       const constructedAddress = `${partnerDetails.address}, ${partnerDetails.city} - ${partnerDetails.postalCode}`;
@@ -37,6 +50,36 @@ export default function PartnerBilling() {
       }));
     }
   }, [partnerDetails]);
+
+  // 🔥 When billingConfig comes, set charges, discounts, and invoice fields
+  useEffect(() => {
+    if (billingConfig) {
+      setCharges(billingConfig.charges || []);
+      setDiscounts(billingConfig.discounts || []);
+      setInvoiceSettings((prev) => ({
+        ...prev,
+        gstin: billingConfig.gstin || "",
+        footerMessage: billingConfig.footerMessage || "",
+        upiId: billingConfig.upiId || "",
+        currency: billingConfig.currency || "INR",
+      }));
+    }
+  }, [billingConfig]);
+
+  const { mutate: saveBillingDetails, isLoading: isSaving } = useMutation(
+    (billingDetails) =>
+      postService(import.meta.env.VITE_APP_UPDATE_CONFIG, billingDetails),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["partner", partnerHandle]);
+        queryClient.invalidateQueries(["billing-config", partnerHandle]);
+        console.log("Billing details updated successfully");
+      },
+      onError: (error) => {
+        console.error("Failed to update billing details:", error);
+      },
+    }
+  );
 
   const handleAddCharge = () => {
     if (newCharge.label && newCharge.value) {
@@ -70,14 +113,23 @@ export default function PartnerBilling() {
     setCharges(updated);
   };
 
-  // 🖋 Save Button Handler
   const handleSave = () => {
-    console.log("Saving Invoice Settings...", invoiceSettings);
-    // Here you can integrate API call to save it
+    const billingDetailsPayload = {
+      partnerId: partnerDetails.partnerId,
+      currency: invoiceSettings.currency,
+      gstin: invoiceSettings.gstin,
+      upiId: invoiceSettings.upiId,
+      footerMessage: invoiceSettings.footerMessage,
+      charges: charges,
+      discounts: discounts,
+    };
+
+    console.log("Saving Billing Details...", billingDetailsPayload);
+    saveBillingDetails(billingDetailsPayload);
   };
 
   return (
-    <div className="w-full p-5 flex flex-col gap-8 h-[calc(100vh-20px)] overflow-y-scroll">
+    <div className="w-full p-5 flex flex-col gap-4 h-[calc(100vh-20px)] overflow-y-scroll">
 
       {/* GRID for Additional Charges + Default Discount */}
       {isProfileLoading ?
@@ -269,20 +321,20 @@ export default function PartnerBilling() {
             </div>
           </div>
           {/* Invoice Settings Section */}
-          <div className="bg-white rounded-lg p-4 w-full border border-gray-300">
+          <div className="bg-white rounded-lg ">
             <h2 className="font-semibold mb-4">Invoice Details</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col">
-                <label className="text-sm font-medium mb-1">Restaurant Name</label>
+                <label className="text-sm font-medium mb-1">
+                  Business Name <i className="text-xs text-gray-500">(editable in the brand section)</i>
+                </label>
                 <input
                   type="text"
                   className="border p-2 rounded-md"
                   placeholder="Enter Restaurant Name"
                   value={invoiceSettings.restaurantName}
-                  onChange={(e) =>
-                    setInvoiceSettings({ ...invoiceSettings, restaurantName: e.target.value })
-                  }
+                  disabled
                 />
               </div>
 
@@ -299,16 +351,43 @@ export default function PartnerBilling() {
                 />
               </div>
 
+              <div className="flex flex-col">
+                <label className="text-sm font-medium mb-1">Currency</label>
+                <select
+                  className="border p-2 rounded-md"
+                  value={invoiceSettings.currency || "INR"}
+                  onChange={(e) =>
+                    setInvoiceSettings({ ...invoiceSettings, currency: e.target.value })
+                  }
+                >
+                  <option value="INR">INR</option>
+                  <option value="USD">USD</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col">
+                <label className="text-sm font-medium mb-1">UPI ID</label>
+                <input
+                  type="text"
+                  className="border p-2 rounded-md"
+                  placeholder="Enter UPI ID"
+                  value={invoiceSettings.upiId || ""}
+                  onChange={(e) =>
+                    setInvoiceSettings({ ...invoiceSettings, upiId: e.target.value })
+                  }
+                />
+              </div>
+
               <div className="flex flex-col md:col-span-2">
-                <label className="text-sm font-medium mb-1">Address</label>
+                <label className="text-sm font-medium mb-1">
+                  Address <i className="text-xs text-gray-500">(editable in the brand section)</i>
+                </label>
                 <textarea
                   className="border p-2 rounded-md"
                   rows="2"
                   placeholder="Enter Business Address"
                   value={invoiceSettings.address}
-                  onChange={(e) =>
-                    setInvoiceSettings({ ...invoiceSettings, address: e.target.value })
-                  }
+                  disabled
                 ></textarea>
               </div>
 

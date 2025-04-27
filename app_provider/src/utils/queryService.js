@@ -55,6 +55,8 @@ export const getFeedback = (partnerHandle) => {
   );
 };
 
+
+
 /* changing the api of getTables to use partnerHandle
 export const getTables = (partnerId) =>
   useQuery(
