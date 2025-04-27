@@ -5,8 +5,8 @@ export const optionMap = [
     icon: "dashboard",
   },
   {
-    name: "Profile",
-    page: "profile",
+    name: "Brand",
+    page: "brand",
     icon: "qr_code_2",
   },
   {

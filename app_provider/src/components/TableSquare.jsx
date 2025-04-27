@@ -40,8 +40,12 @@ export default function TableSquare({ table, onClick, startTableIndex, alerts })
 
       {/* Alert Badge */}
       {alerts?.bill_requested && (
-        <div className="absolute bottom-1 right-1 bg-orange-400 border border-orderlee-primary-100 text-white text-xs px-2 py-1 rounded-lg shadow-md animate-pulse-border">
-          bill
+        <div className="absolute bottom-1 right-1 bg-orange-400 border border-orderlee-primary-100 text-white text-xs px-2 py-1 rounded-lg animate-pulse-border">
+          <span
+            className="material-symbols-outlined text-xs "
+          >
+            receipt_long
+          </span>
         </div>
       )}
     </div>

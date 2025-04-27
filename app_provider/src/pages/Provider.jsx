@@ -30,7 +30,7 @@ export default function Provider() {
       <div className="mr-2 flex flex-grow flex-wrap w-full rounded-lg my-2 bg-white shadow-md overflow-hidden">
         <Routes>
           <Route path={`/`} element={<ProviderDefault />} />
-          <Route path={`/profile`} element={<ProviderProfile />} />
+          <Route path={`/brand`} element={<ProviderProfile />} />
           <Route path={`/menu`} element={<ProviderMenu />} />
           <Route path={`/feedback`} element={<ProviderFeedback />} />
           <Route path={`/settings`} element={<ProviderSettings />} />
