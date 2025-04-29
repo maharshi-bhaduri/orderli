@@ -25,12 +25,12 @@ export default function Home() {
   const [enteredCode, setEnteredCode] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [showCode, setShowCode] = useState(false);
-
   const [codeVerified, setCodeVerified] = useState(() => {
     const stored = localStorage.getItem(`codeVerified${partnerHandle}`);
     return stored === "true";
   });
   const verifyCodeMutation = useVerifyCodeMutation();
+  const checkinCode = localStorage.getItem(`checkinCode-${partnerHandle}`);
 
   function handleCodeSubmit() {
     verifyCodeMutation.mutate(
@@ -41,6 +41,7 @@ export default function Home() {
           if (response.data.data.verifiedData.verified === true) {
             setCodeVerified(true);
             localStorage.setItem(`codeVerified${partnerHandle}`, "true");
+            localStorage.setItem(`checkinCode-${partnerHandle}`, enteredCode);
           } else {
             setErrorMessage("Incorrect code. Please try again");
             setTimeout(() => {
@@ -159,7 +160,7 @@ export default function Home() {
                   </div>
 
                   {/* --- New Toggle for Show/Hide Check-in Code --- */}
-                  {enteredCode && (
+                  {checkinCode && (
                     <div className="w-full flex flex-col items-center">
                       <button
                         onClick={() => setShowCode(!showCode)}
@@ -169,7 +170,7 @@ export default function Home() {
                       </button>
                       {showCode && (
                         <div className="mt-2 px-4 py-2 bg-white border border-orange-300 rounded-lg text-gray-700">
-                          {enteredCode}
+                          {checkinCode}
                         </div>
                       )}
                     </div>

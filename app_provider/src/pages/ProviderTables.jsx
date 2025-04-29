@@ -48,9 +48,40 @@ export default function ProviderTables() {
       }, {});
 
       setTableAlerts(groupedAlerts);
+      console.log(groupedAlerts);
+      let tableIdList = [];
+      for (let [tableId, alertType] of Object.entries(groupedAlerts)) {
+        //console.log(Object.keys(alertType));
+        //console.log("tableid", tableId);
+        for (let alert in alertType) {
+          if (alert === "table_occupied") tableIdList.push(tableId);
+        }
+      }
+      console.log(tableIdList);
     };
 
     fetchAlerts();
+
+    const subscription = supabase
+      .channel("table_alerts_channel")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "table_alerts_live",
+        },
+        (payload) => {
+          console.log("Real time alerts received", payload);
+          fetchAlerts();
+        }
+      )
+      .subscribe();
+
+    //cleanup when unmount
+    return () => {
+      supabase.removeChannel(subscription);
+    };
   }, []);
 
   // Mutation for add/edit table
