@@ -118,6 +118,36 @@ export default function Home() {
                   <p className="mb-2 flex justify-center items-center rounded-lg bg-white border border-orange-300 p-2 w-full">
                     Table:<span className=" ml-2">{tableDetails.tableId}</span>
                   </p>
+                  {/* {showCode && (
+                    <div className="mt-2 px-4 py-2 bg-white border border-orange-300 rounded-lg text-gray-700">
+                      {checkinCode}
+                    </div>
+                  )} */}
+                  {checkinCode && (
+                    <div className="w-full flex mb-2 items-center">
+                      <div className="relative w-full h-12 bg-orange-100 rounded-lg flex items-center justify-start px-2 shadow-inner select-none">
+                        <div className="absolute left-4 text-lg text-gray-700 tracking-widest font-mono">
+                          {showCode ? checkinCode : ""}
+                        </div>
+                        <div
+                          onMouseDown={() => setShowCode(true)}
+                          onMouseUp={() => setShowCode(false)}
+                          onMouseLeave={() => setShowCode(false)}
+                          onTouchStart={() => setShowCode(true)}
+                          onTouchEnd={() => setShowCode(false)}
+                          className={`w-10 h-10 bg-orange-400 rounded-lg shadow-lg transform transition-transform duration-300 ease-in-out cursor-pointer flex items-center justify-center ${
+                            showCode ? "translate-x-[85px]" : "translate-x-0"
+                          }`}
+                        >
+                          <span className="material-symbols-outlined text-white text-xl">
+                            {showCode ? "visibility_off" : "visibility"}
+                          </span>
+
+                          {/* {showCode ? "Show" : "Hide"} */}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   {!codeVerified && (
                     <>
                       <input
@@ -160,21 +190,6 @@ export default function Home() {
                   </div>
 
                   {/* --- New Toggle for Show/Hide Check-in Code --- */}
-                  {checkinCode && (
-                    <div className="w-full flex flex-col items-center">
-                      <button
-                        onClick={() => setShowCode(!showCode)}
-                        className="mt-2 text-orange-500 text-xs underline hover:text-orange-700 transition"
-                      >
-                        {showCode ? "Hide Check-In Code" : "Show Check-In Code"}
-                      </button>
-                      {showCode && (
-                        <div className="mt-2 px-4 py-2 bg-white border border-orange-300 rounded-lg text-gray-700">
-                          {checkinCode}
-                        </div>
-                      )}
-                    </div>
-                  )}
                 </div>
               )}
             </div>
