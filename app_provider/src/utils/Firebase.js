@@ -28,6 +28,10 @@ export function signInWithGoogle() {
       Cookies.set("token", res._tokenResponse.idToken);
       Cookies.set("uid", res.user.uid);
       localStorage.setItem("user", res.user);
+      console.log(res.user);
+      if (localStorage.getItem("partnerId")) {
+        localStorage.clear("partnerId");
+      }
       return res.user;
     })
     .catch((error) => {
