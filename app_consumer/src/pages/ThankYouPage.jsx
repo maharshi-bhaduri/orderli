@@ -93,6 +93,26 @@ export default function ThankYouPage() {
           Taxes included where applicable
         </div>
 
+        {/* UPI Section */}
+        <div className="text-center mt-4">
+          <p className="text-sm font-medium text-gray-600 mb-1">Pay via UPI</p>
+
+          <div
+            className="flex items-center justify-between bg-gradient-to-r from-orange-50 to-orange-100 
+               px-3 py-3 rounded-xl cursor-pointer hover:from-orange-100 hover:to-orange-200 
+               transition shadow-md border border-orange-300"
+            onClick={() => navigator.clipboard.writeText(bill.upiId)}
+          >
+            <div className="flex items-center space-x-2">
+              <span className="text-green-600 text-lg">💸</span>
+              <span className="font-mono text-lg font-bold tracking-wide text-gray-900">
+                {bill.upiId}
+              </span>
+            </div>
+            <span className="text-orange-700 text-sm font-semibold">Copy</span>
+          </div>
+        </div>
+
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4"
           onClick={() => navigate(`/${partnerHandle}`)}
