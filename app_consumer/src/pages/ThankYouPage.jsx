@@ -7,9 +7,27 @@ export default function ThankYouPage() {
   const [bill, setBill] = useState(null);
 
   useEffect(() => {
-    const storedBill = localStorage.getItem('bill');
+    const storedBill = localStorage.getItem("bill");
     if (storedBill) {
-      setBill(JSON.parse(storedBill));
+      const parsedBill = JSON.parse(storedBill);
+
+      // Consolidate same items by name
+      const consolidatedItemsMap = {};
+      parsedBill.items.forEach((item) => {
+        const key = item.itemName;
+        if (!consolidatedItemsMap[key]) {
+          consolidatedItemsMap[key] = {
+            ...item,
+            quantity: 0,
+          };
+        }
+        consolidatedItemsMap[key].quantity += item.quantity;
+      });
+
+      const consolidatedItems = Object.values(consolidatedItemsMap);
+      parsedBill.items = consolidatedItems;
+
+      setBill(parsedBill);
     }
   }, []);
 
@@ -29,12 +47,12 @@ export default function ThankYouPage() {
         </h2>
         <div className="border-b border-dashed my-4" />
 
-        {/* Bill Items */}
+        {/* Consolidated Bill Items */}
         <div className="text-left">
           {bill.items.map((item, idx) => (
             <div key={idx} className="flex justify-between mb-1">
               <span>{item.quantity} x {item.itemName}</span>
-              <span>₹{item.itemPrice * item.quantity}</span>
+              <span>₹{(item.itemPrice * item.quantity).toFixed(2)}</span>
             </div>
           ))}
         </div>
