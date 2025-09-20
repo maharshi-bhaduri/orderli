@@ -25,10 +25,12 @@ export default function ProviderTables() {
     status: "",
   });
   const [qrUrl, setQrUrl] = useState("");
+  const [activeFilter, setActiveFilter] = useState(null);
 
   const queryClient = useQueryClient();
   const { partnerHandle } = useParams();
-  const { data: tables, isLoading, isError } = getTables(partnerHandle);
+  const { data: tables, isLoading } = getTables(partnerHandle);
+  const [tableStatuses, setTableStatuses] = useState({});
 
   useEffect(() => {
     const fetchAlerts = async () => {
@@ -48,16 +50,17 @@ export default function ProviderTables() {
       }, {});
 
       setTableAlerts(groupedAlerts);
-      console.log(groupedAlerts);
-      let tableIdList = [];
-      for (let [tableId, alertType] of Object.entries(groupedAlerts)) {
-        //console.log(Object.keys(alertType));
-        //console.log("tableid", tableId);
-        for (let alert in alertType) {
-          if (alert === "table_occupied") tableIdList.push(tableId);
+
+      const statuses = {};
+      for (let tableId of Object.keys(groupedAlerts)) {
+        const alerts = groupedAlerts[tableId];
+        if (alerts.bill_requested) {
+          statuses[tableId] = "Bill Requested";
+        } else if (alerts.table_occupied) {
+          statuses[tableId] = "Occupied";
         }
       }
-      console.log(tableIdList);
+      setTableStatuses(statuses);
     };
 
     fetchAlerts();
@@ -71,21 +74,16 @@ export default function ProviderTables() {
           schema: "public",
           table: "table_alerts_live",
         },
-        (payload) => {
-          console.log("Real time alerts received", payload);
-          fetchAlerts();
-        }
+        () => fetchAlerts()
       )
       .subscribe();
 
-    //cleanup when unmount
     return () => {
       supabase.removeChannel(subscription);
     };
   }, []);
 
-  // Mutation for add/edit table
-  const { mutateAsync: saveTableData, isLoading: isSaving } = useMutation(
+  const { mutateAsync: saveTableData } = useMutation(
     (data) =>
       postService(
         modalMode === "add"
@@ -111,34 +109,64 @@ export default function ProviderTables() {
 
   const handleEditClick = (table) => {
     const generatedUrl = `www.snaqr.com/~${table.suffix}`;
-    setQrUrl(generatedUrl); // Store the generated URL in state
-
+    setQrUrl(generatedUrl);
     setModalMode("edit");
     setFormData({ ...table });
-    console.log(formData);
     setCurrentTable(table);
     setIsModalOpen(true);
   };
+
+  const handleSave = async () => {
+    const payload = { ...formData, partnerHandle };
+    await saveTableData(payload);
+  };
+
+  const getStatus = (tableId) => {
+    return tableStatuses[tableId] || "Available";
+  };
+
+  const statusCounts = {
+    Available: 0,
+    "Bill Requested": 0,
+    Occupied: 0,
+  };
+
+  tables?.forEach((table) => {
+    const status = getStatus(table.tableId);
+    statusCounts[status] += 1;
+  });
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
-  const handleSave = async () => {
-    const payload = { ...formData, partnerHandle };
-    console.log(formData);
-    await saveTableData(payload);
+  const statusStyles = {
+    Available: "bg-green-100 text-green-800 border-green-500",
+    "Bill Requested": "bg-yellow-100 text-yellow-800 border-yellow-500",
+    Occupied: "bg-red-100 text-red-800 border-red-500",
   };
+
+  const renderStatusButton = (status) => (
+    <button
+      key={status}
+      onClick={() =>
+        setActiveFilter((prev) => (prev === status ? null : status))
+      }
+      className={`flex items-center gap-2 px-3 py-1 rounded-full border transition
+        ${statusStyles[status]} 
+        ${activeFilter === status ? "border-2 border-gray-800" : "border border-transparent"}`}
+    >
+      <span className="w-5 h-5 rounded-full border border-gray-400 bg-white text-xs text-center leading-5 font-bold">
+        {statusCounts[status]}
+      </span>
+      <span className="text-sm font-medium">{status}</span>
+    </button>
+  );
 
   return (
     <div className="w-full flex flex-col items-center">
-      <div className="w-full"></div>
-      <div className={"rounded-lg bg-white " + "w-full flex flex-col"}>
-        <div
-          className="flex items-center justify-between border
-        rounded-t-lg w-full"
-        >
+      <div className="rounded-lg bg-white w-full flex flex-col">
+        <div className="flex items-center justify-between border rounded-t-lg w-full p-4">
           <GraphicButton
             text="Add"
             buttonStyle="bluefill"
@@ -148,19 +176,8 @@ export default function ProviderTables() {
             <span className="material-symbols-outlined text-sm">add</span>
           </GraphicButton>
 
-          <div className="flex items-center gap-4 ml-4 border rounded-md p-2">
-            <div className="flex items-center gap-2">
-              <span className="w-4 h-4 bg-green-300 rounded-full"></span>
-              <span className="text-sm">Available</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-4 h-4 bg-yellow-300 rounded-full"></span>
-              <span className="text-sm">Reserved</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-4 h-4 bg-red-300 rounded-full"></span>
-              <span className="text-sm">Occupied</span>
-            </div>
+          <div className="flex items-center gap-3 ml-4">
+            {["Available", "Bill Requested", "Occupied"].map(renderStatusButton)}
           </div>
         </div>
 
@@ -170,22 +187,32 @@ export default function ProviderTables() {
           </div>
         ) : (
           <div className="mx-8 my-8">
-            <div className="w-full grid grid-cols-4 gap-4">
-              {tables &&
-                tables.map((table) => (
-                  <TableSquare
+            <div className="w-full flex flex-wrap justify-around gap-2">
+              {tables?.map((table) => {
+                const tableStatus = getStatus(table.tableId);
+                const shouldDim =
+                  activeFilter && tableStatus !== activeFilter;
+
+                return (
+                  <div
                     key={table.tableId}
-                    table={table}
-                    onClick={() => handleEditClick(table)}
-                    startTableIndex={tables[0]?.tableId}
-                    alerts={tableAlerts[table.tableId] || {}}
-                  />
-                ))}
+                    className={shouldDim ? "opacity-30" : "opacity-100"}
+                    disabled={shouldDim}
+                  >
+                    <TableSquare
+                      table={table}
+                      onClick={() => handleEditClick(table)}
+                      startTableIndex={tables[0]?.tableId}
+                      alerts={tableAlerts[table.tableId] || {}}
+                      status={tableStatus}
+                    />
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
 
-        {/* Reusable Modal */}
         <Modal
           open={isModalOpen}
           onClose={() => setIsModalOpen(false)}
